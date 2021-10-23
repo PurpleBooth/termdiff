@@ -96,6 +96,12 @@ impl Display for DrawDiff<'_> {
     }
 }
 
+impl From<DrawDiff<'_>> for String {
+    fn from(diff: DrawDiff<'_>) -> Self {
+        format!("{}", diff)
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::{
@@ -141,6 +147,22 @@ mod test {
         let actual: DrawDiff = DrawDiff::new(old, new, arrows_theme());
         assert_eq!(
             format!("{}", actual),
+            "< left / > right
+<Good Error
+<Bad Success
+>Bad Error
+>Good Success
+"
+        );
+    }
+
+    #[test]
+    fn into_string() {
+        let old = "Good Error\nBad Success";
+        let new = "Bad Error\nGood Success";
+        let actual: String = DrawDiff::new(old, new, arrows_theme()).into();
+        assert_eq!(
+            actual,
             "< left / > right
 <Good Error
 <Bad Success
