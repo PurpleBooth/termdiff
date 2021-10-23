@@ -4,14 +4,8 @@
 //!
 //! ```
 //! use termdiff::{arrows_theme, diff};
-//! let old = "Double, double toil and trouble;
-//! Fire burn and
-//! Caldron bubble.";
-//! let new = "Double, double toil and trouble;
-//! Fire burn and
-//! caldron bubble.
-//! Cool it with a baboon's blood,
-//! Then the charm is firm and good.";
+//! let old = "The quick brown fox and\njumps over the sleepy dog";
+//! let new = "The quick red fox and\njumps over the lazy dog";
 //! let mut buffer: Vec<u8> = Vec::new();
 //! diff(&mut buffer, old, new, arrows_theme()).unwrap();
 //! let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
@@ -19,12 +13,10 @@
 //! assert_eq!(
 //!     actual,
 //!     "< left / > right
-//!  Double, double toil and trouble;
-//!  Fire burn and
-//! <Caldron bubble.
-//! >caldron bubble.
-//! >Cool it with a baboon's blood,
-//! >Then the charm is firm and good.
+//! <The quick brown fox and
+//! <jumps over the sleepy dog
+//! >The quick red fox and
+//! >jumps over the lazy dog
 //! "
 //! );
 //! ```
@@ -34,25 +26,17 @@
 //!
 //! ```
 //! use termdiff::{signs_theme, DrawDiff};
-//! let old = "Double, double toil and trouble;
-//! Fire burn and
-//! Caldron bubble.";
-//! let new = "Double, double toil and trouble;
-//! Fire burn and
-//! caldron bubble.
-//! Cool it with a baboon's blood,
-//! Then the charm is firm and good.";
+//! let old = "The quick brown fox and\njumps over the sleepy dog";
+//! let new = "The quick red fox and\njumps over the lazy dog";
 //! let actual = format!("{}", DrawDiff::new(old, new, signs_theme()));
 //!
 //! assert_eq!(
 //!     actual,
 //!     "--- remove | insert +++
-//!  Double, double toil and trouble;
-//!  Fire burn and
-//! -Caldron bubble.
-//! +caldron bubble.
-//! +Cool it with a baboon's blood,
-//! +Then the charm is firm and good.
+//! -The quick brown fox and
+//! -jumps over the sleepy dog
+//! +The quick red fox and
+//! +jumps over the lazy dog
 //! "
 //! );
 //! ```
@@ -78,25 +62,17 @@
 //! line_end: "\n".into(),
 //! };
 //!
-//! let old = "Double, double toil and trouble;
-//! Fire burn and
-//! Caldron bubble.";
-//! let new = "Double, double toil and trouble;
-//! Fire burn and
-//! caldron bubble.
-//! Cool it with a baboon's blood,
-//! Then the charm is firm and good.";
+//! let old = "The quick brown fox and\njumps over the sleepy dog";
+//! let new = "The quick red fox and\njumps over the lazy dog";
 //! let actual = format!("{}", DrawDiff::new(old, new, my_theme));
 //!
 //! assert_eq!(
 //!     actual,
 //!     "Header
-//! =Double, double toil and trouble;
-//! =Fire burn and
-//! !Caldron bubble.
-//! |caldron bubble.
-//! |Cool it with a baboon's blood,
-//! |Then the charm is firm and good.
+//! !The quick brown fox and
+//! !jumps over the sleepy dog
+//! |The quick red fox and
+//! |jumps over the lazy dog
 //! "
 //! );
 //! ```

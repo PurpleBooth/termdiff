@@ -22,10 +22,19 @@ impl DrawDiff<'_> {
     /// ```
     /// use termdiff::{arrows_theme, DrawDiff};
     /// assert_eq!(
-    ///     format!("{}", DrawDiff::new("Hello", "World", arrows_theme())),
+    ///     format!(
+    ///         "{}",
+    ///         DrawDiff::new(
+    ///             "The quick brown fox and\njumps over the sleepy dog",
+    ///             "The quick red fox and\njumps over the lazy dog",
+    ///             arrows_theme()
+    ///         )
+    ///     ),
     ///     "< left / > right
-    /// <Hello
-    /// >World
+    /// <The quick brown fox and
+    /// <jumps over the sleepy dog
+    /// >The quick red fox and
+    /// >jumps over the lazy dog
     /// "
     /// );
     /// ```
@@ -142,49 +151,49 @@ mod test {
 
     #[test]
     fn line_by_line() {
-        let old = "Good Error\nBad Success";
-        let new = "Bad Error\nGood Success";
+        let old = "The quick brown fox and\njumps over the sleepy dog";
+        let new = "The quick red fox and\njumps over the lazy dog";
         let actual: DrawDiff = DrawDiff::new(old, new, arrows_theme());
         assert_eq!(
             format!("{}", actual),
             "< left / > right
-<Good Error
-<Bad Success
->Bad Error
->Good Success
+<The quick brown fox and
+<jumps over the sleepy dog
+>The quick red fox and
+>jumps over the lazy dog
 "
         );
     }
 
     #[test]
     fn into_string() {
-        let old = "Good Error\nBad Success";
-        let new = "Bad Error\nGood Success";
+        let old = "The quick brown fox and\njumps over the sleepy dog";
+        let new = "The quick red fox and\njumps over the lazy dog";
         let actual: String = DrawDiff::new(old, new, arrows_theme()).into();
         assert_eq!(
             actual,
             "< left / > right
-<Good Error
-<Bad Success
->Bad Error
->Good Success
+<The quick brown fox and
+<jumps over the sleepy dog
+>The quick red fox and
+>jumps over the lazy dog
 "
         );
     }
 
     #[test]
     fn its_customisable() {
-        let old = "Good Error\nBad Success";
-        let new = "Bad Error\nGood Success";
+        let old = "The quick brown fox and\njumps over the sleepy dog";
+        let new = "The quick red fox and\njumps over the lazy dog";
         let actual: DrawDiff = DrawDiff::new(old, new, arrows_color_theme());
 
         assert_eq!(
             format!("{}", actual),
             "\u{1b}[38;5;9m< left\u{1b}[39m / \u{1b}[38;5;10m> right\u{1b}[39m
-\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9m\u{1b}[4mGood\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m Error
-\u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9m\u{1b}[4mBad\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m Success\u{1b}[39m
-\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mBad\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m Error
-\u{1b}[39m\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mGood\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m Success\u{1b}[39m
+\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mThe quick \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4mbrown\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m fox and
+\u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mjumps over the \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4msleepy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m dog\u{1b}[39m
+\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mThe quick \u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mred\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m fox and
+\u{1b}[39m\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mjumps over the \u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mlazy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m dog\u{1b}[39m
 "
         );
     }

@@ -36,8 +36,8 @@ pub struct Theme {
 ///
 /// ```
 /// use termdiff::{arrows_theme, diff};
-/// let old = "a\nb\nc";
-/// let new = "a\nc\n";
+/// let old = "The quick brown fox and\njumps over the sleepy dog";
+/// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
 /// diff(&mut buffer, old, new, arrows_theme()).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
@@ -45,10 +45,10 @@ pub struct Theme {
 /// assert_eq!(
 ///     actual,
 ///     "< left / > right
-///  a
-/// <b
-/// <c
-/// >c
+/// <The quick brown fox and
+/// <jumps over the sleepy dog
+/// >The quick red fox and
+/// >jumps over the lazy dog
 /// "
 /// );
 /// ```
@@ -72,8 +72,8 @@ pub fn arrows_theme() -> Theme {
 ///
 /// ```
 /// use termdiff::{arrows_color_theme, diff};
-/// let old = "a\nb\nc";
-/// let new = "a\nc\n";
+/// let old = "The quick brown fox and\njumps over the sleepy dog";
+/// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
 /// diff(&mut buffer, old, new, arrows_color_theme()).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
@@ -81,11 +81,11 @@ pub fn arrows_theme() -> Theme {
 /// assert_eq!(
 ///     actual,
 ///     "\u{1b}[38;5;9m< left\u{1b}[39m / \u{1b}[38;5;10m> right\u{1b}[39m
-///  a
-/// \u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mb
-/// \u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mc\u{1b}[39m
-/// \u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mc
-/// \u{1b}[39m"
+/// \u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mThe quick \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4mbrown\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m fox and
+/// \u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mjumps over the \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4msleepy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m dog\u{1b}[39m
+/// \u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mThe quick \u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mred\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m fox and
+/// \u{1b}[39m\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mjumps over the \u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mlazy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m dog\u{1b}[39m
+/// "
 /// );
 /// ```
 #[must_use]
@@ -110,8 +110,8 @@ pub fn arrows_color_theme() -> Theme {
 ///
 /// ```
 /// use termdiff::{diff, signs_theme};
-/// let old = "a\nb\nc";
-/// let new = "a\nc\n";
+/// let old = "The quick brown fox and\njumps over the sleepy dog";
+/// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
 /// diff(&mut buffer, old, new, signs_theme()).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
@@ -119,10 +119,10 @@ pub fn arrows_color_theme() -> Theme {
 /// assert_eq!(
 ///     actual,
 ///     "--- remove | insert +++
-///  a
-/// -b
-/// -c
-/// +c
+/// -The quick brown fox and
+/// -jumps over the sleepy dog
+/// +The quick red fox and
+/// +jumps over the lazy dog
 /// "
 /// );
 /// ```
@@ -146,8 +146,8 @@ pub fn signs_theme() -> Theme {
 ///
 /// ```
 /// use termdiff::{diff, signs_color_theme};
-/// let old = "a\nb\nc";
-/// let new = "a\nc\n";
+/// let old = "The quick brown fox and\njumps over the sleepy dog";
+/// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
 /// diff(&mut buffer, old, new, signs_color_theme()).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
@@ -155,11 +155,11 @@ pub fn signs_theme() -> Theme {
 /// assert_eq!(
 ///     actual,
 ///     "\u{1b}[38;5;9m--- remove\u{1b}[39m | \u{1b}[38;5;10minsert +++\u{1b}[39m
-///  a
-/// \u{1b}[38;5;9m-\u{1b}[39m\u{1b}[38;5;9mb
-/// \u{1b}[39m\u{1b}[38;5;9m-\u{1b}[39m\u{1b}[38;5;9mc\u{1b}[39m
-/// \u{1b}[38;5;10m+\u{1b}[39m\u{1b}[38;5;10mc
-/// \u{1b}[39m"
+/// \u{1b}[38;5;9m-\u{1b}[39m\u{1b}[38;5;9mThe quick \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4mbrown\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m fox and
+/// \u{1b}[39m\u{1b}[38;5;9m-\u{1b}[39m\u{1b}[38;5;9mjumps over the \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4msleepy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m dog\u{1b}[39m
+/// \u{1b}[38;5;10m+\u{1b}[39m\u{1b}[38;5;10mThe quick \u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mred\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m fox and
+/// \u{1b}[39m\u{1b}[38;5;10m+\u{1b}[39m\u{1b}[38;5;10mjumps over the \u{1b}[39m\u{1b}[38;5;10m\u{1b}[4mlazy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;10m dog\u{1b}[39m
+/// "
 /// );
 /// ```
 #[must_use]
