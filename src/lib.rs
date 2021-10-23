@@ -64,3 +64,15 @@ mod themes;
 pub use cmd::diff;
 pub use draw_diff::DrawDiff;
 pub use themes::{arrows_color_theme, arrows_theme, signs_color_theme, signs_theme, Theme};
+
+#[cfg(doctest)]
+mod test_readme {
+    macro_rules! external_doc_test {
+        ($x:expr) => {
+            #[doc = $x]
+            extern "C" {}
+        };
+    }
+
+    external_doc_test!(include_str!("../README.md"));
+}
