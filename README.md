@@ -72,3 +72,46 @@ format](./demo_arrows.png "Demo of the arrows format")
 ### Signs
 
 ![Demo of the signs format](./demo_signs.png "Demo of the signs format")
+
+### Custom
+
+``` rust
+use termdiff::DrawDiff;
+use termdiff::Theme;
+use crossterm::style::Stylize;
+
+let my_theme = Theme {
+    header: format!("{}\n", "Header"),
+    highlight_insert: crossterm::style::Stylize::stylize,
+    highlight_delete: crossterm::style::Stylize::stylize,
+    equal_prefix: "=".to_string(),
+    equal_content: crossterm::style::Stylize::stylize,
+    delete_prefix: "!".to_string(),
+    delete_content: crossterm::style::Stylize::stylize,
+    insert_prefix: "|".to_string(),
+    insert_line: crossterm::style::Stylize::stylize,
+    line_end: "\n".into(),
+};
+
+let old = "Double, double toil and trouble;
+Fire burn and
+Caldron bubble.";
+        let new = "Double, double toil and trouble;
+Fire burn and
+caldron bubble.
+Cool it with a baboon's blood,
+Then the charm is firm and good.";
+let actual = format!("{}", DrawDiff::new(old, new, my_theme));
+
+assert_eq!(
+    actual,
+    "Header
+=Double, double toil and trouble;
+=Fire burn and
+!Caldron bubble.
+|caldron bubble.
+|Cool it with a baboon's blood,
+|Then the charm is firm and good.
+"
+);
+```
