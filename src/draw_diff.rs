@@ -15,6 +15,20 @@ pub struct DrawDiff<'a> {
 }
 
 impl DrawDiff<'_> {
+    /// Make a new instance of the diff drawer
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use termdiff::{arrows_theme, DrawDiff};
+    /// assert_eq!(
+    ///     format!("{}", DrawDiff::new("Hello", "World", arrows_theme())),
+    ///     "< left / > right
+    /// <Hello
+    /// >World
+    /// "
+    /// );
+    /// ```
     #[must_use]
     pub const fn new<'a>(old: &'a str, new: &'a str, theme: Theme) -> DrawDiff<'a> {
         DrawDiff { old, new, theme }
