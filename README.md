@@ -8,11 +8,11 @@ We have a limited number of built in themes
 
 ### Arrows
 
-![Demo of the arrows format](./demo_arrows.png "Demo of the arrows format")
+![Demo of the arrows
+format](./demo_arrows.png "Demo of the arrows format")
 
 ### Signs
+
 ![Demo of the signs format](./demo_signs.png "Demo of the signs format")
 
-Read more at [Docs.rs][1]
-
-[1]: https://docs.rs/termdiff/
+Read more at [Docs.rs](https://docs.rs/termdiff/)
