@@ -5,7 +5,7 @@ version = "1.2.0"
 edition = "2018"
 license = "CC0-1.0"
 repository = "https://github.com/PurpleBooth/termdiff"
-keywords = ["diff", "terminal"]
+keywords = ["diff", "terminal", "text", "comparison"]
 categories = ["development-tools", "text-processing"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
