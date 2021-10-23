@@ -13,6 +13,6 @@ We have a limited number of built in themes
 ### Signs
 ![Demo of the signs format](./demo_signs.png "Demo of the signs format")
 
-Read more at Docs.rs[1]
+Read more at [Docs.rs][1]
 
 [1]: https://docs.rs/termdiff/
