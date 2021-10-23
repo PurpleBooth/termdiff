@@ -28,10 +28,39 @@
 //! "
 //! );
 //! ```
-
-pub use cmd::diff;
-pub use themes::{arrows_color_theme, arrows_theme, signs_color_theme, signs_theme, Theme};
+//!
+//! Alternatively if you are dropping this into a `format!` or similar, you
+//! might want to use the displayable instead
+//!
+//! ```
+//! use termdiff::{signs_theme, DrawDiff};
+//! let old = "Double, double toil and trouble;
+//! Fire burn and
+//! Caldron bubble.";
+//! let new = "Double, double toil and trouble;
+//! Fire burn and
+//! caldron bubble.
+//! Cool it with a baboon's blood,
+//! Then the charm is firm and good.";
+//! let actual = format!("{}", DrawDiff::new(old, new, signs_theme()));
+//!
+//! assert_eq!(
+//!     actual,
+//!     "--- remove | insert +++
+//!  Double, double toil and trouble;
+//!  Fire burn and
+//! -Caldron bubble.
+//! +caldron bubble.
+//! +Cool it with a baboon's blood,
+//! +Then the charm is firm and good.
+//! "
+//! );
+//! ```
 
 mod cmd;
 mod draw_diff;
 mod themes;
+
+pub use cmd::diff;
+pub use draw_diff::DrawDiff;
+pub use themes::{arrows_color_theme, arrows_theme, signs_color_theme, signs_theme, Theme};

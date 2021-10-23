@@ -15,6 +15,7 @@ pub struct DrawDiff<'a> {
 }
 
 impl DrawDiff<'_> {
+    #[must_use]
     pub const fn new<'a>(old: &'a str, new: &'a str, theme: Theme) -> DrawDiff<'a> {
         DrawDiff { old, new, theme }
     }
