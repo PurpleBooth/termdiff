@@ -10,5 +10,5 @@ categories = ["development-tools", "text-processing"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-similar = "2.1.0"
+similar = { version = "2.1.0", features=["inline", "unicode"] }
 crossterm = "0.22.1"
