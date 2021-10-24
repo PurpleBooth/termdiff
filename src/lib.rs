@@ -45,21 +45,20 @@
 //!
 //!
 //! ``` rust
-//! use termdiff::DrawDiff;
-//! use termdiff::Theme;
 //! use crossterm::style::Stylize;
+//! use termdiff::{DrawDiff, Theme};
 //!
 //! let my_theme = Theme {
-//! header: format!("{}\n", "Header"),
-//! highlight_insert: crossterm::style::Stylize::stylize,
-//! highlight_delete: crossterm::style::Stylize::stylize,
-//! equal_prefix: "=".to_string(),
-//! equal_content: crossterm::style::Stylize::stylize,
-//! delete_prefix: "!".to_string(),
-//! delete_content: crossterm::style::Stylize::stylize,
-//! insert_prefix: "|".to_string(),
-//! insert_line: crossterm::style::Stylize::stylize,
-//! line_end: "\n".into(),
+//!     header: format!("{}\n", "Header"),
+//!     highlight_insert: crossterm::style::Stylize::stylize,
+//!     highlight_delete: crossterm::style::Stylize::stylize,
+//!     equal_prefix: "=".to_string(),
+//!     equal_content: crossterm::style::Stylize::stylize,
+//!     delete_prefix: "!".to_string(),
+//!     delete_content: crossterm::style::Stylize::stylize,
+//!     insert_prefix: "|".to_string(),
+//!     insert_line: crossterm::style::Stylize::stylize,
+//!     line_end: "\n".into(),
 //! };
 //!
 //! let old = "The quick brown fox and\njumps over the sleepy dog";
