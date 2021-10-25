@@ -1,4 +1,5 @@
 use crossterm::style::{StyledContent, Stylize};
+use lazy_static::lazy_static;
 
 /// Take a string and format it for some purpose
 type LineFormatter = fn(String) -> StyledContent<String>;
@@ -7,6 +8,7 @@ type LineFormatter = fn(String) -> StyledContent<String>;
 ///
 /// This is to allows some control over what the diff looks like without having
 /// to parse it yourself
+#[derive(Clone, Eq, PartialEq)]
 pub struct Theme {
     /// How to format the text when highlighting it for inserts
     pub highlight_insert: LineFormatter,
@@ -28,6 +30,21 @@ pub struct Theme {
     pub line_end: String,
     /// A header to put above the diff
     pub header: String,
+}
+
+lazy_static! {
+    static ref ARROWS_THEME: Theme = Theme {
+        header: "< left / > right\n".to_string(),
+        highlight_insert: crossterm::style::Stylize::stylize,
+        highlight_delete: crossterm::style::Stylize::stylize,
+        equal_prefix: " ".to_string(),
+        equal_content: crossterm::style::Stylize::stylize,
+        delete_prefix: "<".to_string(),
+        delete_content: crossterm::style::Stylize::stylize,
+        insert_prefix: ">".to_string(),
+        insert_line: crossterm::style::Stylize::stylize,
+        line_end: "\n".into(),
+    };
 }
 
 /// A simple colorless using arrows theme
@@ -54,18 +71,22 @@ pub struct Theme {
 /// ```
 #[must_use]
 pub fn arrows_theme() -> Theme {
-    Theme {
-        header: "< left / > right\n".to_string(),
-        highlight_insert: crossterm::style::Stylize::stylize,
-        highlight_delete: crossterm::style::Stylize::stylize,
+    ARROWS_THEME.clone()
+}
+
+lazy_static! {
+    static ref ARROWS_COLOR_THEME: Theme = Theme {
+        header: format!("{} / {}\n", "< left".red(), "> right".green()),
+        highlight_insert: crossterm::style::Stylize::underlined,
+        highlight_delete: crossterm::style::Stylize::underlined,
         equal_prefix: " ".to_string(),
         equal_content: crossterm::style::Stylize::stylize,
-        delete_prefix: "<".to_string(),
-        delete_content: crossterm::style::Stylize::stylize,
-        insert_prefix: ">".to_string(),
-        insert_line: crossterm::style::Stylize::stylize,
+        delete_prefix: "<".red().to_string(),
+        delete_content: crossterm::style::Stylize::red,
+        insert_prefix: ">".green().to_string(),
+        insert_line: crossterm::style::Stylize::green,
         line_end: "\n".into(),
-    }
+    };
 }
 
 /// A simple colorful theme using arrows
@@ -90,18 +111,22 @@ pub fn arrows_theme() -> Theme {
 /// ```
 #[must_use]
 pub fn arrows_color_theme() -> Theme {
-    Theme {
-        header: format!("{} / {}\n", "< left".red(), "> right".green()),
-        highlight_insert: crossterm::style::Stylize::underlined,
-        highlight_delete: crossterm::style::Stylize::underlined,
+    ARROWS_COLOR_THEME.clone()
+}
+
+lazy_static! {
+    static ref SIGNS_THEME: Theme = Theme {
+        header: "--- remove | insert +++\n".to_string(),
+        highlight_insert: crossterm::style::Stylize::stylize,
+        highlight_delete: crossterm::style::Stylize::stylize,
         equal_prefix: " ".to_string(),
         equal_content: crossterm::style::Stylize::stylize,
-        delete_prefix: "<".red().to_string(),
-        delete_content: crossterm::style::Stylize::red,
-        insert_prefix: ">".green().to_string(),
-        insert_line: crossterm::style::Stylize::green,
+        delete_prefix: "-".to_string(),
+        delete_content: crossterm::style::Stylize::stylize,
+        insert_prefix: "+".to_string(),
+        insert_line: crossterm::style::Stylize::stylize,
         line_end: "\n".into(),
-    }
+    };
 }
 
 /// A simple colorless using signs theme
@@ -128,18 +153,22 @@ pub fn arrows_color_theme() -> Theme {
 /// ```
 #[must_use]
 pub fn signs_theme() -> Theme {
-    Theme {
-        header: "--- remove | insert +++\n".to_string(),
-        highlight_insert: crossterm::style::Stylize::stylize,
-        highlight_delete: crossterm::style::Stylize::stylize,
+    SIGNS_THEME.clone()
+}
+
+lazy_static! {
+    static ref SIGNS_COLOR_THEME: Theme = Theme {
+        header: format!("{} | {}\n", "--- remove".red(), "insert +++".green()),
+        highlight_insert: crossterm::style::Stylize::underlined,
+        highlight_delete: crossterm::style::Stylize::underlined,
         equal_prefix: " ".to_string(),
         equal_content: crossterm::style::Stylize::stylize,
-        delete_prefix: "-".to_string(),
-        delete_content: crossterm::style::Stylize::stylize,
-        insert_prefix: "+".to_string(),
-        insert_line: crossterm::style::Stylize::stylize,
+        delete_prefix: "-".red().to_string(),
+        delete_content: crossterm::style::Stylize::red,
+        insert_prefix: "+".green().to_string(),
+        insert_line: crossterm::style::Stylize::green,
         line_end: "\n".into(),
-    }
+    };
 }
 
 /// A simple colorful theme using signs
@@ -164,16 +193,5 @@ pub fn signs_theme() -> Theme {
 /// ```
 #[must_use]
 pub fn signs_color_theme() -> Theme {
-    Theme {
-        header: format!("{} | {}\n", "--- remove".red(), "insert +++".green()),
-        highlight_insert: crossterm::style::Stylize::underlined,
-        highlight_delete: crossterm::style::Stylize::underlined,
-        equal_prefix: " ".to_string(),
-        equal_content: crossterm::style::Stylize::stylize,
-        delete_prefix: "-".red().to_string(),
-        delete_content: crossterm::style::Stylize::red,
-        insert_prefix: "+".green().to_string(),
-        insert_line: crossterm::style::Stylize::green,
-        line_end: "\n".into(),
-    }
+    SIGNS_COLOR_THEME.clone()
 }
