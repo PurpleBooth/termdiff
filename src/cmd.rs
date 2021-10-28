@@ -13,7 +13,8 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// let old = "a\nb\nc";
 /// let new = "a\nc\n";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// diff(&mut buffer, old, new, arrows_theme()).unwrap();
+/// let  theme = arrows_theme();
+/// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(
@@ -34,7 +35,8 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// let old = "a\nb\nc";
 /// let new = "a\nc\n";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// diff(&mut buffer, old, new, arrows_color_theme()).unwrap();
+/// let  theme = arrows_color_theme();
+/// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(
@@ -51,7 +53,7 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// # Errors
 ///
 /// Errors on failing to write to the writer.
-pub fn diff(w: &mut dyn Write, old: &str, new: &str, theme: Theme) -> std::io::Result<()> {
+pub fn diff(w: &mut dyn Write, old: &str, new: &str, theme: &Theme) -> std::io::Result<()> {
     let output: DrawDiff = DrawDiff::new(old, new, theme);
     write!(w, "{}", output)
 }
@@ -65,7 +67,7 @@ mod tests {
         let old = "a\nb\nc";
         let new = "a\nc\n";
         let mut buffer: Vec<u8> = Vec::new();
-        super::diff(&mut buffer, old, new, arrows_theme()).unwrap();
+        super::diff(&mut buffer, old, new, &arrows_theme()).unwrap();
         let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 
         assert_eq!(
@@ -84,7 +86,7 @@ mod tests {
         let old = "a\nb\nc";
         let new = "a\nc\n";
         let mut buffer: Vec<u8> = Vec::new();
-        super::diff(&mut buffer, old, new, arrows_color_theme()).unwrap();
+        super::diff(&mut buffer, old, new, &arrows_color_theme()).unwrap();
         let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
         assert_eq!(
             actual,

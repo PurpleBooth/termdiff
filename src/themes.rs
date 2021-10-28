@@ -56,7 +56,8 @@ lazy_static! {
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// diff(&mut buffer, old, new, arrows_theme()).unwrap();
+/// let  theme = arrows_theme();
+/// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(
@@ -95,8 +96,9 @@ lazy_static! {
 /// use termdiff::{arrows_color_theme, diff};
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
+/// let theme = arrows_color_theme();
 /// let mut buffer: Vec<u8> = Vec::new();
-/// diff(&mut buffer, old, new, arrows_color_theme()).unwrap();
+/// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(
@@ -138,7 +140,8 @@ lazy_static! {
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// diff(&mut buffer, old, new, signs_theme()).unwrap();
+/// let  theme = signs_theme();
+/// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(
@@ -178,7 +181,8 @@ lazy_static! {
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// diff(&mut buffer, old, new, signs_color_theme()).unwrap();
+/// let  theme = signs_color_theme();
+/// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(

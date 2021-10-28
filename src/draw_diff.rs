@@ -11,7 +11,7 @@ use super::themes::Theme;
 pub struct DrawDiff<'a> {
     old: &'a str,
     new: &'a str,
-    theme: Theme,
+    theme: &'a Theme,
 }
 
 impl DrawDiff<'_> {
@@ -21,13 +21,14 @@ impl DrawDiff<'_> {
     ///
     /// ```
     /// use termdiff::{arrows_theme, DrawDiff};
+    /// let  theme = arrows_theme();
     /// assert_eq!(
     ///     format!(
     ///         "{}",
     ///         DrawDiff::new(
     ///             "The quick brown fox and\njumps over the sleepy dog",
     ///             "The quick red fox and\njumps over the lazy dog",
-    ///             arrows_theme()
+    ///             &theme
     ///         )
     ///     ),
     ///     "< left / > right
@@ -39,7 +40,7 @@ impl DrawDiff<'_> {
     /// );
     /// ```
     #[must_use]
-    pub const fn new<'a>(old: &'a str, new: &'a str, theme: Theme) -> DrawDiff<'a> {
+    pub const fn new<'a>(old: &'a str, new: &'a str, theme: &'a Theme) -> DrawDiff<'a> {
         DrawDiff { old, new, theme }
     }
 
@@ -122,7 +123,8 @@ mod test {
     fn single_characters() {
         let old = "a\nb\nc";
         let new = "a\nc\n";
-        let actual: DrawDiff = DrawDiff::new(old, new, arrows_theme());
+        let theme = arrows_theme();
+        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
 
         assert_eq!(
             format!("{}", actual),
@@ -139,7 +141,8 @@ mod test {
     fn one_line() {
         let old = "adc";
         let new = "abc";
-        let actual: DrawDiff = DrawDiff::new(old, new, arrows_theme());
+        let theme = arrows_theme();
+        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
         assert_eq!(
             format!("{}", actual),
             "< left / > right
@@ -153,7 +156,8 @@ mod test {
     fn line_by_line() {
         let old = "The quick brown fox and\njumps over the sleepy dog";
         let new = "The quick red fox and\njumps over the lazy dog";
-        let actual: DrawDiff = DrawDiff::new(old, new, arrows_theme());
+        let theme = arrows_theme();
+        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
         assert_eq!(
             format!("{}", actual),
             "< left / > right
@@ -169,7 +173,7 @@ mod test {
     fn into_string() {
         let old = "The quick brown fox and\njumps over the sleepy dog";
         let new = "The quick red fox and\njumps over the lazy dog";
-        let actual: String = DrawDiff::new(old, new, arrows_theme()).into();
+        let actual: String = DrawDiff::new(old, new, &arrows_theme()).into();
         assert_eq!(
             actual,
             "< left / > right
@@ -185,7 +189,8 @@ mod test {
     fn its_customisable() {
         let old = "The quick brown fox and\njumps over the sleepy dog";
         let new = "The quick red fox and\njumps over the lazy dog";
-        let actual: DrawDiff = DrawDiff::new(old, new, arrows_color_theme());
+        let theme = arrows_color_theme();
+        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
 
         assert_eq!(
             format!("{}", actual),
