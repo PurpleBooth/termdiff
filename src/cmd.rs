@@ -13,7 +13,7 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// let old = "a\nb\nc";
 /// let new = "a\nc\n";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let  theme = arrows_theme();
+/// let theme = arrows_theme();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
@@ -35,7 +35,7 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// let old = "a\nb\nc";
 /// let new = "a\nc\n";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let  theme = arrows_color_theme();
+/// let theme = arrows_color_theme();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///

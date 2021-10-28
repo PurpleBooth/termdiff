@@ -7,7 +7,7 @@
 //! let old = "The quick brown fox and\njumps over the sleepy dog";
 //! let new = "The quick red fox and\njumps over the lazy dog";
 //! let mut buffer: Vec<u8> = Vec::new();
-//! let  theme = arrows_theme();
+//! let theme = arrows_theme();
 //! diff(&mut buffer, old, new, &theme).unwrap();
 //! let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 //!
@@ -29,7 +29,7 @@
 //! use termdiff::{signs_theme, DrawDiff};
 //! let old = "The quick brown fox and\njumps over the sleepy dog";
 //! let new = "The quick red fox and\njumps over the lazy dog";
-//! let  theme = signs_theme();
+//! let theme = signs_theme();
 //! let actual = format!("{}", DrawDiff::new(old, new, &theme));
 //!
 //! assert_eq!(
@@ -52,14 +52,14 @@
 //!
 //! let my_theme = Theme {
 //!     header: format!("{}\n", "Header"),
-//!     highlight_insert: crossterm::style::Stylize::stylize,
-//!     highlight_delete: crossterm::style::Stylize::stylize,
+//!     highlight_insert: |x| x.to_string(),
+//!     highlight_delete: |x| x.to_string(),
 //!     equal_prefix: "=".to_string(),
-//!     equal_content: crossterm::style::Stylize::stylize,
+//!     equal_content: |x| x.to_string(),
 //!     delete_prefix: "!".to_string(),
-//!     delete_content: crossterm::style::Stylize::stylize,
+//!     delete_content: |x| x.to_string(),
 //!     insert_prefix: "|".to_string(),
-//!     insert_line: crossterm::style::Stylize::stylize,
+//!     insert_line: |x| x.to_string(),
 //!     line_end: "\n".into(),
 //! };
 //!

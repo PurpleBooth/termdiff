@@ -68,14 +68,14 @@ use crossterm::style::Stylize;
 
 let my_theme = Theme {
     header: format!("{}\n", "Header"),
-    highlight_insert: crossterm::style::Stylize::stylize,
-    highlight_delete: crossterm::style::Stylize::stylize,
+    highlight_insert: |x| x.to_string(),
+    highlight_delete: |x| x.to_string(),
     equal_prefix: "=".to_string(),
-    equal_content: crossterm::style::Stylize::stylize,
+    equal_content: |x| x.to_string(),
     delete_prefix: "!".to_string(),
-    delete_content: crossterm::style::Stylize::stylize,
+    delete_content: |x| x.to_string(),
     insert_prefix: "|".to_string(),
-    insert_line: crossterm::style::Stylize::stylize,
+    insert_line: |x| x.to_string(),
     line_end: "\n".into(),
 };
 

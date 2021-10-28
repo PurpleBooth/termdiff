@@ -1,6 +1,8 @@
-use std::fmt::{Display, Formatter};
+use std::{
+    borrow::Borrow,
+    fmt::{Display, Formatter},
+};
 
-use crossterm::style::{StyledContent, Stylize};
 use similar::{ChangeTag, DiffableStr, TextDiff};
 
 use super::themes::Theme;
@@ -21,7 +23,7 @@ impl DrawDiff<'_> {
     ///
     /// ```
     /// use termdiff::{arrows_theme, DrawDiff};
-    /// let  theme = arrows_theme();
+    /// let theme = arrows_theme();
     /// assert_eq!(
     ///     format!(
     ///         "{}",
@@ -44,15 +46,15 @@ impl DrawDiff<'_> {
         DrawDiff { old, new, theme }
     }
 
-    fn highlight(&self, text: String, tag: ChangeTag) -> StyledContent<String> {
+    fn highlight(&self, text: &str, tag: ChangeTag) -> String {
         match tag {
-            ChangeTag::Equal => text.stylize(),
+            ChangeTag::Equal => text.to_string(),
             ChangeTag::Delete => (self.theme.highlight_delete)(text),
             ChangeTag::Insert => (self.theme.highlight_insert)(text),
         }
     }
 
-    fn format_line(&self, line: String, tag: ChangeTag) -> StyledContent<String> {
+    fn format_line(&self, line: &str, tag: ChangeTag) -> String {
         match tag {
             ChangeTag::Equal => (self.theme.equal_content)(line),
             ChangeTag::Delete => (self.theme.delete_content)(line),
@@ -80,19 +82,11 @@ impl Display for DrawDiff<'_> {
 
                 for (highlight, inline_change) in change.values() {
                     if *highlight {
-                        let highlighted = self
-                            .highlight(inline_change.to_string_lossy().to_string(), change.tag());
-                        write!(
-                            f,
-                            "{}",
-                            self.format_line(highlighted.to_string(), change.tag())
-                        )?;
+                        let highlighted =
+                            self.highlight(inline_change.to_string_lossy().borrow(), change.tag());
+                        write!(f, "{}", self.format_line(&highlighted, change.tag()))?;
                     } else {
-                        write!(
-                            f,
-                            "{}",
-                            self.format_line((*inline_change).to_string(), change.tag())
-                        )?;
+                        write!(f, "{}", self.format_line(*inline_change, change.tag()))?;
                     }
                 }
 
