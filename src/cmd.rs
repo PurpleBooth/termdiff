@@ -9,11 +9,11 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 ///  Black and white output
 ///
 /// ```
-/// use termdiff::{arrows_theme, diff};
+/// use termdiff::{diff, ArrowsTheme};
 /// let old = "a\nb\nc";
 /// let new = "a\nc\n";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let theme = arrows_theme();
+/// let theme = ArrowsTheme::default();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
@@ -31,11 +31,11 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// Colorful theme
 ///
 /// ```
-/// use termdiff::{arrows_color_theme, diff};
+/// use termdiff::{diff, ArrowsColorTheme};
 /// let old = "a\nb\nc";
 /// let new = "a\nc\n";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let theme = arrows_color_theme();
+/// let theme = ArrowsColorTheme::default();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
@@ -53,21 +53,22 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 /// # Errors
 ///
 /// Errors on failing to write to the writer.
-pub fn diff(w: &mut dyn Write, old: &str, new: &str, theme: &Theme) -> std::io::Result<()> {
+pub fn diff(w: &mut dyn Write, old: &str, new: &str, theme: &dyn Theme) -> std::io::Result<()> {
     let output: DrawDiff = DrawDiff::new(old, new, theme);
     write!(w, "{}", output)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::super::{arrows_color_theme, arrows_theme};
+    use super::super::ArrowsTheme;
+    use crate::ArrowsColorTheme;
 
     #[test]
     fn single_characters() {
         let old = "a\nb\nc";
         let new = "a\nc\n";
         let mut buffer: Vec<u8> = Vec::new();
-        super::diff(&mut buffer, old, new, &arrows_theme()).unwrap();
+        super::diff(&mut buffer, old, new, &ArrowsTheme {}).unwrap();
         let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 
         assert_eq!(
@@ -86,7 +87,7 @@ mod tests {
         let old = "a\nb\nc";
         let new = "a\nc\n";
         let mut buffer: Vec<u8> = Vec::new();
-        super::diff(&mut buffer, old, new, &arrows_color_theme()).unwrap();
+        super::diff(&mut buffer, old, new, &ArrowsColorTheme {}).unwrap();
         let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
         assert_eq!(
             actual,

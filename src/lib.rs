@@ -3,11 +3,11 @@
 //! # Examples
 //!
 //! ```
-//! use termdiff::{arrows_theme, diff};
+//! use termdiff::{diff, ArrowsTheme};
 //! let old = "The quick brown fox and\njumps over the sleepy dog";
 //! let new = "The quick red fox and\njumps over the lazy dog";
 //! let mut buffer: Vec<u8> = Vec::new();
-//! let theme = arrows_theme();
+//! let theme = ArrowsTheme::default();
 //! diff(&mut buffer, old, new, &theme).unwrap();
 //! let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 //!
@@ -26,10 +26,10 @@
 //! might want to use the displayable instead
 //!
 //! ```
-//! use termdiff::{signs_theme, DrawDiff};
+//! use termdiff::{DrawDiff, SignsTheme};
 //! let old = "The quick brown fox and\njumps over the sleepy dog";
 //! let new = "The quick red fox and\njumps over the lazy dog";
-//! let theme = signs_theme();
+//! let theme = SignsTheme::default();
 //! let actual = format!("{}", DrawDiff::new(old, new, &theme));
 //!
 //! assert_eq!(
@@ -47,22 +47,54 @@
 //!
 //!
 //! ``` rust
+//! use std::borrow::Cow;
+//!
 //! use crossterm::style::Stylize;
 //! use termdiff::{DrawDiff, Theme};
 //!
-//! let my_theme = Theme {
-//!     header: format!("{}\n", "Header"),
-//!     highlight_insert: |x| x.to_string(),
-//!     highlight_delete: |x| x.to_string(),
-//!     equal_prefix: "=".to_string(),
-//!     equal_content: |x| x.to_string(),
-//!     delete_prefix: "!".to_string(),
-//!     delete_content: |x| x.to_string(),
-//!     insert_prefix: "|".to_string(),
-//!     insert_line: |x| x.to_string(),
-//!     line_end: "\n".into(),
-//! };
+//! struct MyTheme {}
+//! impl Theme for MyTheme {
+//!     fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+//!         input.into()
+//!     }
 //!
+//!     fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+//!         input.into()
+//!     }
+//!
+//!     fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+//!         input.into()
+//!     }
+//!
+//!     fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+//!         input.into()
+//!     }
+//!
+//!     fn equal_prefix<'this>(&self) -> Cow<'this, str> {
+//!         "=".into()
+//!     }
+//!
+//!     fn delete_prefix<'this>(&self) -> Cow<'this, str> {
+//!         "!".into()
+//!     }
+//!
+//!     fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+//!         input.into()
+//!     }
+//!
+//!     fn insert_prefix<'this>(&self) -> Cow<'this, str> {
+//!         "|".into()
+//!     }
+//!
+//!     fn line_end<'this>(&self) -> Cow<'this, str> {
+//!         "\n".into()
+//!     }
+//!
+//!     fn header<'this>(&self) -> Cow<'this, str> {
+//!         format!("{}\n", "Header").into()
+//!     }
+//! }
+//! let my_theme = MyTheme {};
 //! let old = "The quick brown fox and\njumps over the sleepy dog";
 //! let new = "The quick red fox and\njumps over the lazy dog";
 //! let actual = format!("{}", DrawDiff::new(old, new, &my_theme));
@@ -84,7 +116,7 @@ mod themes;
 
 pub use cmd::diff;
 pub use draw_diff::DrawDiff;
-pub use themes::{arrows_color_theme, arrows_theme, signs_color_theme, signs_theme, Theme};
+pub use themes::{ArrowsColorTheme, ArrowsTheme, SignsColorTheme, SignsTheme, Theme};
 
 #[cfg(doctest)]
 mod test_readme {

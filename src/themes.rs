@@ -1,50 +1,32 @@
-use crossterm::style::Stylize;
-use lazy_static::lazy_static;
+use std::borrow::Cow;
 
-/// Take a string and format it for some purpose
-type LineFormatter = fn(&str) -> String;
+use crossterm::style::Stylize;
 
 /// A [`Theme`] for the diff
 ///
 /// This is to allows some control over what the diff looks like without having
 /// to parse it yourself
-#[derive(Clone)]
-pub struct Theme {
+pub trait Theme {
     /// How to format the text when highlighting it for inserts
-    pub highlight_insert: LineFormatter,
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str>;
     /// How to format the text when highlighting it for deletes
-    pub highlight_delete: LineFormatter,
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str>;
     /// How to format unchanged content
-    pub equal_content: LineFormatter,
-    /// The prefix to give lines that are equal
-    pub equal_prefix: String,
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str>;
     /// How to format bits of text that are being removed
-    pub delete_content: LineFormatter,
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str>;
+    /// The prefix to give lines that are equal
+    fn equal_prefix<'this>(&self) -> Cow<'this, str>;
     /// The prefix to give lines that are being removed
-    pub delete_prefix: String,
+    fn delete_prefix<'this>(&self) -> Cow<'this, str>;
     /// How to format bits of text that are being added
-    pub insert_line: LineFormatter,
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str>;
     /// The prefix to give lines that are being added
-    pub insert_prefix: String,
+    fn insert_prefix<'this>(&self) -> Cow<'this, str>;
     /// If a diff line doesn't end with a newline, what should we insert
-    pub line_end: String,
+    fn line_end<'this>(&self) -> Cow<'this, str>;
     /// A header to put above the diff
-    pub header: String,
-}
-
-lazy_static! {
-    static ref ARROWS_THEME: Theme = Theme {
-        header: "< left / > right\n".to_string(),
-        highlight_insert: std::string::ToString::to_string,
-        highlight_delete: std::string::ToString::to_string,
-        equal_prefix: " ".to_string(),
-        equal_content: std::string::ToString::to_string,
-        delete_prefix: "<".to_string(),
-        delete_content: std::string::ToString::to_string,
-        insert_prefix: ">".to_string(),
-        insert_line: std::string::ToString::to_string,
-        line_end: "\n".into(),
-    };
+    fn header<'this>(&self) -> Cow<'this, str>;
 }
 
 /// A simple colorless using arrows theme
@@ -52,12 +34,11 @@ lazy_static! {
 /// # Examples
 ///
 /// ```
-/// use termdiff::{arrows_theme, diff};
+/// use termdiff::{diff, ArrowsTheme};
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let theme = arrows_theme();
-/// diff(&mut buffer, old, new, &theme).unwrap();
+/// diff(&mut buffer, old, new, &ArrowsTheme::default()).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
 /// assert_eq!(
@@ -70,33 +51,58 @@ lazy_static! {
 /// "
 /// );
 /// ```
-#[must_use]
-pub fn arrows_theme() -> Theme {
-    ARROWS_THEME.clone()
-}
+#[derive(Default)]
+pub struct ArrowsTheme {}
 
-lazy_static! {
-    static ref ARROWS_COLOR_THEME: Theme = Theme {
-        header: format!("{} / {}\n", "< left".red(), "> right".green()),
-        highlight_insert: |x| x.underlined().to_string(),
-        highlight_delete: |x| x.underlined().to_string(),
-        equal_prefix: " ".to_string(),
-        equal_content: std::string::ToString::to_string,
-        delete_prefix: "<".red().to_string(),
-        delete_content: |x| x.red().to_string(),
-        insert_prefix: ">".green().to_string(),
-        insert_line: |x| x.green().to_string(),
-        line_end: "\n".into(),
-    };
+impl Theme for ArrowsTheme {
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn equal_prefix<'this>(&self) -> Cow<'this, str> {
+        " ".into()
+    }
+
+    fn delete_prefix<'this>(&self) -> Cow<'this, str> {
+        "<".into()
+    }
+
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn insert_prefix<'this>(&self) -> Cow<'this, str> {
+        ">".into()
+    }
+
+    fn line_end<'this>(&self) -> Cow<'this, str> {
+        "\n".into()
+    }
+
+    fn header<'this>(&self) -> Cow<'this, str> {
+        "< left / > right\n".into()
+    }
 }
 
 /// A simple colorful theme using arrows
 ///
 /// ```
-/// use termdiff::{arrows_color_theme, diff};
+/// use termdiff::{ArrowsColorTheme, diff};
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
-/// let theme = arrows_color_theme();
+/// let theme = ArrowsColorTheme::default();
 /// let mut buffer: Vec<u8> = Vec::new();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
@@ -111,24 +117,49 @@ lazy_static! {
 /// "
 /// );
 /// ```
-#[must_use]
-pub fn arrows_color_theme() -> Theme {
-    ARROWS_COLOR_THEME.clone()
-}
+#[derive(Default)]
+pub struct ArrowsColorTheme {}
 
-lazy_static! {
-    static ref SIGNS_THEME: Theme = Theme {
-        header: "--- remove | insert +++\n".to_string(),
-        highlight_insert: std::string::ToString::to_string,
-        highlight_delete: std::string::ToString::to_string,
-        equal_prefix: " ".to_string(),
-        equal_content: std::string::ToString::to_string,
-        delete_prefix: "-".to_string(),
-        delete_content: std::string::ToString::to_string,
-        insert_prefix: "+".to_string(),
-        insert_line: std::string::ToString::to_string,
-        line_end: "\n".into(),
-    };
+impl Theme for ArrowsColorTheme {
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.underlined().to_string().into()
+    }
+
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.underlined().to_string().into()
+    }
+
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.red().to_string().into()
+    }
+
+    fn equal_prefix<'this>(&self) -> Cow<'this, str> {
+        " ".into()
+    }
+
+    fn delete_prefix<'this>(&self) -> Cow<'this, str> {
+        "<".red().to_string().into()
+    }
+
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.green().to_string().into()
+    }
+
+    fn insert_prefix<'this>(&self) -> Cow<'this, str> {
+        ">".green().to_string().into()
+    }
+
+    fn line_end<'this>(&self) -> Cow<'this, str> {
+        "\n".into()
+    }
+
+    fn header<'this>(&self) -> Cow<'this, str> {
+        format!("{} / {}\n", "< left".red(), "> right".green()).into()
+    }
 }
 
 /// A simple colorless using signs theme
@@ -136,11 +167,11 @@ lazy_static! {
 /// # Examples
 ///
 /// ```
-/// use termdiff::{diff, signs_theme};
+/// use termdiff::{diff, SignsTheme};
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let theme = signs_theme();
+/// let theme = SignsTheme::default();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
@@ -154,34 +185,59 @@ lazy_static! {
 /// "
 /// );
 /// ```
-#[must_use]
-pub fn signs_theme() -> Theme {
-    SIGNS_THEME.clone()
-}
+#[derive(Default)]
+pub struct SignsTheme {}
 
-lazy_static! {
-    static ref SIGNS_COLOR_THEME: Theme = Theme {
-        header: format!("{} | {}\n", "--- remove".red(), "insert +++".green()),
-        highlight_insert: |x| x.underlined().green().to_string(),
-        highlight_delete: |x| x.underlined().red().to_string(),
-        equal_prefix: " ".to_string(),
-        equal_content: std::string::ToString::to_string,
-        delete_prefix: "-".red().to_string(),
-        delete_content: |x| x.red().to_string(),
-        insert_prefix: "+".green().to_string(),
-        insert_line: |x| x.green().to_string(),
-        line_end: "\n".into(),
-    };
+impl Theme for SignsTheme {
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.to_string().into()
+    }
+
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn equal_prefix<'this>(&self) -> Cow<'this, str> {
+        " ".into()
+    }
+
+    fn delete_prefix<'this>(&self) -> Cow<'this, str> {
+        "-".into()
+    }
+
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn insert_prefix<'this>(&self) -> Cow<'this, str> {
+        "+".into()
+    }
+
+    fn line_end<'this>(&self) -> Cow<'this, str> {
+        "\n".into()
+    }
+
+    fn header<'this>(&self) -> Cow<'this, str> {
+        format!("{} | {}\n", "--- remove", "insert +++").into()
+    }
 }
 
 /// A simple colorful theme using signs
 ///
 /// ```
-/// use termdiff::{diff, signs_color_theme};
+/// use termdiff::{diff, SignsColorTheme};
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let  theme = signs_color_theme();
+/// let  theme = SignsColorTheme::default();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
@@ -195,7 +251,47 @@ lazy_static! {
 /// "
 /// );
 /// ```
-#[must_use]
-pub fn signs_color_theme() -> Theme {
-    SIGNS_COLOR_THEME.clone()
+#[derive(Default)]
+pub struct SignsColorTheme {}
+
+impl Theme for SignsColorTheme {
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.underlined().green().to_string().into()
+    }
+
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.underlined().red().to_string().into()
+    }
+
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
+
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.red().to_string().into()
+    }
+
+    fn equal_prefix<'this>(&self) -> Cow<'this, str> {
+        " ".into()
+    }
+
+    fn delete_prefix<'this>(&self) -> Cow<'this, str> {
+        "-".red().to_string().into()
+    }
+
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.green().to_string().into()
+    }
+
+    fn insert_prefix<'this>(&self) -> Cow<'this, str> {
+        "+".green().to_string().into()
+    }
+
+    fn line_end<'this>(&self) -> Cow<'this, str> {
+        "\n".into()
+    }
+
+    fn header<'this>(&self) -> Cow<'this, str> {
+        format!("{} | {}\n", "--- remove".red(), "insert +++".green()).into()
+    }
 }
