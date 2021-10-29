@@ -8,23 +8,35 @@ use crossterm::style::Stylize;
 /// to parse it yourself
 pub trait Theme {
     /// How to format the text when highlighting it for inserts
-    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str>;
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
     /// How to format the text when highlighting it for deletes
-    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str>;
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
     /// How to format unchanged content
-    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str>;
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
     /// How to format bits of text that are being removed
-    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str>;
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
     /// The prefix to give lines that are equal
     fn equal_prefix<'this>(&self) -> Cow<'this, str>;
     /// The prefix to give lines that are being removed
     fn delete_prefix<'this>(&self) -> Cow<'this, str>;
     /// How to format bits of text that are being added
-    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str>;
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
+    }
     /// The prefix to give lines that are being added
     fn insert_prefix<'this>(&self) -> Cow<'this, str>;
     /// If a diff line doesn't end with a newline, what should we insert
-    fn line_end<'this>(&self) -> Cow<'this, str>;
+    fn line_end<'this>(&self) -> Cow<'this, str> {
+        "\n".into()
+    }
     /// A header to put above the diff
     fn header<'this>(&self) -> Cow<'this, str>;
 }
@@ -55,22 +67,6 @@ pub trait Theme {
 pub struct ArrowsTheme {}
 
 impl Theme for ArrowsTheme {
-    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
-    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
-    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
-    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
     fn equal_prefix<'this>(&self) -> Cow<'this, str> {
         " ".into()
     }
@@ -79,16 +75,8 @@ impl Theme for ArrowsTheme {
         "<".into()
     }
 
-    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
     fn insert_prefix<'this>(&self) -> Cow<'this, str> {
         ">".into()
-    }
-
-    fn line_end<'this>(&self) -> Cow<'this, str> {
-        "\n".into()
     }
 
     fn header<'this>(&self) -> Cow<'this, str> {
@@ -129,10 +117,6 @@ impl Theme for ArrowsColorTheme {
         input.underlined().to_string().into()
     }
 
-    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
     fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
         input.red().to_string().into()
     }
@@ -151,10 +135,6 @@ impl Theme for ArrowsColorTheme {
 
     fn insert_prefix<'this>(&self) -> Cow<'this, str> {
         ">".green().to_string().into()
-    }
-
-    fn line_end<'this>(&self) -> Cow<'this, str> {
-        "\n".into()
     }
 
     fn header<'this>(&self) -> Cow<'this, str> {
@@ -189,22 +169,6 @@ impl Theme for ArrowsColorTheme {
 pub struct SignsTheme {}
 
 impl Theme for SignsTheme {
-    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.to_string().into()
-    }
-
-    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
-    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
-    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
     fn equal_prefix<'this>(&self) -> Cow<'this, str> {
         " ".into()
     }
@@ -213,16 +177,8 @@ impl Theme for SignsTheme {
         "-".into()
     }
 
-    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
-        input.into()
-    }
-
     fn insert_prefix<'this>(&self) -> Cow<'this, str> {
         "+".into()
-    }
-
-    fn line_end<'this>(&self) -> Cow<'this, str> {
-        "\n".into()
     }
 
     fn header<'this>(&self) -> Cow<'this, str> {
