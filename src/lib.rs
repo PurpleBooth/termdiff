@@ -52,6 +52,7 @@
 //! use crossterm::style::Stylize;
 //! use termdiff::{DrawDiff, Theme};
 //!
+//! #[derive(Debug)]
 //! struct MyTheme {}
 //! impl Theme for MyTheme {
 //!     fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
@@ -109,6 +110,17 @@
 //! "
 //! );
 //! ```
+
+#![warn(
+    rust_2018_idioms,
+    unused,
+    rust_2021_compatibility,
+    nonstandard_style,
+    future_incompatible,
+    missing_copy_implementations,
+    missing_debug_implementations,
+    missing_docs
+)]
 
 mod cmd;
 mod draw_diff;

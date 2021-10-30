@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, fmt::Debug};
 
 use crossterm::style::Stylize;
 
@@ -6,7 +6,7 @@ use crossterm::style::Stylize;
 ///
 /// This is to allows some control over what the diff looks like without having
 /// to parse it yourself
-pub trait Theme {
+pub trait Theme: Debug {
     /// How to format the text when highlighting it for inserts
     fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
         input.into()
@@ -63,7 +63,7 @@ pub trait Theme {
 /// "
 /// );
 /// ```
-#[derive(Default)]
+#[derive(Default, Debug, Copy, Clone)]
 pub struct ArrowsTheme {}
 
 impl Theme for ArrowsTheme {
@@ -105,7 +105,7 @@ impl Theme for ArrowsTheme {
 /// "
 /// );
 /// ```
-#[derive(Default)]
+#[derive(Default, Debug, Clone, Copy)]
 pub struct ArrowsColorTheme {}
 
 impl Theme for ArrowsColorTheme {
@@ -165,7 +165,7 @@ impl Theme for ArrowsColorTheme {
 /// "
 /// );
 /// ```
-#[derive(Default)]
+#[derive(Default, Copy, Clone, Debug)]
 pub struct SignsTheme {}
 
 impl Theme for SignsTheme {
@@ -207,7 +207,7 @@ impl Theme for SignsTheme {
 /// "
 /// );
 /// ```
-#[derive(Default)]
+#[derive(Default, Clone, Copy, Debug)]
 pub struct SignsColorTheme {}
 
 impl Theme for SignsColorTheme {

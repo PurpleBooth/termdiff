@@ -10,6 +10,7 @@ use super::themes::Theme;
 /// The struct that draws the diff
 ///
 /// Uses similar under the hood
+#[derive(Debug)]
 pub struct DrawDiff<'a> {
     old: &'a str,
     new: &'a str,
@@ -120,7 +121,7 @@ mod test {
         let old = "a\nb\nc";
         let new = "a\nc\n";
         let theme = ArrowsTheme {};
-        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
+        let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
 
         assert_eq!(
             format!("{}", actual),
@@ -138,7 +139,7 @@ mod test {
         let old = "adc";
         let new = "abc";
         let theme = ArrowsTheme {};
-        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
+        let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
         assert_eq!(
             format!("{}", actual),
             "< left / > right
@@ -153,7 +154,7 @@ mod test {
         let old = "The quick brown fox and\njumps over the sleepy dog";
         let new = "The quick red fox and\njumps over the lazy dog";
         let theme = ArrowsTheme {};
-        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
+        let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
         assert_eq!(
             format!("{}", actual),
             "< left / > right
@@ -186,7 +187,7 @@ mod test {
         let old = "The quick brown fox and\njumps over the sleepy dog";
         let new = "The quick red fox and\njumps over the lazy dog";
         let theme = ArrowsColorTheme {};
-        let actual: DrawDiff = DrawDiff::new(old, new, &theme);
+        let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
 
         assert_eq!(
             format!("{}", actual),

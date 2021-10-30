@@ -54,7 +54,7 @@ use super::{draw_diff::DrawDiff, themes::Theme};
 ///
 /// Errors on failing to write to the writer.
 pub fn diff(w: &mut dyn Write, old: &str, new: &str, theme: &dyn Theme) -> std::io::Result<()> {
-    let output: DrawDiff = DrawDiff::new(old, new, theme);
+    let output: DrawDiff<'_> = DrawDiff::new(old, new, theme);
     write!(w, "{}", output)
 }
 

@@ -67,7 +67,7 @@ use termdiff::Theme;
 use crossterm::style::Stylize;
 use std::borrow::Cow;
 
-
+#[derive(Debug)]
 struct MyTheme {}
 impl Theme for MyTheme {fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
         input.into()
