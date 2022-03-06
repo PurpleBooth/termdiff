@@ -70,12 +70,38 @@ impl<'input> DrawDiff<'input> {
             ChangeTag::Insert => self.theme.insert_prefix(),
         }
     }
+
+    fn replace_trailing_if_needed(
+        &self,
+        old: &'input str,
+        new: &'input str,
+    ) -> (Cow<'input, str>, Cow<'input, str>) {
+        if old.chars().last() == new.chars().last() {
+            (old.into(), new.into())
+        } else {
+            return (self.replace_trailing_nl(old), self.replace_trailing_nl(new));
+        }
+    }
+
+    fn replace_trailing_nl(&self, x: &'input str) -> Cow<'input, str> {
+        if x.ends_with('\n') {
+            let mut buffer = x.to_string();
+            let popped = buffer.pop().unwrap();
+            buffer.push_str(&self.theme.trailing_lf_marker());
+            buffer.push(popped);
+            buffer.into()
+        } else {
+            x.into()
+        }
+    }
 }
 
 impl Display for DrawDiff<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let (old, new): (Cow<'_, str>, Cow<'_, str>) =
+            self.replace_trailing_if_needed(self.old, self.new);
         write!(f, "{}", self.theme.header())?;
-        let diff = TextDiff::from_lines(self.old, self.new);
+        let diff = TextDiff::from_lines(&old, &new);
 
         for op in diff.ops() {
             for change in diff.iter_inline_changes(op) {
@@ -129,7 +155,7 @@ mod test {
  a
 <b
 <c
->c
+>c␊
 "
         );
     }

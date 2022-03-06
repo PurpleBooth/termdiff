@@ -37,6 +37,12 @@ pub trait Theme: Debug {
     fn line_end<'this>(&self) -> Cow<'this, str> {
         "\n".into()
     }
+
+    /// What to highlight any trailing newlines with
+    fn trailing_lf_marker<'this>(&self) -> Cow<'this, str> {
+        "␊".into()
+    }
+
     /// A header to put above the diff
     fn header<'this>(&self) -> Cow<'this, str>;
 }
