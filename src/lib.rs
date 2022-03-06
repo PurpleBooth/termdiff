@@ -122,13 +122,13 @@
     missing_docs
 )]
 
-mod cmd;
-mod draw_diff;
-mod themes;
-
 pub use cmd::diff;
 pub use draw_diff::DrawDiff;
 pub use themes::{ArrowsColorTheme, ArrowsTheme, SignsColorTheme, SignsTheme, Theme};
+
+mod cmd;
+mod draw_diff;
+mod themes;
 
 #[cfg(doctest)]
 mod test_readme {

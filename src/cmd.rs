@@ -86,8 +86,7 @@ mod tests {
         let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
         assert_eq!(
             actual,
-"\u{1b}[38;5;9m< left\u{1b}[39m / \u{1b}[38;5;10m> right\u{1b}[39m\n a\n\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mb\n\u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mc\u{1b}[39m\n\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mc␊\n\u{1b}[39m",
-
+            "\u{1b}[38;5;9m< left\u{1b}[39m / \u{1b}[38;5;10m> right\u{1b}[39m\n a\n\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mb\n\u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mc\u{1b}[39m\n\u{1b}[38;5;10m>\u{1b}[39m\u{1b}[38;5;10mc␊\n\u{1b}[39m",
         );
     }
 }
