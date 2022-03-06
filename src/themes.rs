@@ -38,7 +38,8 @@ pub trait Theme: Debug {
         "\n".into()
     }
 
-    /// What to highlight any trailing newlines with
+    /// If one of the two strings ends with a newline, and the other does not,
+    /// insert this character before the newline, and then re-add the newline
     fn trailing_lf_marker<'this>(&self) -> Cow<'this, str> {
         "␊".into()
     }
