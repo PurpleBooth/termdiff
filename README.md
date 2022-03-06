@@ -69,46 +69,49 @@ use std::borrow::Cow;
 
 #[derive(Debug)]
 struct MyTheme {}
-impl Theme for MyTheme {fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
+impl Theme for MyTheme {
+    fn highlight_insert<'this>(&self, input: &'this str) -> Cow<'this, str> {
         input.into()
     }
 
-fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
-       input.into()
+    fn highlight_delete<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
     }
 
-fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-       input.into()
+    fn equal_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
     }
 
-fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
-       input.into()
+    fn delete_content<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
     }
 
-fn equal_prefix<'this>(&self) -> Cow<'this, str> {
-     "=".into()
+    fn equal_prefix<'this>(&self) -> Cow<'this, str> {
+        "=".into()
     }
 
-fn delete_prefix<'this>(&self) -> Cow<'this, str> {
+    fn delete_prefix<'this>(&self) -> Cow<'this, str> {
         "!".into()
     }
 
-fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
-     input.into()
+    fn insert_line<'this>(&self, input: &'this str) -> Cow<'this, str> {
+        input.into()
     }
 
-fn insert_prefix<'this>(&self) -> Cow<'this, str> {
-     "|".into()
+    fn insert_prefix<'this>(&self) -> Cow<'this, str> {
+        "|".into()
     }
 
-fn line_end<'this>(&self) -> Cow<'this, str> {
+    fn line_end<'this>(&self) -> Cow<'this, str> {
         "\n".into()
     }
 
-fn header<'this>(&self) -> Cow<'this, str> {
+    fn header<'this>(&self) -> Cow<'this, str> {
         format!("{}\n", "Header").into()
-    }}
-let my_theme = MyTheme{};
+    }
+}
+
+let my_theme = MyTheme {};
 
 let old = "The quick brown fox and\njumps over the sleepy dog";
 let new = "The quick red fox and\njumps over the lazy dog";
