@@ -193,6 +193,19 @@ mod test {
     }
 
     #[test]
+    fn two_empty_strings() {
+        let old = "";
+        let new = "";
+        let theme = ArrowsTheme {};
+        let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
+        assert_eq!(
+            format!("{}", actual),
+            "< left / > right
+"
+        );
+    }
+
+    #[test]
     fn into_string() {
         let old = "The quick brown fox and\njumps over the sleepy dog";
         let new = "The quick red fox and\njumps over the lazy dog";
