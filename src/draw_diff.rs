@@ -117,7 +117,7 @@ impl Display for DrawDiff<'_> {
                             self.format_line(highlighted.borrow(), change.tag())
                         )?;
                     } else {
-                        write!(f, "{}", self.format_line(*inline_change, change.tag()))?;
+                        write!(f, "{}", self.format_line(inline_change, change.tag()))?;
                     }
                 }
 
@@ -133,7 +133,7 @@ impl Display for DrawDiff<'_> {
 
 impl From<DrawDiff<'_>> for String {
     fn from(diff: DrawDiff<'_>) -> Self {
-        format!("{}", diff)
+        format!("{diff}")
     }
 }
 
@@ -150,7 +150,7 @@ mod test {
         let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
 
         assert_eq!(
-            format!("{}", actual),
+            format!("{actual}"),
             "< left / > right
  a
 <b
@@ -167,7 +167,7 @@ mod test {
         let theme = ArrowsTheme {};
         let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
         assert_eq!(
-            format!("{}", actual),
+            format!("{actual}"),
             "< left / > right
 <adc
 >abc
@@ -182,7 +182,7 @@ mod test {
         let theme = ArrowsTheme {};
         let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
         assert_eq!(
-            format!("{}", actual),
+            format!("{actual}"),
             "< left / > right
 <The quick brown fox and
 <jumps over the sleepy dog
@@ -199,7 +199,7 @@ mod test {
         let theme = ArrowsTheme {};
         let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
         assert_eq!(
-            format!("{}", actual),
+            format!("{actual}"),
             "< left / > right
 "
         );
@@ -229,7 +229,7 @@ mod test {
         let actual: DrawDiff<'_> = DrawDiff::new(old, new, &theme);
 
         assert_eq!(
-            format!("{}", actual),
+            format!("{actual}"),
             "\u{1b}[38;5;9m< left\u{1b}[39m / \u{1b}[38;5;10m> right\u{1b}[39m
 \u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mThe quick \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4mbrown\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m fox and
 \u{1b}[39m\u{1b}[38;5;9m<\u{1b}[39m\u{1b}[38;5;9mjumps over the \u{1b}[39m\u{1b}[38;5;9m\u{1b}[4msleepy\u{1b}[0m\u{1b}[39m\u{1b}[38;5;9m dog\u{1b}[39m
