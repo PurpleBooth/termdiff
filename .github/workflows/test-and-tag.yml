@@ -15,7 +15,7 @@ jobs:
       run_minimal_version_check: true
 
   release:
-    if: github.ref == 'raefs/heads/main'
+    if: github.ref == 'refs/heads/main'
     needs:
       - lint-markdown
       - rust-checks
