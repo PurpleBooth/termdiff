@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v3.1.4 - 2024-08-19
+#### Bug Fixes
+- **(deps)** update rust crate crossterm to 0.28.0 - (515dc5c) - renovate[bot]
+#### Continuous Integration
+- **(Mergify)** configuration update - (6770a6c) - Billie Thompson
+- Use binstall and cog for releases - (15d0bcc) - Billie Thompson
+#### Miscellaneous Chores
+- Add renovate.json - (fba500f) - renovate[bot]
+
+- - -
+
 ## v3.1.3 - 2024-07-27
 #### Bug Fixes
 - Bump versions - (878ba7f) - Billie Thompson
