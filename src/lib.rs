@@ -111,16 +111,23 @@
 //! );
 //! ```
 
-#![warn(
-    rust_2018_idioms,
+#![warn(clippy::nursery, clippy::suspicious)]
+#![deny(
     unused,
-    rust_2021_compatibility,
     nonstandard_style,
     future_incompatible,
     missing_copy_implementations,
     missing_debug_implementations,
-    missing_docs
+    missing_docs,
+    clippy::pedantic,
+    clippy::cargo,
+    clippy::complexity,
+    clippy::correctness,
+    clippy::pedantic,
+    clippy::perf,
+    clippy::style
 )]
+#![allow(clippy::multiple_crate_versions)]
 
 pub use cmd::diff;
 pub use draw_diff::DrawDiff;
