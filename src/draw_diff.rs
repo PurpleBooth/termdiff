@@ -79,7 +79,7 @@ impl<'input> DrawDiff<'input> {
         if old.chars().last() == new.chars().last() {
             (old.into(), new.into())
         } else {
-            return (self.replace_trailing_nl(old), self.replace_trailing_nl(new));
+            (self.replace_trailing_nl(old), self.replace_trailing_nl(new))
         }
     }
 
