@@ -111,7 +111,7 @@
 //! );
 //! ```
 
-#![warn(clippy::nursery, clippy::suspicious)]
+#![warn(clippy::nursery)]
 #![deny(
     unused,
     nonstandard_style,
@@ -125,7 +125,8 @@
     clippy::correctness,
     clippy::pedantic,
     clippy::perf,
-    clippy::style
+    clippy::style,
+    clippy::suspicious
 )]
 #![allow(clippy::multiple_crate_versions)]
 
