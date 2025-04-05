@@ -11,4 +11,4 @@ categories = ["development-tools", "text-processing"]
 
 [dependencies]
 similar = { version = "2.6.0", features = ["inline"] }
-crossterm = "0.28.0"
+crossterm = ">=0.28.0, <=0.29.0"
