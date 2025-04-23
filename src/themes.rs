@@ -258,3 +258,32 @@ impl Theme for SignsColorTheme {
         format!("{} | {}\n", "--- remove".red(), "insert +++".green()).into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_signs_theme_equal_prefix() {
+        let theme = SignsTheme::default();
+        assert_eq!(theme.equal_prefix(), Cow::Borrowed(" "));
+    }
+
+    #[test]
+    fn test_signs_color_theme_equal_prefix() {
+        let theme = SignsColorTheme::default();
+        assert_eq!(theme.equal_prefix(), Cow::Borrowed(" "));
+    }
+
+    #[test]
+    fn test_arrows_theme_equal_prefix() {
+        let theme = ArrowsTheme::default();
+        assert_eq!(theme.equal_prefix(), Cow::Borrowed(" "));
+    }
+
+    #[test]
+    fn test_arrows_color_theme_equal_prefix() {
+        let theme = ArrowsColorTheme::default();
+        assert_eq!(theme.equal_prefix(), Cow::Borrowed(" "));
+    }
+}
