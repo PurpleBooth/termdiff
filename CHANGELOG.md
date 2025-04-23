@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v3.1.5 - 2025-04-23
+#### Bug Fixes
+- **(deps)** update rust crate crossterm to 0.28.0, ||, ^0 - (6c289dd) - Solace System Renovate Fox
+#### Continuous Integration
+- Switch workflow runners from "docker" to "runner-latest" - (5169558) - Billie Thompson
+- run on ubuntu-latest - (aba3139) - PurpleBooth
+- Set rangeStrategy to widen for dependencies in Renovate - (92d643d) - Billie Thompson
+- Remove GitHub-specific CI/CD configurations and migrate to Forgejo - (305262a) - Billie Thompson
+#### Miscellaneous Chores
+- **(deps)** update https://code.forgejo.org/actions/cache digest to 5a3ec84 - (3aa1647) - Solace System Renovate Fox
+- **(deps)** update https://code.forgejo.org/actions/cache digest to d4323d4 - (e9c7bbe) - Solace System Renovate Fox
+- **(deps)** update https://code.forgejo.org/actions/cache digest to 0c907a7 - (fee1679) - Solace System Renovate Fox
+- Remove rustfmt configuration file - (1f94db7) - Billie Thompson
+#### Refactoring
+- Update Clippy lint configuration for better clarity - (7378501) - Billie Thompson
+- Enforce stricter Clippy lints and allow specific exceptions. - (0672c30) - Billie Thompson
+- Fix redundant return and ensure consistent newline handling. - (a6a7d8b) - Billie Thompson
+
+- - -
+
 ## v3.1.4 - 2024-08-19
 #### Bug Fixes
 - **(deps)** update rust crate crossterm to 0.28.0 - (515dc5c) - renovate[bot]
