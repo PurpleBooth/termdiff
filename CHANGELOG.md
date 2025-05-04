@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v4.0.0 - 2025-05-04
+#### Documentation
+- remove PERFORMANCE_IMPROVEMENTS.md documentation - (265f433) - Billie Thompson
+#### Refactoring
+- **(src)** move tests to dedicated directory and add benchmarking - (9b040b1) - Billie Thompson
+#### Tests
+- add some cases found by mutation testing - (320eef3) - Billie Thompson
+
+- - -
+
 ## v3.1.6 - 2025-04-24
 #### Performance
 - Significantly improved Myers algorithm performance for large inputs (up to 37% faster) - See PERFORMANCE_IMPROVEMENTS.md for details
