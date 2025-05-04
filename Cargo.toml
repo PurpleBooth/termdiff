@@ -9,6 +9,22 @@ keywords = ["diff", "terminal", "text", "comparison"]
 categories = ["development-tools", "text-processing"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+default = ["myers", "similar", "arrows", "arrows_color", "signs", "signs_color"]
+myers = []
+similar = ["dep:similar"]
+arrows = []
+arrows_color = ["dep:crossterm"]
+signs = []
+signs_color = ["dep:crossterm"]
+
 [dependencies]
-similar = { version = "2.6.0", features = ["inline"] }
-crossterm = ">=0.28.0, <=0.29.0"
+similar = { version = "2.6.0", features = ["inline"], optional = true }
+crossterm = { version = ">=0.28.0, <=0.29.0", optional = true }
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[[bench]]
+name = "diff_benchmark"
+harness = false

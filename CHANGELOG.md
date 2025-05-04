@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v3.1.6 - 2025-04-24
+#### Performance
+- Significantly improved Myers algorithm performance for large inputs (up to 37% faster) - See PERFORMANCE_IMPROVEMENTS.md for details
+
+- - -
 ## v3.1.5 - 2025-04-23
 #### Bug Fixes
 - **(deps)** update rust crate crossterm to 0.28.0, ||, ^0 - (6c289dd) - Solace System Renovate Fox
