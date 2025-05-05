@@ -212,11 +212,10 @@ mod tests {
         let algorithms = Algorithm::available_algorithms();
         let expected_result = !algorithms.is_empty();
         let actual_result = Algorithm::has_available_algorithms();
-        
+
         // Verify that the function returns the expected result
         assert_eq!(
-            actual_result, 
-            expected_result,
+            actual_result, expected_result,
             "has_available_algorithms() should return !algorithms.is_empty()"
         );
     }
@@ -225,31 +224,41 @@ mod tests {
     fn test_has_available_algorithms_behavior_with_empty_vec() {
         // Test with a mock implementation that returns an empty vector
         let mock_empty_vec = || Vec::<Algorithm>::new();
-        
+
         // This is the exact implementation from has_available_algorithms
         let result = !mock_empty_vec().is_empty();
-        
+
         // When the vector is empty, the result should be false
-        assert!(!result, "Should return false when algorithms vector is empty");
-        
+        assert!(
+            !result,
+            "Should return false when algorithms vector is empty"
+        );
+
         // Now test with a non-empty vector
         let mock_non_empty_vec = || vec![Algorithm::Myers];
         let result = !mock_non_empty_vec().is_empty();
-        
+
         // When the vector is not empty, the result should be true
-        assert!(result, "Should return true when algorithms vector is not empty");
-        
+        assert!(
+            result,
+            "Should return true when algorithms vector is not empty"
+        );
+
         // Verify that the actual implementation matches our expectations
         #[cfg(not(any(feature = "myers", feature = "similar")))]
         {
-            assert!(!Algorithm::has_available_algorithms(), 
-                    "Should return false when no algorithms are available");
+            assert!(
+                !Algorithm::has_available_algorithms(),
+                "Should return false when no algorithms are available"
+            );
         }
-        
+
         #[cfg(any(feature = "myers", feature = "similar"))]
         {
-            assert!(Algorithm::has_available_algorithms(), 
-                    "Should return true when algorithms are available");
+            assert!(
+                Algorithm::has_available_algorithms(),
+                "Should return true when algorithms are available"
+            );
         }
     }
 
@@ -257,13 +266,17 @@ mod tests {
     #[cfg(not(any(feature = "myers", feature = "similar")))]
     fn test_has_available_algorithms_with_no_features() {
         // When no algorithms are enabled, has_available_algorithms should return false
-        assert!(!Algorithm::has_available_algorithms(), 
-                "has_available_algorithms() should return false when no features are enabled");
-        
+        assert!(
+            !Algorithm::has_available_algorithms(),
+            "has_available_algorithms() should return false when no features are enabled"
+        );
+
         // Verify that the available_algorithms vector is empty
         let algorithms = Algorithm::available_algorithms();
-        assert!(algorithms.is_empty(), 
-                "available_algorithms() should return an empty vector when no features are enabled");
+        assert!(
+            algorithms.is_empty(),
+            "available_algorithms() should return an empty vector when no features are enabled"
+        );
     }
 
     #[test]

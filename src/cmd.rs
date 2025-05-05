@@ -300,10 +300,10 @@ mod tests {
         let new = "new";
         let mut buffer = Cursor::new(Vec::new());
         let theme = ArrowsTheme::default();
-        
+
         // Test the exact condition from diff_with_algorithm
         let mut test_buffer = Cursor::new(Vec::new());
-        
+
         // This is the exact code from diff_with_algorithm that we want to test
         if !Algorithm::has_available_algorithms() {
             write!(
@@ -311,10 +311,10 @@ mod tests {
                 "Error: No diff algorithms are available. Enable either 'myers' or 'similar' feature."
             ).unwrap();
         }
-        
+
         // Now test a mock version where we force the condition to be true
         let mut mock_buffer = Cursor::new(Vec::new());
-        
+
         // Force the condition to be true (simulating no algorithms available)
         let mock_no_algorithms = true;
         if mock_no_algorithms {
@@ -323,26 +323,32 @@ mod tests {
                 "Error: No diff algorithms are available. Enable either 'myers' or 'similar' feature."
             ).unwrap();
         }
-        
+
         let mock_output = String::from_utf8(mock_buffer.into_inner()).expect("Not valid UTF-8");
-        assert!(mock_output.contains("Error: No diff algorithms are available"), 
-                "Error message should be shown when no algorithms are available");
-        
+        assert!(
+            mock_output.contains("Error: No diff algorithms are available"),
+            "Error message should be shown when no algorithms are available"
+        );
+
         // Now test the actual function
         let result = diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers);
         assert!(result.is_ok());
-        
+
         // The actual output depends on whether algorithms are available
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        
+
         if Algorithm::has_available_algorithms() {
             // If algorithms are available, we should see diff output
-            assert!(!output.contains("Error: No diff algorithms are available"), 
-                    "Should not show error when algorithms are available");
+            assert!(
+                !output.contains("Error: No diff algorithms are available"),
+                "Should not show error when algorithms are available"
+            );
         } else {
             // If no algorithms are available, we should see the error message
-            assert!(output.contains("Error: No diff algorithms are available"), 
-                    "Should show error when no algorithms are available");
+            assert!(
+                output.contains("Error: No diff algorithms are available"),
+                "Should show error when no algorithms are available"
+            );
         }
     }
 
@@ -450,43 +456,49 @@ mod tests {
         assert!(output.contains("Error: No diff algorithms are available"));
     }
 
-    /// Test that diff_with_algorithm correctly handles unavailable algorithms
+    /// Test that `diff_with_algorithm` correctly handles unavailable algorithms
     #[test]
     fn test_diff_with_algorithm_unavailable() {
         let old = "old";
         let new = "new";
         let mut buffer = Cursor::new(Vec::new());
         let theme = ArrowsTheme::default();
-        
+
         // Skip test if no algorithms are available
         if !Algorithm::has_available_algorithms() {
             return;
         }
-        
+
         // Get available algorithms
         let available_algorithms = Algorithm::available_algorithms();
-        
+
         // Find an algorithm that's not available (if possible)
-        let unavailable_algorithm = if available_algorithms.contains(&Algorithm::Myers) 
-            && !available_algorithms.contains(&Algorithm::Similar) {
+        let unavailable_algorithm = if available_algorithms.contains(&Algorithm::Myers)
+            && !available_algorithms.contains(&Algorithm::Similar)
+        {
             Algorithm::Similar
-        } else if !available_algorithms.contains(&Algorithm::Myers) 
-            && available_algorithms.contains(&Algorithm::Similar) {
+        } else if !available_algorithms.contains(&Algorithm::Myers)
+            && available_algorithms.contains(&Algorithm::Similar)
+        {
             Algorithm::Myers
         } else {
             // If both are available or none are available, we can't test this case
             return;
         };
-        
+
         // Test with the unavailable algorithm
         diff_with_algorithm(&mut buffer, old, new, &theme, unavailable_algorithm).unwrap();
-        
+
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        
+
         // Should still produce output using an available algorithm
-        assert!(!output.contains("Error: No diff algorithms are available"), 
-            "Should use an available algorithm instead of showing an error");
-        assert!(output.contains("old") || output.contains("new"), 
-            "Output should contain diff content");
+        assert!(
+            !output.contains("Error: No diff algorithms are available"),
+            "Should use an available algorithm instead of showing an error"
+        );
+        assert!(
+            output.contains("old") || output.contains("new"),
+            "Output should contain diff content"
+        );
     }
 }
