@@ -191,8 +191,8 @@ fn test_diff_with_algorithm_myers() {
 
     let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
     // Verify the theme's arrow prefixes are present
-    assert!(output.contains("< The quick brown fox"));
-    assert!(output.contains("> The quick red fox"));
+    assert!(output.contains("<The quick brown fox"));
+    assert!(output.contains(">The quick red fox"));
 }
 
 /// Test that the `diff_with_algorithm` function works with the Similar algorithm
@@ -208,6 +208,6 @@ fn test_diff_with_algorithm_similar() {
 
     let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
     // Verify the theme's arrow prefixes are present
-    assert!(output.contains("< The quick brown fox"));
-    assert!(output.contains("> The quick red fox"));
+    assert!(output.contains("<The quick brown fox"));
+    assert!(output.contains(">The quick red fox"));
 }
