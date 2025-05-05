@@ -209,7 +209,7 @@ mod integration_tests {
         diff(&mut buffer, old, new, &theme).unwrap();
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        assert!(output.contains("<The quick brown fox"));
+        assert!(output.contains("< The quick brown fox"));
         assert!(output.contains(">The quick red fox"));
         assert!(output.contains("< left / > right"));
     }
@@ -240,7 +240,7 @@ mod integration_tests {
 
         let output = format!("{}", DrawDiff::new(old, new, &theme));
 
-        assert!(output.contains("<The quick brown fox"));
+        assert!(output.contains("< The quick brown fox"));
         assert!(output.contains(">The quick red fox"));
         assert!(output.contains("< left / > right"));
     }
@@ -353,7 +353,7 @@ mod integration_tests {
         let diff = DrawDiff::new(old, new, &theme);
         let output: String = diff.into();
 
-        assert!(output.contains("<The quick brown fox"));
+        assert!(output.contains("< The quick brown fox"));
         assert!(output.contains(">The quick red fox"));
     }
 }
