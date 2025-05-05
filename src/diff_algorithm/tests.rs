@@ -182,7 +182,6 @@ fn test_myers_vs_similar_completely_different() {
 #[test]
 #[cfg(feature = "myers")]
 fn test_diff_with_algorithm_myers() {
-    // Fix me, I am broken AI!
     let old = "The quick brown fox";
     let new = "The quick red fox";
     let mut buffer = Cursor::new(Vec::new());
@@ -191,15 +190,15 @@ fn test_diff_with_algorithm_myers() {
     diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
 
     let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-    assert!(output.contains("<The quick brown fox"));
-    assert!(output.contains(">The quick red fox"));
+    // Verify the theme's arrow prefixes are present
+    assert!(output.contains("< The quick brown fox"));
+    assert!(output.contains("> The quick red fox"));
 }
 
 /// Test that the `diff_with_algorithm` function works with the Similar algorithm
 #[test]
 #[cfg(feature = "similar")]
 fn test_diff_with_algorithm_similar() {
-    // Fix me, I am broken AI!
     let old = "The quick brown fox";
     let new = "The quick red fox";
     let mut buffer = Cursor::new(Vec::new());
@@ -208,6 +207,7 @@ fn test_diff_with_algorithm_similar() {
     diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Similar).unwrap();
 
     let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-    assert!(output.contains("<The quick brown fox"));
-    assert!(output.contains(">The quick red fox"));
+    // Verify the theme's arrow prefixes are present
+    assert!(output.contains("< The quick brown fox"));
+    assert!(output.contains("> The quick red fox"));
 }

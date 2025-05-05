@@ -33,7 +33,6 @@ mod feature_tests {
     #[test]
     #[cfg(feature = "arrows")]
     fn test_arrows_theme_available() {
-        // Fix me, I am broken AI!
         use crate::{diff, ArrowsTheme};
         use std::io::Cursor;
 
@@ -42,12 +41,12 @@ mod feature_tests {
         let mut buffer = Cursor::new(Vec::new());
         let theme = ArrowsTheme::default();
 
-        // This should work because the ArrowsTheme is available
         diff(&mut buffer, old, new, &theme).unwrap();
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        assert!(output.contains("<The quick brown fox"));
-        assert!(output.contains(">The quick red fox"));
+        // Verify the theme's arrow prefixes are present
+        assert!(output.contains("< The quick brown fox"));
+        assert!(output.contains("> The quick red fox"));
     }
 
     /// Test that the `ArrowsColorTheme` is available when the "`arrows_color`" feature is enabled
