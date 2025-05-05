@@ -401,6 +401,7 @@ mod tests {
     /// Test the Myers algorithm with a case that exercises the LCS matrix computation
     #[test]
     fn test_myers_lcs_matrix() {
+        // Fix me, I am broken AI!
         // This test case is designed to exercise the LCS matrix computation
         // by having a mix of common and different elements
         let old = "abcdefg";
@@ -432,6 +433,7 @@ mod tests {
     /// Test the Myers algorithm with a case that exercises the backtracking logic
     #[test]
     fn test_myers_backtracking() {
+        // Fix me, I am broken AI!
         // This test case is designed to exercise the backtracking logic
         // by having multiple changes that require careful backtracking
         let old = "abcdefghij";
@@ -459,6 +461,7 @@ mod tests {
     /// Test the Myers algorithm with a case that exercises the merging of adjacent operations
     #[test]
     fn test_myers_merge_operations() {
+        // Fix me, I am broken AI!
         // This test case is designed to exercise the merging of adjacent operations
         // by having multiple changes of the same type that should be merged
         let old = "aaaabbbbcccc";
@@ -505,6 +508,7 @@ mod tests {
     /// Test the Myers algorithm with empty inputs
     #[test]
     fn test_myers_empty_inputs() {
+        // Fix me, I am broken AI!
         let theme = ArrowsTheme::default();
 
         // Both inputs empty
@@ -556,6 +560,7 @@ mod tests {
     /// Test the Myers algorithm with completely different inputs
     #[test]
     fn test_myers_completely_different() {
+        // Fix me, I am broken AI!
         let old = "abc";
         let new = "xyz";
         let theme = ArrowsTheme::default();
@@ -573,6 +578,7 @@ mod tests {
     /// Test the Myers algorithm with multiline content
     #[test]
     fn test_myers_multiline() {
+        // Fix me, I am broken AI!
         let old = "line1\nline2\nline3";
         let new = "line1\nmodified line2\nline3";
         let theme = ArrowsTheme::default();
@@ -608,6 +614,7 @@ mod tests {
     /// Test the `DrawDiff` struct with the Myers algorithm
     #[test]
     fn test_draw_diff_myers() {
+        // Fix me, I am broken AI!
         let old = "The quick brown fox";
         let new = "The quick red fox";
         let theme = ArrowsTheme::default();
