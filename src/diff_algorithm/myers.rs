@@ -76,8 +76,7 @@ impl DiffAlgorithm for MyersDiff {
                     change.add_value(false, old_lines[old_idx].into());
                     
                     // Check if this is the last line and it's missing a newline
-                    let missing_newline = old_idx == old_lines.len() - 1 && 
-                                         !old.ends_with('\n');
+                    let missing_newline = old_idx == old_lines.len() - 1 && !old.ends_with('\n');
                     change.set_missing_newline(missing_newline);
                     
                     changes.push(change);
@@ -94,8 +93,7 @@ impl DiffAlgorithm for MyersDiff {
                     change.add_value(true, old_lines[old_idx].into());
                     
                     // Check if this is the last line and it's missing a newline
-                    let missing_newline = old_idx == old_lines.len() - 1 && 
-                                         !old.ends_with('\n');
+                    let missing_newline = old_idx == old_lines.len() - 1 && !old.ends_with('\n');
                     change.set_missing_newline(missing_newline);
                     
                     changes.push(change);
@@ -112,8 +110,7 @@ impl DiffAlgorithm for MyersDiff {
                     change.add_value(true, new_lines[new_idx].into());
                     
                     // Check if this is the last line and it's missing a newline
-                    let missing_newline = new_idx == new_lines.len() - 1 && 
-                                         !new.ends_with('\n');
+                    let missing_newline = new_idx == new_lines.len() - 1 && !new.ends_with('\n');
                     change.set_missing_newline(missing_newline);
                     
                     changes.push(change);
@@ -248,9 +245,10 @@ fn merge_adjacent_ops(ops: Vec<DiffOp>) -> Vec<DiffOp> {
     let mut current = ops[0].clone();
     
     for op in ops.into_iter().skip(1) {
-        if current.tag() == op.tag() && 
-           current.old_start() + current.old_len() == op.old_start() &&
-           current.new_start() + current.new_len() == op.new_start() {
+        if current.tag() == op.tag()
+            && current.old_start() + current.old_len() == op.old_start()
+            && current.new_start() + current.new_len() == op.new_start()
+        {
             // Merge with the current operation
             current = DiffOp::new(
                 current.tag(),
