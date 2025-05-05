@@ -442,10 +442,17 @@ mod tests {
         diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
-        // Verify the specific changes
-        // AI! This test needs better error messages
-        assert!(output.contains("<abcdefghij"));
-        assert!(output.contains(">axcyefghiz"));
+        // Verify the specific changes with helpful error messages
+        assert!(
+            output.contains("<abcdefghij"),
+            "Expected output to contain '<abcdefghij' but was:\n{}",
+            output
+        );
+        assert!(
+            output.contains(">axcyefghiz"),
+            "Expected output to contain '>axcyefghiz' but was:\n{}",
+            output
+        );
         // Should show changes at positions 2 (b->x) and 8 (i->y)
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
