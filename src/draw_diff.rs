@@ -216,6 +216,7 @@ mod tests {
     /// Test that `DrawDiff::new` creates a new instance with the provided values
     #[test]
     fn test_draw_diff_new() {
+        // Fix me, I am broken AI!
         let old = "old";
         let new = "new";
         let theme = ArrowsTheme::default();
@@ -275,6 +276,7 @@ mod tests {
     /// Test that `DrawDiff` correctly handles multiline inputs
     #[test]
     fn test_draw_diff_multiline() {
+        // Fix me, I am broken AI!
         let old = "line 1\nline 2\nline 3";
         let new = "line 1\nmodified line 2\nline 3";
         let theme = ArrowsTheme::default();
@@ -320,6 +322,7 @@ mod tests {
     /// Test that `DrawDiff` correctly handles completely different inputs
     #[test]
     fn test_draw_diff_completely_different() {
+        // Fix me, I am broken AI!
         let old = "old text";
         let new = "new text";
         let theme = ArrowsTheme::default();
@@ -335,6 +338,7 @@ mod tests {
     /// Test that `DrawDiff` correctly handles inputs with partial differences
     #[test]
     fn test_draw_diff_partial_differences() {
+        
         let old = "the quick brown fox";
         let new = "the quick red fox";
         let theme = ArrowsTheme::default();
@@ -400,6 +404,7 @@ mod tests {
     /// Test that `DrawDiff` correctly handles inputs with multiple changes
     #[test]
     fn test_draw_diff_multiple_changes() {
+        // Fix me, I am broken AI!
         let old = "line 1\nline 2\nline 3\nline 4";
         let new = "line 1\nmodified line 2\nline 3\nmodified line 4";
         let theme = ArrowsTheme::default();
@@ -419,6 +424,7 @@ mod tests {
     /// Test that `DrawDiff` correctly handles inputs with added lines
     #[test]
     fn test_draw_diff_added_lines() {
+        // Fix me, I am broken AI!
         let old = "line 1\nline 3";
         let new = "line 1\nline 2\nline 3";
         let theme = ArrowsTheme::default();
