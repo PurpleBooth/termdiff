@@ -1,7 +1,5 @@
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
 
-// Run mutation tests and fix them, most of them are in this file AI!
-
 /// Represents a diff operation
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum DiffOperation {
@@ -376,9 +374,14 @@ mod tests {
         diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
-        // The output should show the deletion
-        assert!(output.contains("<abxc"));
-        assert!(output.contains(">abc"));
+        // The output should show the specific deletion
+        let expected = "\
+< left / > right
+ a
+ b< xc
+> c
+";
+        assert_eq!(output, expected);
     }
 
     /// Test the Myers algorithm with a complex case involving multiple operations
@@ -394,9 +397,17 @@ mod tests {
         diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
-        // The output should show the changes
-        assert!(output.contains("<abcd"));
-        assert!(output.contains(">acbd"));
+        // The output should show the specific changes
+        let expected = "\
+< left / > right
+ a
+ b< c
+ d< 
+> c
+> b
+> d
+";
+        assert_eq!(output, expected);
     }
 
     /// Test the Myers algorithm with a case that exercises the LCS matrix computation
@@ -413,9 +424,17 @@ mod tests {
         diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
-        // The output should show the changes
-        assert!(output.contains("<abcdefg"));
-        assert!(output.contains(">abxdefz"));
+        // The output should show specific line changes
+        let expected = "\
+< left / > right
+ a
+ b< c
+ d< e
+ f< g
+> x
+> defz
+";
+        assert_eq!(output, expected);
 
         // Verify that the output contains the expected strings
         let diff = DrawDiff::with_algorithm(old, new, &theme, Algorithm::Myers);
