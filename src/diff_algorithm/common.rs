@@ -192,23 +192,35 @@ mod tests {
     fn test_has_available_algorithms() {
         // This test ensures that has_available_algorithms works correctly
         let has_algorithms = Algorithm::has_available_algorithms();
-        
+
         #[cfg(any(feature = "similar", feature = "myers"))]
-        assert!(has_algorithms, "Should have available algorithms when features are enabled");
-        
+        assert!(
+            has_algorithms,
+            "Should have available algorithms when features are enabled"
+        );
+
         #[cfg(not(any(feature = "similar", feature = "myers")))]
-        assert!(!has_algorithms, "Should not have available algorithms when no features are enabled");
+        assert!(
+            !has_algorithms,
+            "Should not have available algorithms when no features are enabled"
+        );
     }
 
     #[test]
     fn test_first_available() {
         // This test ensures that first_available works correctly
         let first = Algorithm::first_available();
-        
+
         #[cfg(any(feature = "similar", feature = "myers"))]
-        assert!(first.is_some(), "Should have a first algorithm when features are enabled");
-        
+        assert!(
+            first.is_some(),
+            "Should have a first algorithm when features are enabled"
+        );
+
         #[cfg(not(any(feature = "similar", feature = "myers")))]
-        assert!(first.is_none(), "Should not have a first algorithm when no features are enabled");
+        assert!(
+            first.is_none(),
+            "Should not have a first algorithm when no features are enabled"
+        );
     }
 }

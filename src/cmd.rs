@@ -50,7 +50,7 @@ use super::{diff_algorithm::Algorithm, draw_diff::DrawDiff, themes::Theme};
 /// Errors on failing to write to the writer.
 pub fn diff(w: &mut dyn Write, old: &str, new: &str, theme: &dyn Theme) -> std::io::Result<()> {
     // Check if any algorithms are available
-    if Algorithm::has_available_algorithms() == false {
+    if !Algorithm::has_available_algorithms() {
         return write!(
             w,
             "Error: No diff algorithms are available. Enable either 'myers' or 'similar' feature."
