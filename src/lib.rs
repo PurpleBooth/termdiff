@@ -212,6 +212,7 @@ mod integration_tests {
         assert!(output.contains("< The quick brown fox"));
         assert!(output.contains("> The quick red fox"));
         assert!(output.contains("> The quick red fox"));
+        assert!(output.contains("> The quick red fox"));
         assert!(output.contains("< left / > right"));
     }
 
@@ -355,6 +356,6 @@ mod integration_tests {
         let output: String = diff.into();
 
         assert!(output.contains("< The quick brown fox"));
-        assert!(output.contains(">The quick red fox"));
+        assert!(output.contains("> The quick red fox"));
     }
 }
