@@ -1,5 +1,7 @@
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
 
+// AI: this has loads of escaped mutants - fix it please. AI!
+
 /// Represents a diff operation
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum DiffOperation {
