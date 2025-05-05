@@ -216,18 +216,16 @@ mod tests {
     /// Test that `DrawDiff::new` creates a new instance with the provided values
     #[test]
     fn test_draw_diff_new() {
-        // Fix me, I am broken AI!
         let old = "old";
         let new = "new";
         let theme = ArrowsTheme::default();
 
         let diff = DrawDiff::new(old, new, &theme);
-
-        // We can't directly access the fields since they're private,
-        // but we can verify the behavior by formatting the diff
         let output = format!("{diff}");
-        assert!(output.contains("<old"));
-        assert!(output.contains(">new"));
+        
+        // Check header and formatted output
+        assert!(output.starts_with("< left / > right\n"));
+        assert!(output.contains("< old\n> new"));
     }
 
     /// Test that `DrawDiff` correctly handles identical inputs
@@ -276,7 +274,6 @@ mod tests {
     /// Test that `DrawDiff` correctly handles multiline inputs
     #[test]
     fn test_draw_diff_multiline() {
-        // Fix me, I am broken AI!
         let old = "line 1\nline 2\nline 3";
         let new = "line 1\nmodified line 2\nline 3";
         let theme = ArrowsTheme::default();
@@ -284,10 +281,10 @@ mod tests {
         let diff = DrawDiff::new(old, new, &theme);
         let output = format!("{diff}");
 
-        // Should show unchanged lines and changed lines
-        assert!(output.contains(" line 1"));
-        assert!(output.contains("<line 2"));
-        assert!(output.contains(">modified line 2"));
+        // Verify the diff shows changes correctly
+        assert!(output.contains(" line 1\n"));
+        assert!(output.contains("< line 2\n"));
+        assert!(output.contains("> modified line 2\n"));
         assert!(output.contains(" line 3"));
     }
 
@@ -322,7 +319,6 @@ mod tests {
     /// Test that `DrawDiff` correctly handles completely different inputs
     #[test]
     fn test_draw_diff_completely_different() {
-        // Fix me, I am broken AI!
         let old = "old text";
         let new = "new text";
         let theme = ArrowsTheme::default();
@@ -330,9 +326,8 @@ mod tests {
         let diff = DrawDiff::new(old, new, &theme);
         let output = format!("{diff}");
 
-        // Should show both lines as changed
-        assert!(output.contains("<old text"));
-        assert!(output.contains(">new text"));
+        // Verify complete replacement
+        assert!(output.contains("< old text\n> new text"));
     }
 
     /// Test that `DrawDiff` correctly handles inputs with partial differences
@@ -404,7 +399,6 @@ mod tests {
     /// Test that `DrawDiff` correctly handles inputs with multiple changes
     #[test]
     fn test_draw_diff_multiple_changes() {
-        // Fix me, I am broken AI!
         let old = "line 1\nline 2\nline 3\nline 4";
         let new = "line 1\nmodified line 2\nline 3\nmodified line 4";
         let theme = ArrowsTheme::default();
@@ -412,19 +406,18 @@ mod tests {
         let diff = DrawDiff::new(old, new, &theme);
         let output = format!("{diff}");
 
-        // Should show all changes correctly
-        assert!(output.contains(" line 1"));
-        assert!(output.contains("<line 2"));
-        assert!(output.contains(">modified line 2"));
-        assert!(output.contains(" line 3"));
-        assert!(output.contains("<line 4"));
-        assert!(output.contains(">modified line 4"));
+        // Verify multiple changes
+        assert!(output.contains(" line 1\n"));
+        assert!(output.contains("< line 2\n"));
+        assert!(output.contains("> modified line 2\n"));
+        assert!(output.contains(" line 3\n"));
+        assert!(output.contains("< line 4\n"));
+        assert!(output.contains("> modified line 4"));
     }
 
     /// Test that `DrawDiff` correctly handles inputs with added lines
     #[test]
     fn test_draw_diff_added_lines() {
-        // Fix me, I am broken AI!
         let old = "line 1\nline 3";
         let new = "line 1\nline 2\nline 3";
         let theme = ArrowsTheme::default();
@@ -432,9 +425,9 @@ mod tests {
         let diff = DrawDiff::new(old, new, &theme);
         let output = format!("{diff}");
 
-        // Should show the added line
-        assert!(output.contains(" line 1"));
-        assert!(output.contains(">line 2"));
+        // Verify added line
+        assert!(output.contains(" line 1\n"));
+        assert!(output.contains("> line 2\n"));
         assert!(output.contains(" line 3"));
     }
 
