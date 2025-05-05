@@ -396,4 +396,44 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
         assert!(output.contains("Error: No diff algorithms are available"));
     }
+
+    /// Test that diff_with_algorithm correctly handles unavailable algorithms
+    #[test]
+    fn test_diff_with_algorithm_unavailable() {
+        let old = "old";
+        let new = "new";
+        let mut buffer = Cursor::new(Vec::new());
+        let theme = ArrowsTheme::default();
+        
+        // Skip test if no algorithms are available
+        if !Algorithm::has_available_algorithms() {
+            return;
+        }
+        
+        // Get available algorithms
+        let available_algorithms = Algorithm::available_algorithms();
+        
+        // Find an algorithm that's not available (if possible)
+        let unavailable_algorithm = if available_algorithms.contains(&Algorithm::Myers) 
+            && !available_algorithms.contains(&Algorithm::Similar) {
+            Algorithm::Similar
+        } else if !available_algorithms.contains(&Algorithm::Myers) 
+            && available_algorithms.contains(&Algorithm::Similar) {
+            Algorithm::Myers
+        } else {
+            // If both are available or none are available, we can't test this case
+            return;
+        };
+        
+        // Test with the unavailable algorithm
+        diff_with_algorithm(&mut buffer, old, new, &theme, unavailable_algorithm).unwrap();
+        
+        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
+        
+        // Should still produce output using an available algorithm
+        assert!(!output.contains("Error: No diff algorithms are available"), 
+            "Should use an available algorithm instead of showing an error");
+        assert!(output.contains("old") || output.contains("new"), 
+            "Output should contain diff content");
+    }
 }

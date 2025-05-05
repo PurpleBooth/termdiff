@@ -207,6 +207,21 @@ mod tests {
     }
 
     #[test]
+    fn test_has_available_algorithms_implementation() {
+        // Test the implementation logic directly
+        let algorithms = Algorithm::available_algorithms();
+        let expected_result = !algorithms.is_empty();
+        let actual_result = Algorithm::has_available_algorithms();
+        
+        // Verify that the function returns the expected result
+        assert_eq!(
+            actual_result, 
+            expected_result,
+            "has_available_algorithms() should return !algorithms.is_empty()"
+        );
+    }
+
+    #[test]
     fn test_first_available() {
         // This test ensures that first_available works correctly
         let first = Algorithm::first_available();
