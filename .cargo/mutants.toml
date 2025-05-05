@@ -1,0 +1,1 @@
+exclude_re = ["Algorithm::has_available_algorithms", "diff_with_algorithm"] # same as -E
