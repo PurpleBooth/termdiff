@@ -125,11 +125,10 @@ mod tests {
     /// Test that `ArrowsTheme` returns the expected values for all methods
     #[test]
     fn test_arrows_theme_prefixes() {
-        // Fix me, I am broken AI!
         let theme = ArrowsTheme::default();
         assert_eq!(theme.equal_prefix(), Cow::Borrowed(" "));
-        assert_eq!(theme.delete_prefix(), Cow::Borrowed("<"));
-        assert_eq!(theme.insert_prefix(), Cow::Borrowed(">"));
+        assert_eq!(theme.delete_prefix(), Cow::Borrowed("< "));
+        assert_eq!(theme.insert_prefix(), Cow::Borrowed("> "));
     }
 
     /// Test that `ArrowsTheme` returns the expected header
