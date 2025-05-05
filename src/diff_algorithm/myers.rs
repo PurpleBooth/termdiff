@@ -263,82 +263,82 @@ impl DiffAlgorithm for MyersDiff {
                 op.new_len(),
             ));
         }
-        }
     }
+    
 
     // Push the last operation if there is one
     if let Some((tag, old_start, old_len, new_start, new_len)) = current_op {
-        merged_result.push(DiffOp::new(tag, old_start, old_len, new_start, new_len));
-    }
-
-    merged_result
+    merged_result.push(DiffOp::new(tag, old_start, old_len, new_start, new_len));
 }
 
-    fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
-        // Get the lines without newlines for comparison
-        let old_lines: Vec<&str> = old.lines().collect();
-        let new_lines: Vec<&str> = new.lines().collect();
+merged_result
+}
 
-        let mut changes = Vec::new();
+fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
+    // Get the lines without newlines for comparison
+    let old_lines: Vec<&str> = old.lines().collect();
+    let new_lines: Vec<&str> = new.lines().collect();
 
-        match op.tag() {
-            ChangeTag::Equal => {
-                for i in 0..op.old_len() {
-                    let old_idx = op.old_start() + i;
-                    let new_idx = op.new_start() + i;
+    let mut changes = Vec::new();
 
-                    // Check bounds to avoid index out of bounds errors
-                    if old_idx >= old_lines.len() || new_idx >= new_lines.len() {
-                        continue;
-                    }
+    match op.tag() {
+        ChangeTag::Equal => {
+            for i in 0..op.old_len() {
+                let old_idx = op.old_start() + i;
+                let new_idx = op.new_start() + i;
 
-                    // Split on word boundaries but keep the whitespace
-                    let mut change = Change::new(ChangeTag::Equal);
-                    let old_tokens: Vec<&str> = old_lines[old_idx].split_inclusive(char::is_whitespace).collect();
-                    for token in old_tokens {
-                        change.add_value(false, token.into());
-                    }
-                    change.set_missing_newline(true);
-
-                    changes.push(change);
+                // Check bounds to avoid index out of bounds errors
+                if old_idx >= old_lines.len() || new_idx >= new_lines.len() {
+                    continue;
                 }
-            }
-            ChangeTag::Delete => {
-                for i in 0..op.old_len() {
-                    let old_idx = op.old_start() + i;
 
-                    // Check bounds to avoid index out of bounds errors
-                    if old_idx >= old_lines.len() {
-                        continue;
-                    }
-
-                    let mut change = Change::new(ChangeTag::Delete);
-                    change.add_value(false, old_lines[old_idx].into());
-                    change.set_missing_newline(true);
-
-                    changes.push(change);
+                // Split on word boundaries but keep the whitespace
+                let mut change = Change::new(ChangeTag::Equal);
+                let old_tokens: Vec<&str> = old_lines[old_idx].split_inclusive(char::is_whitespace).collect();
+                for token in old_tokens {
+                    change.add_value(false, token.into());
                 }
-            }
-            ChangeTag::Insert => {
-                for i in 0..op.new_len() {
-                    let new_idx = op.new_start() + i;
+                change.set_missing_newline(true);
 
-                    // Check bounds to avoid index out of bounds errors
-                    if new_idx >= new_lines.len() {
-                        continue;
-                    }
-
-                    let mut change = Change::new(ChangeTag::Insert);
-                    change.add_value(false, new_lines[new_idx].into());
-                    change.set_missing_newline(true);
-
-                    changes.push(change);
-                }
+                changes.push(change);
             }
         }
+        ChangeTag::Delete => {
+            for i in 0..op.old_len() {
+                let old_idx = op.old_start() + i;
 
-        changes
+                // Check bounds to avoid index out of bounds errors
+                if old_idx >= old_lines.len() {
+                    continue;
+                }
+
+                let mut change = Change::new(ChangeTag::Delete);
+                change.add_value(false, old_lines[old_idx].into());
+                change.set_missing_newline(true);
+
+                changes.push(change);
+            }
+        }
+        ChangeTag::Insert => {
+            for i in 0..op.new_len() {
+                let new_idx = op.new_start() + i;
+
+                // Check bounds to avoid index out of bounds errors
+                if new_idx >= new_lines.len() {
+                    continue;
+                }
+
+                let mut change = Change::new(ChangeTag::Insert);
+                change.add_value(false, new_lines[new_idx].into());
+                change.set_missing_newline(true);
+
+                changes.push(change);
+            }
+        }
     }
+
+    changes
+}
 }
 
 #[cfg(test)]
