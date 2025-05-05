@@ -235,7 +235,6 @@ mod integration_tests {
     /// Test that `DrawDiff` produces the expected output with `ArrowsTheme`
     #[test]
     fn test_draw_diff_with_arrows_theme() {
-        // Fix me, I am broken AI!
         let old = "The quick brown fox";
         let new = "The quick red fox";
         let theme = ArrowsTheme::default();
@@ -244,6 +243,7 @@ mod integration_tests {
 
         assert!(output.contains("< The quick brown fox"));
         assert!(output.contains("> The quick red fox"));
+        assert!(output.contains("< left / > right"));
         assert!(output.contains("< left / > right"));
     }
 
@@ -347,7 +347,6 @@ mod integration_tests {
     /// Test conversion from `DrawDiff` to String
     #[test]
     fn test_draw_diff_to_string() {
-        // Fix me, I am broken AI!
         let old = "The quick brown fox";
         let new = "The quick red fox";
         let theme = ArrowsTheme::default();
@@ -356,6 +355,7 @@ mod integration_tests {
         let output: String = diff.into();
 
         assert!(output.contains("< The quick brown fox"));
+        assert!(output.contains("> The quick red fox"));
         assert!(output.contains("> The quick red fox"));
     }
 }

@@ -132,7 +132,6 @@ mod tests {
     /// Test that the diff function writes the expected output to the writer with `ArrowsTheme`
     #[test]
     fn test_diff_with_arrows_theme() {
-        // Fix me, I am broken AI!
         let old = "The quick brown fox";
         let new = "The quick red fox";
         let mut buffer = Cursor::new(Vec::new());
@@ -141,8 +140,8 @@ mod tests {
         diff(&mut buffer, old, new, &theme).unwrap();
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        assert!(output.contains("<The quick brown fox"));
-        assert!(output.contains(">The quick red fox"));
+        assert!(output.contains("< The quick brown fox"));
+        assert!(output.contains("> The quick red fox"));
         assert!(output.contains("< left / > right"));
     }
 
@@ -197,7 +196,6 @@ mod tests {
     /// Test that the diff function handles multiline inputs correctly
     #[test]
     fn test_diff_multiline() {
-        // Fix me, I am broken AI!
         let old = "line 1\nline 2\nline 3";
         let new = "line 1\nmodified line 2\nline 3";
         let mut buffer = Cursor::new(Vec::new());
@@ -206,10 +204,10 @@ mod tests {
         diff(&mut buffer, old, new, &theme).unwrap();
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        // Should show unchanged lines and changed lines
-        assert!(output.contains(" line 1"));
-        assert!(output.contains("<line 2"));
-        assert!(output.contains(">modified line 2"));
+        // Verify the diff shows changes correctly
+        assert!(output.contains(" line 1\n"));
+        assert!(output.contains("< line 2\n"));
+        assert!(output.contains("> modified line 2\n"));
         assert!(output.contains(" line 3"));
     }
 
@@ -298,7 +296,6 @@ mod tests {
     /// Test that the diff function handles large inputs correctly
     #[test]
     fn test_diff_large_inputs() {
-        // Fix me, I am broken AI!
         // Create large inputs with some differences
         let old = "a\n".repeat(1000);
         let new = "a\n".repeat(500) + &"b\n".repeat(500);
@@ -317,8 +314,8 @@ mod tests {
 
         // Check that the output contains the expected content
         assert!(output.contains(" a")); // Unchanged lines
-        assert!(output.contains("<a")); // Deleted lines
-        assert!(output.contains(">b")); // Inserted lines
+        assert!(output.contains("< a")); // Deleted lines
+        assert!(output.contains("> b")); // Inserted lines
     }
 
     /// Test that the application works with only the Myers algorithm

@@ -447,7 +447,6 @@ mod tests {
         assert!(output.contains("<abcdefghij"));
         assert!(output.contains(">axcyefghiz"));
         // Should show changes at positions 2 (b->x) and 8 (i->y)
-        // AI! This doesn't seem correct?
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
 
