@@ -251,17 +251,16 @@ impl DiffAlgorithm for MyersDiff {
                     ));
                 }
             }
-            // Add the final operation after processing all ops
-            } else {
-                // Start a new operation
-                current_op = Some((
-                    op.tag(),
-                    op.old_start(),
-                    op.old_len(),
-                    op.new_start(),
-                    op.new_len(),
-                ));
             }
+        } else {
+            // Start a new operation
+            current_op = Some((
+                op.tag(),
+                op.old_start(),
+                op.old_len(),
+                op.new_start(),
+                op.new_len(),
+            ));
         }
 
         // Push the last operation if there is one
@@ -291,6 +290,7 @@ impl DiffAlgorithm for MyersDiff {
                     }
 
                     // Split on word boundaries but keep the whitespace
+                    let mut change = Change::new(ChangeTag::Equal);
                     let old_tokens: Vec<&str> = old_lines[old_idx].split_inclusive(char::is_whitespace).collect();
                     for token in old_tokens {
                         change.add_value(false, token.into());
