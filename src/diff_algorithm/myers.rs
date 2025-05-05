@@ -83,117 +83,83 @@ impl DiffAlgorithm for MyersDiff {
     fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
         let mut changes = Vec::new();
 
+        // Create a single change for the entire operation to match Similar algorithm's behavior
+        let mut change = Change::new(op.tag());
+        
         match op.tag() {
             ChangeTag::Equal => {
-                // For equal operations, just create a single change with the content
-                let mut change = Change::new(ChangeTag::Equal);
-
                 // Extract the relevant portion of the old text
                 let start = op.old_start();
                 let end = start + op.old_len();
-
+                
                 // Get the lines from the old text
                 let old_lines: Vec<&str> = old.lines().collect();
-
+                
                 // Make sure we don't go out of bounds
                 if start < old_lines.len() {
                     let end = end.min(old_lines.len());
-
+                    
                     for i in start..end {
                         let line = old_lines[i];
                         // Check if this is the last line and doesn't have a newline
                         let missing_newline = i == old_lines.len() - 1 && !old.ends_with('\n');
-
+                        
                         change.add_value(false, line.into());
                         change.set_missing_newline(missing_newline);
-
-                        // Add the change and create a new one for the next line
-                        if i < end - 1 {
-                            changes.push(change);
-                            change = Change::new(ChangeTag::Equal);
-                        }
-                    }
-
-                    // Add the last change if we had any lines
-                    if end > start {
-                        changes.push(change);
                     }
                 }
-            }
+            },
             ChangeTag::Delete => {
-                // For delete operations, create a change with the deleted content
-                let mut change = Change::new(ChangeTag::Delete);
-
                 // Extract the relevant portion of the old text
                 let start = op.old_start();
                 let end = start + op.old_len();
-
+                
                 // Get the lines from the old text
                 let old_lines: Vec<&str> = old.lines().collect();
-
+                
                 // Make sure we don't go out of bounds
                 if start < old_lines.len() {
                     let end = end.min(old_lines.len());
-
+                    
                     for i in start..end {
                         let line = old_lines[i];
                         // Check if this is the last line and doesn't have a newline
                         let missing_newline = i == old_lines.len() - 1 && !old.ends_with('\n');
-
+                        
                         change.add_value(true, line.into());
                         change.set_missing_newline(missing_newline);
-
-                        // Add the change and create a new one for the next line
-                        if i < end - 1 {
-                            changes.push(change);
-                            change = Change::new(ChangeTag::Delete);
-                        }
-                    }
-
-                    // Add the last change if we had any lines
-                    if end > start {
-                        changes.push(change);
                     }
                 }
-            }
+            },
             ChangeTag::Insert => {
-                // For insert operations, create a change with the inserted content
-                let mut change = Change::new(ChangeTag::Insert);
-
                 // Extract the relevant portion of the new text
                 let start = op.new_start();
                 let end = start + op.new_len();
-
+                
                 // Get the lines from the new text
                 let new_lines: Vec<&str> = new.lines().collect();
-
+                
                 // Make sure we don't go out of bounds
                 if start < new_lines.len() {
                     let end = end.min(new_lines.len());
-
+                    
                     for i in start..end {
                         let line = new_lines[i];
                         // Check if this is the last line and doesn't have a newline
                         let missing_newline = i == new_lines.len() - 1 && !new.ends_with('\n');
-
+                        
                         change.add_value(true, line.into());
                         change.set_missing_newline(missing_newline);
-
-                        // Add the change and create a new one for the next line
-                        if i < end - 1 {
-                            changes.push(change);
-                            change = Change::new(ChangeTag::Insert);
-                        }
-                    }
-
-                    // Add the last change if we had any lines
-                    if end > start {
-                        changes.push(change);
                     }
                 }
-            }
+            },
         }
-
+        
+        // Only add the change if it has values
+        if !change.values().is_empty() {
+            changes.push(change);
+        }
+        
         changes
     }
 }
