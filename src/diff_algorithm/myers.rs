@@ -262,6 +262,7 @@ impl DiffAlgorithm for MyersDiff {
             ));
         }
     }
+    }
 
         // Push the last operation if there is one
         if let Some((tag, old_start, old_len, new_start, new_len)) = current_op {
@@ -269,6 +270,7 @@ impl DiffAlgorithm for MyersDiff {
         }
 
         merged_result
+    }
     }
 
     fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
