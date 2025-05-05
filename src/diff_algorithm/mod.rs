@@ -137,6 +137,7 @@ mod availability_tests {
     /// Test the `diff_with_algorithm` function with an unavailable algorithm
     #[test]
     fn test_diff_with_unavailable_algorithm() {
+        // AI! This test is pointless. Delete it
         let old = "The quick brown fox";
         let new = "The quick red fox";
         let mut buffer = Cursor::new(Vec::new());
