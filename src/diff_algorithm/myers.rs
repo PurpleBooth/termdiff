@@ -263,6 +263,7 @@ impl DiffAlgorithm for MyersDiff {
                 op.new_len(),
             ));
         }
+        }
     }
 
     // Push the last operation if there is one
