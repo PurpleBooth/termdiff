@@ -489,20 +489,37 @@ mod tests {
     /// Test the Myers algorithm with a case that exercises the `iter_inline_changes` method
     #[test]
     fn test_myers_iter_inline_changes() {
-        // Fix me, I am broken AI!
         // This test case is designed to exercise the iter_inline_changes method
         // by having changes that require inline highlighting
         let old = "The quick brown fox jumps over the lazy dog";
         let new = "The quick red fox jumps over the sleepy dog";
-        let theme = ArrowsTheme::default();
+        
+        // Create a theme that shows inline highlights with underlines
+        #[derive(Debug)]
+        struct TestTheme;
+        impl crate::themes::Theme for TestTheme {
+            fn highlight_insert<'this>(&self, input: &'this str) -> std::borrow::Cow<'this, str> {
+                format!("_{input}_").into()
+            }
+            fn highlight_delete<'this>(&self, input: &'this str) -> std::borrow::Cow<'this, str> {
+                format!("_{input}_").into()
+            }
+            // Use simple arrow prefixes for clarity
+            fn delete_prefix<'this>(&self) -> std::borrow::Cow<'this, str> { "<".into() }
+            fn insert_prefix<'this>(&self) -> std::borrow::Cow<'this, str> { ">".into() }
+            fn equal_prefix<'this>(&self) -> std::borrow::Cow<'this, str> { " ".into() }
+            fn header<'this>(&self) -> std::borrow::Cow<'this, str> { "< left / > right\n".into() }
+        }
 
-        // Get output from Myers algorithm using DrawDiff
-        let diff = DrawDiff::with_algorithm(old, new, &theme, Algorithm::Myers);
-        let output = format!("{diff}");
+        // Get output from Myers algorithm using the test theme
+        let theme = TestTheme;
+        let mut buffer = Cursor::new(Vec::new());
+        diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
+        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
-        // The output should show the changes
-        assert!(output.contains("<The quick brown fox jumps over the lazy dog"));
-        assert!(output.contains(">The quick red fox jumps over the sleepy dog"));
+        // Check that specific changes are highlighted
+        assert!(output.contains("<The quick _brown_ fox jumps over the _lazy_ dog"));
+        assert!(output.contains(">The quick _red_ fox jumps over the _sleepy_ dog"));
     }
 
     /// Test the Myers algorithm with empty inputs
