@@ -67,9 +67,8 @@ impl DiffAlgorithm for MyersDiff {
         let similar_op = match op.tag() {
             ChangeTag::Equal => similar::DiffOp::Equal {
                 old_index: op.old_start(),
-                old_len: op.old_len(),
                 new_index: op.new_start(),
-                new_len: op.new_len(),
+                len: op.old_len(), // The Equal variant has a single 'len' field
             },
             ChangeTag::Delete => similar::DiffOp::Delete {
                 old_index: op.old_start(),
