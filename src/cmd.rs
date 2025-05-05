@@ -132,6 +132,7 @@ mod tests {
     /// Test that the diff function writes the expected output to the writer with `ArrowsTheme`
     #[test]
     fn test_diff_with_arrows_theme() {
+        // Fix me, I am broken AI!
         let old = "The quick brown fox";
         let new = "The quick red fox";
         let mut buffer = Cursor::new(Vec::new());
@@ -196,6 +197,7 @@ mod tests {
     /// Test that the diff function handles multiline inputs correctly
     #[test]
     fn test_diff_multiline() {
+        // Fix me, I am broken AI!
         let old = "line 1\nline 2\nline 3";
         let new = "line 1\nmodified line 2\nline 3";
         let mut buffer = Cursor::new(Vec::new());
@@ -296,6 +298,7 @@ mod tests {
     /// Test that the diff function handles large inputs correctly
     #[test]
     fn test_diff_large_inputs() {
+        // Fix me, I am broken AI!
         // Create large inputs with some differences
         let old = "a\n".repeat(1000);
         let new = "a\n".repeat(500) + &"b\n".repeat(500);
