@@ -156,9 +156,12 @@ fn compute_edit_script<T: PartialEq>(old_seq: &[T], new_seq: &[T]) -> Vec<EditOp
         trace.push(v.clone());
 
         // For each diagonal k from -d to d in steps of 2
-        for k in (-1 * d as i32..=d as i32).step_by(2) {
+        for k in (-(d as i32)..=d as i32).step_by(2) {
             // Determine whether to go down or right
-            let mut x = if k == -1 * d as i32 || (k != d as i32 && v[(k - 1 + offset as i32) as usize] < v[(k + 1 + offset as i32) as usize]) {
+            let mut x = if k == -(d as i32)
+                || (k != d as i32
+                    && v[(k - 1 + offset as i32) as usize] < v[(k + 1 + offset as i32) as usize])
+            {
                 v[(k + 1 + offset as i32) as usize] // Move down: (x, y-1) -> (x, y)
             } else {
                 v[(k - 1 + offset as i32) as usize] + 1 // Move right: (x-1, y) -> (x, y)
@@ -167,7 +170,10 @@ fn compute_edit_script<T: PartialEq>(old_seq: &[T], new_seq: &[T]) -> Vec<EditOp
             let mut y = x - k;
 
             // Follow diagonal moves (matches) as far as possible
-            while x < old_len as i32 && y < new_len as i32 && old_seq[x as usize] == new_seq[y as usize] {
+            while x < old_len as i32
+                && y < new_len as i32
+                && old_seq[x as usize] == new_seq[y as usize]
+            {
                 x += 1;
                 y += 1;
             }
@@ -200,7 +206,10 @@ fn backtrack_path(trace: Vec<Vec<i32>>, old_len: usize, new_len: usize) -> Vec<E
         let k = x - y;
 
         // Determine whether we came from a vertical, horizontal, or diagonal move
-        let prev_k = if k == -1 * d as i32 || (k != d as i32 && v[(k - 1 + offset as i32) as usize] < v[(k + 1 + offset as i32) as usize]) {
+        let prev_k = if k == -(d as i32)
+            || (k != d as i32
+                && v[(k - 1 + offset as i32) as usize] < v[(k + 1 + offset as i32) as usize])
+        {
             k + 1
         } else {
             k - 1
@@ -285,8 +294,8 @@ fn merge_adjacent_ops(ops: Vec<DiffOp>) -> Vec<DiffOp> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::{diff_with_algorithm, Algorithm, ArrowsTheme, DrawDiff};
+
+    use crate::{diff_with_algorithm, Algorithm, ArrowsTheme};
     use std::io::Cursor;
 
     /// Test the Myers algorithm with a simple insertion case
