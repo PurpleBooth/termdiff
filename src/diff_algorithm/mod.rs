@@ -134,62 +134,6 @@ mod availability_tests {
         assert!(available.contains(&first.unwrap()));
     }
 
-    /// Test the `diff_with_algorithm` function with an unavailable algorithm
-    #[test]
-    fn test_diff_with_unavailable_algorithm() {
-        // AI! This test is pointless. Delete it
-        let old = "The quick brown fox";
-        let new = "The quick red fox";
-        let mut buffer = Cursor::new(Vec::new());
-        let theme = ArrowsTheme::default();
-
-        // Get the available algorithms
-        let available = Algorithm::available_algorithms();
-
-        // If Similar is available, test with Myers as unavailable (and vice versa)
-        let unavailable_algorithm = if available.contains(&Algorithm::Similar) {
-            Algorithm::Myers
-        } else {
-            Algorithm::Similar
-        };
-
-        // If both algorithms are available, we need to create a custom test
-        if available.contains(&Algorithm::Myers) && available.contains(&Algorithm::Similar) {
-            // In this case, we'll mock an unavailable algorithm by testing the fallback behavior
-
-            // First, get output from a known available algorithm
-            let mut expected_buffer = Cursor::new(Vec::new());
-            let available_algorithm = Algorithm::first_available().unwrap();
-            diff_with_algorithm(&mut expected_buffer, old, new, &theme, available_algorithm)
-                .unwrap();
-            let expected_output =
-                String::from_utf8(expected_buffer.into_inner()).expect("Not valid UTF-8");
-
-            // Now test with a "fake" unavailable algorithm (we'll use the same algorithm but test the fallback path)
-            // The code should detect the algorithm is not available and use the first available one
-
-            // Create a custom test that directly calls the function with the condition that would trigger fallback
-            let mut actual_buffer = Cursor::new(Vec::new());
-
-            // This should fall back to the first available algorithm
-            diff_with_algorithm(&mut actual_buffer, old, new, &theme, unavailable_algorithm)
-                .unwrap();
-
-            let actual_output =
-                String::from_utf8(actual_buffer.into_inner()).expect("Not valid UTF-8");
-
-            // The outputs should be the same since it should fall back to an available algorithm
-            assert_eq!(actual_output, expected_output);
-        } else {
-            // At least one algorithm is not available, so we can test with that
-            diff_with_algorithm(&mut buffer, old, new, &theme, unavailable_algorithm).unwrap();
-
-            let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-
-            // The output should still contain diff information since it should fall back to an available algorithm
-            assert!(output.contains("The quick brown fox") || output.contains("The quick red fox"));
-        }
-    }
 
     /// Test that `diff_with_algorithm` correctly handles the case where the requested algorithm is not available
     /// This test specifically targets the condition in the function that checks if the algorithm is available
