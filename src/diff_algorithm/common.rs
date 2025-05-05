@@ -254,6 +254,19 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(any(feature = "myers", feature = "similar")))]
+    fn test_has_available_algorithms_with_no_features() {
+        // When no algorithms are enabled, has_available_algorithms should return false
+        assert!(!Algorithm::has_available_algorithms(), 
+                "has_available_algorithms() should return false when no features are enabled");
+        
+        // Verify that the available_algorithms vector is empty
+        let algorithms = Algorithm::available_algorithms();
+        assert!(algorithms.is_empty(), 
+                "available_algorithms() should return an empty vector when no features are enabled");
+    }
+
+    #[test]
     fn test_first_available() {
         // This test ensures that first_available works correctly
         let first = Algorithm::first_available();
