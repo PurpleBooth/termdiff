@@ -14,8 +14,30 @@ impl DiffAlgorithm for MyersDiff {
         }
 
         // Split the input strings into lines for line-by-line comparison
-        let old_lines: Vec<&str> = old.lines().collect();
-        let new_lines: Vec<&str> = new.lines().collect();
+        // Use split_inclusive to preserve newlines
+        let old_lines: Vec<&str> = if old.is_empty() {
+            Vec::new()
+        } else if old.ends_with('\n') {
+            old.split_inclusive('\n').collect()
+        } else {
+            let mut lines = old.split_inclusive('\n').collect::<Vec<_>>();
+            if !lines.is_empty() && !lines.last().unwrap().ends_with('\n') {
+                lines.push(&old[old.rfind('\n').map_or(0, |i| i + 1)..]);
+            }
+            lines
+        };
+        
+        let new_lines: Vec<&str> = if new.is_empty() {
+            Vec::new()
+        } else if new.ends_with('\n') {
+            new.split_inclusive('\n').collect()
+        } else {
+            let mut lines = new.split_inclusive('\n').collect::<Vec<_>>();
+            if !lines.is_empty() && !lines.last().unwrap().ends_with('\n') {
+                lines.push(&new[new.rfind('\n').map_or(0, |i| i + 1)..]);
+            }
+            lines
+        };
 
         // Handle empty inputs
         if old_lines.is_empty() {
@@ -434,6 +456,14 @@ mod tests {
         diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
+        // The output should show the newline difference
+        assert!(output.contains("␊"));
+        
+        // Test the reverse case
+        let mut buffer = Cursor::new(Vec::new());
+        diff_with_algorithm(&mut buffer, new, old, &theme, Algorithm::Myers).unwrap();
+        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
+        
         // The output should show the newline difference
         assert!(output.contains("␊"));
     }
