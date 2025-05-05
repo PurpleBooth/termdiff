@@ -317,8 +317,8 @@ mod tests {
 
         // Check that the output contains the expected content
         assert!(output.contains(" a")); // Unchanged lines
-        assert!(output.contains("<a")); // Deleted lines
-        assert!(output.contains(">b")); // Inserted lines
+        assert!(output.contains("< a")); // Deleted lines
+        assert!(output.contains("> b")); // Inserted lines
     }
 
     /// Test that the application works with only the Myers algorithm
