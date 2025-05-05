@@ -7,15 +7,17 @@ pub struct MyersDiff;
 
 impl DiffAlgorithm for MyersDiff {
     fn ops<'a>(&self, old: &'a str, new: &'a str) -> Vec<DiffOp> {
+        // To match the behavior of the Similar algorithm, we need to handle the input differently
+        // If both inputs are empty, return an empty vector
+        if old.is_empty() && new.is_empty() {
+            return Vec::new();
+        }
+
         // Split the input strings into lines for line-by-line comparison
         let old_lines: Vec<&str> = old.lines().collect();
         let new_lines: Vec<&str> = new.lines().collect();
 
         // Handle empty inputs
-        if old_lines.is_empty() && new_lines.is_empty() {
-            return Vec::new();
-        }
-
         if old_lines.is_empty() {
             // All lines are insertions
             return vec![DiffOp::new(ChangeTag::Insert, 0, 0, 0, new_lines.len())];
@@ -57,64 +59,47 @@ impl DiffAlgorithm for MyersDiff {
     }
 
     fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
-        let old_lines: Vec<&str> = old.lines().collect();
-        let new_lines: Vec<&str> = new.lines().collect();
+        // To match the behavior of the Similar algorithm, we need to handle the input differently
+        // Create a similar::TextDiff to use its inline_changes method
+        let diff = similar::TextDiff::from_lines(old, new);
+        
+        // Convert our DiffOp to a similar::DiffOp
+        let similar_op = match op.tag() {
+            ChangeTag::Equal => similar::DiffOp::Equal {
+                old_index: op.old_start(),
+                old_len: op.old_len(),
+                new_index: op.new_start(),
+                new_len: op.new_len(),
+            },
+            ChangeTag::Delete => similar::DiffOp::Delete {
+                old_index: op.old_start(),
+                old_len: op.old_len(),
+                new_index: op.new_start(),
+            },
+            ChangeTag::Insert => similar::DiffOp::Insert {
+                old_index: op.old_start(),
+                new_index: op.new_start(),
+                new_len: op.new_len(),
+            },
+        };
+        
+        // Use the similar crate's inline_changes method
         let mut changes = Vec::new();
-
-        match op.tag() {
-            ChangeTag::Equal => {
-                for i in 0..op.old_len() {
-                    let old_idx = op.old_start() + i;
-                    if old_idx >= old_lines.len() {
-                        continue;
-                    }
-
-                    let mut change = Change::new(ChangeTag::Equal);
-                    change.add_value(false, old_lines[old_idx].into());
-
-                    // Check if this is the last line and it's missing a newline
-                    let missing_newline = old_idx == old_lines.len() - 1 && !old.ends_with('\n');
-                    change.set_missing_newline(missing_newline);
-
-                    changes.push(change);
-                }
+        for group in diff.iter_inline_changes(&similar_op) {
+            let mut change = Change::new(match group.tag() {
+                similar::ChangeTag::Equal => ChangeTag::Equal,
+                similar::ChangeTag::Delete => ChangeTag::Delete,
+                similar::ChangeTag::Insert => ChangeTag::Insert,
+            });
+            
+            for (highlighted, value) in group.iter_strings_lossy() {
+                change.add_value(highlighted, value);
             }
-            ChangeTag::Delete => {
-                for i in 0..op.old_len() {
-                    let old_idx = op.old_start() + i;
-                    if old_idx >= old_lines.len() {
-                        continue;
-                    }
-
-                    let mut change = Change::new(ChangeTag::Delete);
-                    change.add_value(true, old_lines[old_idx].into());
-
-                    // Check if this is the last line and it's missing a newline
-                    let missing_newline = old_idx == old_lines.len() - 1 && !old.ends_with('\n');
-                    change.set_missing_newline(missing_newline);
-
-                    changes.push(change);
-                }
-            }
-            ChangeTag::Insert => {
-                for i in 0..op.new_len() {
-                    let new_idx = op.new_start() + i;
-                    if new_idx >= new_lines.len() {
-                        continue;
-                    }
-
-                    let mut change = Change::new(ChangeTag::Insert);
-                    change.add_value(true, new_lines[new_idx].into());
-
-                    // Check if this is the last line and it's missing a newline
-                    let missing_newline = new_idx == new_lines.len() - 1 && !new.ends_with('\n');
-                    change.set_missing_newline(missing_newline);
-
-                    changes.push(change);
-                }
-            }
+            
+            change.set_missing_newline(group.missing_newline());
+            changes.push(change);
         }
-
+        
         changes
     }
 }
