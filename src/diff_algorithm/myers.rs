@@ -26,6 +26,9 @@ fn compute_diff_operations<T: PartialEq>(old: &[T], new: &[T]) -> Vec<DiffOperat
     if n == 0 {
         return vec![DiffOperation::Delete; m];
     }
+    if n == 0 {
+        return vec![DiffOperation::Delete; m];
+    }
 
     // For small inputs, use a more efficient approach
     if m < 100 && n < 100 {
@@ -54,6 +57,9 @@ fn compute_diff_operations_small<T: PartialEq>(old: &[T], new: &[T]) -> Vec<Diff
             }
         }
     }
+    // Account for zero-based indexing in backtracking
+    let mut i = m;
+    let mut j = n;
 
     // Backtrack to find the diff operations (iterative approach)
     let mut ops = Vec::with_capacity(m + n); // Pre-allocate with a reasonable capacity
