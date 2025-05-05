@@ -283,8 +283,7 @@ impl DiffAlgorithm for MyersDiff {
                     }
 
                     let mut change = Change::new(ChangeTag::Equal);
-                    // Add a space after the equal prefix to match theme formatting
-                    change.add_value(false, format!(" {}", old_lines[old_idx]).into());
+                    change.add_value(false, old_lines[old_idx].into());
                     change.set_missing_newline(true);
 
                     changes.push(change);
@@ -300,8 +299,7 @@ impl DiffAlgorithm for MyersDiff {
                     }
 
                     let mut change = Change::new(ChangeTag::Delete);
-                    // Add a space after the delete prefix to match theme formatting
-                    change.add_value(false, format!(" {}", old_lines[old_idx]).into());
+                    change.add_value(false, old_lines[old_idx].into());
                     change.set_missing_newline(true);
 
                     changes.push(change);
@@ -317,8 +315,7 @@ impl DiffAlgorithm for MyersDiff {
                     }
 
                     let mut change = Change::new(ChangeTag::Insert);
-                    // Add a space after the insert prefix to match theme formatting
-                    change.add_value(false, format!(" {}", new_lines[new_idx]).into());
+                    change.add_value(false, new_lines[new_idx].into());
                     change.set_missing_newline(true);
 
                     changes.push(change);
