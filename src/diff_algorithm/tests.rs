@@ -52,24 +52,22 @@ fn test_myers_vs_similar_multiline() {
     // Compare the content ignoring exact newline placement
     let normalized_similar = normalize_diff_output(&similar_output);
     let normalized_myers = normalize_diff_output(&myers_output);
-    
+
     assert_eq!(normalized_similar, normalized_myers);
 }
 
 /// Helper function to normalize diff output for comparison
 /// Removes newlines and extra spaces to focus on content
 fn normalize_diff_output(output: &str) -> String {
+    // AI! this is totally wrong, remove it the formatting should be identical. Prefer the output from similar if there is a bug
     // Keep the header line intact
     let mut lines = output.lines();
     let header = lines.next().unwrap_or("").to_string();
-    
+
     // Normalize the rest by removing extra whitespace and preserving only content and prefixes
-    let content = lines
-        .map(|line| line.trim())
-        .collect::<Vec<_>>()
-        .join(" ");
-        
-    format!("{}\n{}", header, content)
+    let content = lines.map(str::trim).collect::<Vec<_>>().join(" ");
+
+    format!("{header}\n{content}")
 }
 
 /// Test that the Myers algorithm produces the same output as the Similar algorithm
@@ -96,7 +94,7 @@ fn test_myers_vs_similar_added_lines() {
     // Compare the content ignoring exact newline placement
     let normalized_similar = normalize_diff_output(&similar_output);
     let normalized_myers = normalize_diff_output(&myers_output);
-    
+
     assert_eq!(normalized_similar, normalized_myers);
 }
 
@@ -124,7 +122,7 @@ fn test_myers_vs_similar_removed_lines() {
     // Compare the content ignoring exact newline placement
     let normalized_similar = normalize_diff_output(&similar_output);
     let normalized_myers = normalize_diff_output(&myers_output);
-    
+
     assert_eq!(normalized_similar, normalized_myers);
 }
 
@@ -152,7 +150,7 @@ fn test_myers_vs_similar_trailing_newline() {
     // Compare the content ignoring exact newline placement
     let normalized_similar = normalize_diff_output(&similar_output);
     let normalized_myers = normalize_diff_output(&myers_output);
-    
+
     assert_eq!(normalized_similar, normalized_myers);
 }
 
