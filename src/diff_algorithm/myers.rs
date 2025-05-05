@@ -11,6 +11,8 @@ enum DiffOperation {
     Insert,
 }
 
+// cargo mutest --features myers --test mod -- test_myers       AI!
+
 /// Computes the diff operations using an optimized version of the Myers algorithm
 fn compute_diff_operations<T: PartialEq>(old: &[T], new: &[T]) -> Vec<DiffOperation> {
     let m = old.len();
