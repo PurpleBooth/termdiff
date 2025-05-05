@@ -1,6 +1,3 @@
-use std::borrow::Cow;
-use std::cmp::min;
-
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
 
 /// Implementation of the Myers diff algorithm based on "An O(ND) Difference Algorithm"
@@ -131,56 +128,57 @@ enum EditOp {
 }
 
 /// Computes the shortest edit script using the Myers algorithm
-fn compute_edit_script<T: PartialEq>(a: &[T], b: &[T]) -> Vec<EditOp> {
-    let n = a.len();
-    let m = b.len();
-    let max = n + m;
+fn compute_edit_script<T: PartialEq>(old_seq: &[T], new_seq: &[T]) -> Vec<EditOp> {
+    let old_len = old_seq.len();
+    let new_len = new_seq.len();
+    let max_edit_distance = old_len + new_len;
 
     // Handle edge cases
-    if n == 0 {
-        return vec![EditOp::Insert; m];
+    if old_len == 0 {
+        return vec![EditOp::Insert; new_len];
     }
-    if m == 0 {
-        return vec![EditOp::Delete; n];
+    if new_len == 0 {
+        return vec![EditOp::Delete; old_len];
     }
 
     // The algorithm uses a vector v to store the furthest reaching D-paths
-    // v[k + max] = x means that the furthest reaching D-path ending at diagonal k
+    // v[k + offset] = x means that the furthest reaching D-path ending at diagonal k
     // has reached position (x, x - k)
-    let mut v = vec![0; 2 * max + 1];
+    let offset = max_edit_distance;
+    let mut v = vec![0_i32; 2 * max_edit_distance + 1];
 
     // Store the entire edit history to reconstruct the path
-    let mut trace = Vec::with_capacity(max + 1);
+    let mut trace = Vec::with_capacity(max_edit_distance + 1);
 
     // For each edit distance d
-    for d in 0..=max {
+    for d in 0..=max_edit_distance {
         // Save the current state of v for backtracking
         trace.push(v.clone());
 
         // For each diagonal k from -d to d in steps of 2
-        for k in (-d..=d).step_by(2) {
+        for k in (-1 * d as i32..=d as i32).step_by(2) {
             // Determine whether to go down or right
-            let mut x = if k == -d || (k != d && v[k - 1 + max] < v[k + 1 + max]) {
-                v[k + 1 + max] // Move down: (x, y-1) -> (x, y)
+            let mut x = if k == -1 * d as i32 || (k != d as i32 && v[(k - 1 + offset as i32) as usize] < v[(k + 1 + offset as i32) as usize]) {
+                v[(k + 1 + offset as i32) as usize] // Move down: (x, y-1) -> (x, y)
             } else {
-                v[k - 1 + max] + 1 // Move right: (x-1, y) -> (x, y)
+                v[(k - 1 + offset as i32) as usize] + 1 // Move right: (x-1, y) -> (x, y)
             };
 
             let mut y = x - k;
 
             // Follow diagonal moves (matches) as far as possible
-            while x < n as i32 && y < m as i32 && a[x as usize] == b[y as usize] {
+            while x < old_len as i32 && y < new_len as i32 && old_seq[x as usize] == new_seq[y as usize] {
                 x += 1;
                 y += 1;
             }
 
             // Store the furthest reaching path for this diagonal
-            v[k + max] = x;
+            v[(k + offset as i32) as usize] = x;
 
             // If we've reached the bottom right corner, we're done
-            if x >= n as i32 && y >= m as i32 {
+            if x >= old_len as i32 && y >= new_len as i32 {
                 // Reconstruct the edit script from the trace
-                return backtrack_path(trace, n, m);
+                return backtrack_path(trace, old_len, new_len);
             }
         }
     }
@@ -190,11 +188,11 @@ fn compute_edit_script<T: PartialEq>(a: &[T], b: &[T]) -> Vec<EditOp> {
 }
 
 /// Reconstructs the edit script by backtracking through the trace
-fn backtrack_path(trace: Vec<Vec<i32>>, n: usize, m: usize) -> Vec<EditOp> {
-    let max = n + m;
+fn backtrack_path(trace: Vec<Vec<i32>>, old_len: usize, new_len: usize) -> Vec<EditOp> {
+    let offset = old_len + new_len;
     let mut edit_script = Vec::new();
-    let mut x = n as i32;
-    let mut y = m as i32;
+    let mut x = old_len as i32;
+    let mut y = new_len as i32;
 
     // Start from the last edit distance and work backwards
     for d in (0..trace.len()).rev() {
@@ -202,13 +200,13 @@ fn backtrack_path(trace: Vec<Vec<i32>>, n: usize, m: usize) -> Vec<EditOp> {
         let k = x - y;
 
         // Determine whether we came from a vertical, horizontal, or diagonal move
-        let prev_k = if k == -d as i32 || (k != d as i32 && v[k - 1 + max] < v[k + 1 + max]) {
+        let prev_k = if k == -1 * d as i32 || (k != d as i32 && v[(k - 1 + offset as i32) as usize] < v[(k + 1 + offset as i32) as usize]) {
             k + 1
         } else {
             k - 1
         };
 
-        let prev_x = v[prev_k + max];
+        let prev_x = v[(prev_k + offset as i32) as usize];
         let prev_y = prev_x - prev_k;
 
         // Add diagonal moves (matches)
@@ -242,30 +240,45 @@ fn merge_adjacent_ops(ops: Vec<DiffOp>) -> Vec<DiffOp> {
     }
 
     let mut merged = Vec::new();
-    let mut current = ops[0].clone();
+    let mut current_tag = ops[0].tag();
+    let mut current_old_start = ops[0].old_start();
+    let mut current_old_len = ops[0].old_len();
+    let mut current_new_start = ops[0].new_start();
+    let mut current_new_len = ops[0].new_len();
 
     for op in ops.into_iter().skip(1) {
-        if current.tag() == op.tag()
-            && current.old_start() + current.old_len() == op.old_start()
-            && current.new_start() + current.new_len() == op.new_start()
+        if current_tag == op.tag()
+            && current_old_start + current_old_len == op.old_start()
+            && current_new_start + current_new_len == op.new_start()
         {
             // Merge with the current operation
-            current = DiffOp::new(
-                current.tag(),
-                current.old_start(),
-                current.old_len() + op.old_len(),
-                current.new_start(),
-                current.new_len() + op.new_len(),
-            );
+            current_old_len += op.old_len();
+            current_new_len += op.new_len();
         } else {
             // Push the current operation and start a new one
-            merged.push(current);
-            current = op;
+            merged.push(DiffOp::new(
+                current_tag,
+                current_old_start,
+                current_old_len,
+                current_new_start,
+                current_new_len,
+            ));
+            current_tag = op.tag();
+            current_old_start = op.old_start();
+            current_old_len = op.old_len();
+            current_new_start = op.new_start();
+            current_new_len = op.new_len();
         }
     }
 
     // Don't forget to push the last operation
-    merged.push(current);
+    merged.push(DiffOp::new(
+        current_tag,
+        current_old_start,
+        current_old_len,
+        current_new_start,
+        current_new_len,
+    ));
 
     merged
 }
