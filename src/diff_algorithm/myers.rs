@@ -8,17 +8,16 @@ pub struct MyersDiff;
 impl DiffAlgorithm for MyersDiff {
     fn ops<'a>(&self, old: &'a str, new: &'a str) -> Vec<DiffOp> {
         // Let's directly use the similar crate's implementation to ensure compatibility
-        let similar_diff = crate::diff_algorithm::similar::SimilarDiff::default();
+        let similar_diff = crate::diff_algorithm::similar::SimilarDiff;
         similar_diff.ops(old, new)
     }
 
     fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
         // Let's directly use the similar crate's implementation to ensure compatibility
-        let similar_diff = crate::diff_algorithm::similar::SimilarDiff::default();
+        let similar_diff = crate::diff_algorithm::similar::SimilarDiff;
         similar_diff.iter_inline_changes(old, new, op)
     }
 }
-
 
 #[cfg(test)]
 mod tests {

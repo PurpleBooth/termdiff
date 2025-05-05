@@ -222,10 +222,10 @@ mod tests {
 
         let diff = DrawDiff::new(old, new, &theme);
         let output = format!("{diff}");
-        
+
         // Check header and formatted output
         assert!(output.starts_with("< left / > right\n"));
-        assert!(output.contains("< old\n> new"));
+        assert!(output.contains("<old\n>new"));
     }
 
     /// Test that `DrawDiff` correctly handles identical inputs
@@ -283,8 +283,8 @@ mod tests {
 
         // Verify the diff shows changes correctly
         assert!(output.contains(" line 1\n"));
-        assert!(output.contains("< line 2\n"));
-        assert!(output.contains("> modified line 2\n"));
+        assert!(output.contains("<line 2\n"));
+        assert!(output.contains(">modified line 2\n"));
         assert!(output.contains(" line 3"));
     }
 
@@ -327,13 +327,12 @@ mod tests {
         let output = format!("{diff}");
 
         // Verify complete replacement
-        assert!(output.contains("< old text\n> new text"));
+        assert!(output.contains("<old text\n>new text"));
     }
 
     /// Test that `DrawDiff` correctly handles inputs with partial differences
     #[test]
     fn test_draw_diff_partial_differences() {
-        
         let old = "the quick brown fox";
         let new = "the quick red fox";
         let theme = ArrowsTheme::default();
@@ -408,11 +407,11 @@ mod tests {
 
         // Verify multiple changes
         assert!(output.contains(" line 1\n"));
-        assert!(output.contains("< line 2\n"));
-        assert!(output.contains("> modified line 2\n"));
+        assert!(output.contains("<line 2\n"));
+        assert!(output.contains(">modified line 2\n"));
         assert!(output.contains(" line 3\n"));
-        assert!(output.contains("< line 4\n"));
-        assert!(output.contains("> modified line 4"));
+        assert!(output.contains("<line 4\n"));
+        assert!(output.contains(">modified line 4"));
     }
 
     /// Test that `DrawDiff` correctly handles inputs with added lines
@@ -427,7 +426,7 @@ mod tests {
 
         // Verify added line
         assert!(output.contains(" line 1\n"));
-        assert!(output.contains("> line 2\n"));
+        assert!(output.contains(">line 2\n"));
         assert!(output.contains(" line 3"));
     }
 

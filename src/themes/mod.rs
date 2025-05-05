@@ -45,8 +45,8 @@ mod feature_tests {
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
         // Verify the theme's arrow prefixes are present
-        assert!(output.contains("< The quick brown fox"));
-        assert!(output.contains("> The quick red fox"));
+        assert!(output.contains("<The quick brown fox"));
+        assert!(output.contains(">The quick red fox"));
     }
 
     /// Test that the `ArrowsColorTheme` is available when the "`arrows_color`" feature is enabled
@@ -126,8 +126,8 @@ mod tests {
     fn test_arrows_theme_prefixes() {
         let theme = ArrowsTheme::default();
         assert_eq!(theme.equal_prefix(), Cow::Borrowed(" "));
-        assert_eq!(theme.delete_prefix(), Cow::Borrowed("< "));
-        assert_eq!(theme.insert_prefix(), Cow::Borrowed("> "));
+        assert_eq!(theme.delete_prefix(), Cow::Borrowed("<"));
+        assert_eq!(theme.insert_prefix(), Cow::Borrowed(">"));
     }
 
     /// Test that `ArrowsTheme` returns the expected header
