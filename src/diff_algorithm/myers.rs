@@ -40,8 +40,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // The output should show the specific insertion point
-        assert!(output.contains("< abc"));
-        assert!(output.contains("> abxc"));
+        assert!(output.contains("<abc"));
+        assert!(output.contains(">abxc"));
     }
 
     /// Test the Myers algorithm with a deletion case
@@ -58,8 +58,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // The output should show the specific deletion
-        assert!(output.contains("< abxc"));
-        assert!(output.contains("> abc"));
+        assert!(output.contains("<abxc"));
+        assert!(output.contains(">abc"));
     }
 
     /// Test the Myers algorithm with a complex case involving multiple operations
@@ -76,8 +76,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // The output should show the specific changes
-        assert!(output.contains("< abcd"));
-        assert!(output.contains("> acbd"));
+        assert!(output.contains("<abcd"));
+        assert!(output.contains(">acbd"));
     }
 
     /// Test the Myers algorithm with empty inputs
@@ -99,7 +99,7 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Should show insertion
-        assert!(output.contains("> abc"));
+        assert!(output.contains(">abc"));
 
         // New input empty
         let mut buffer = Cursor::new(Vec::new());
@@ -107,7 +107,7 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Should show deletion
-        assert!(output.contains("< abc"));
+        assert!(output.contains("<abc"));
     }
 
     /// Test the Myers algorithm with identical inputs
@@ -142,8 +142,8 @@ mod tests {
 
         // Verify line-by-line changes
         assert!(output.contains(" line1"));
-        assert!(output.contains("< line2"));
-        assert!(output.contains("> modified line2"));
+        assert!(output.contains("<line2"));
+        assert!(output.contains(">modified line2"));
         assert!(output.contains(" line3"));
     }
 
