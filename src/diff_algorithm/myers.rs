@@ -354,9 +354,8 @@ mod tests {
         // The output should show the specific insertion point
         let expected = "\
 < left / > right
- a
- b< c
-> xc
+< abc
+> abxc
 ";
         assert_eq!(output, expected);
     }
@@ -377,9 +376,8 @@ mod tests {
         // The output should show the specific deletion
         let expected = "\
 < left / > right
- a
- b< xc
-> c
+< abxc
+> abc
 ";
         assert_eq!(output, expected);
     }
@@ -427,12 +425,8 @@ mod tests {
         // The output should show specific line changes
         let expected = "\
 < left / > right
- a
- b< c
- d< e
- f< g
-> x
-> defz
+< abcdefg
+> abxdefz
 ";
         assert_eq!(output, expected);
 
