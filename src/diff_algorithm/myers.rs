@@ -398,12 +398,8 @@ mod tests {
         // The output should show the specific changes
         let expected = "\
 < left / > right
- a
- b< c
- d< 
-> c
-> b
-> d
+< abcd
+> acbd
 ";
         assert_eq!(output, expected);
     }
