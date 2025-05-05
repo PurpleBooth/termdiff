@@ -105,7 +105,7 @@ impl DiffAlgorithm for MyersDiff {
                         let missing_newline = i == old_lines.len() - 1 && !old.ends_with('\n');
 
                         // Add a space before the value to match Similar algorithm's behavior
-                        change.add_value(false, format!(" {}", line).into());
+                        change.add_value(false, format!(" {line}").into());
                         change.set_missing_newline(missing_newline);
                     }
                 }
@@ -128,7 +128,7 @@ impl DiffAlgorithm for MyersDiff {
                         let missing_newline = i == old_lines.len() - 1 && !old.ends_with('\n');
 
                         // Add a space before the value to match Similar algorithm's behavior
-                        change.add_value(true, format!(" {}", line).into());
+                        change.add_value(true, format!(" {line}").into());
                         change.set_missing_newline(missing_newline);
                     }
                 }
@@ -151,7 +151,7 @@ impl DiffAlgorithm for MyersDiff {
                         let missing_newline = i == new_lines.len() - 1 && !new.ends_with('\n');
 
                         // Add a space before the value to match Similar algorithm's behavior
-                        change.add_value(true, format!(" {}", line).into());
+                        change.add_value(true, format!(" {line}").into());
                         change.set_missing_newline(missing_newline);
                     }
                 }
