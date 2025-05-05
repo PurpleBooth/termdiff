@@ -108,22 +108,19 @@ impl DiffAlgorithm for MyersDiff {
         // Use the similar crate's inline_changes method
         let mut changes = Vec::new();
         
-        // Collect all changes to avoid borrowing issues
-        let groups: Vec<_> = diff.iter_inline_changes(&similar_op).collect();
-        
-        for group in groups {
+        // Process each group of changes
+        for group in diff.iter_inline_changes(&similar_op) {
             let mut change = Change::new(match group.tag() {
                 similar::ChangeTag::Equal => ChangeTag::Equal,
                 similar::ChangeTag::Delete => ChangeTag::Delete,
                 similar::ChangeTag::Insert => ChangeTag::Insert,
             });
             
-            // Collect all values to avoid borrowing issues
-            let values: Vec<_> = group.iter_strings_lossy().collect();
-            
-            for (highlighted, value) in values {
-                // Clone the value to ensure ownership
-                change.add_value(highlighted, value.clone());
+            // Process each value in the group
+            for (highlighted, value) in group.iter_strings_lossy() {
+                // Create an owned copy of the value
+                let owned_value = value.into_owned();
+                change.add_value(highlighted, owned_value.into());
             }
             
             change.set_missing_newline(group.missing_newline());
