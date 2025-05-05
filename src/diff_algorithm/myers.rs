@@ -250,6 +250,8 @@ impl DiffAlgorithm for MyersDiff {
                         op.new_len(),
                     ));
                 }
+            }
+            // Add the final operation after processing all ops
             } else {
                 // Start a new operation
                 current_op = Some((
@@ -288,8 +290,11 @@ impl DiffAlgorithm for MyersDiff {
                         continue;
                     }
 
-                    let mut change = Change::new(ChangeTag::Equal);
-                    change.add_value(false, old_lines[old_idx].into());
+                    // Split on word boundaries but keep the whitespace
+                    let old_tokens: Vec<&str> = old_lines[old_idx].split_inclusive(char::is_whitespace).collect();
+                    for token in old_tokens {
+                        change.add_value(false, token.into());
+                    }
                     change.set_missing_newline(true);
 
                     changes.push(change);
