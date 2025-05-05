@@ -26,7 +26,7 @@ impl DiffAlgorithm for MyersDiff {
             }
             lines
         };
-        
+
         let new_lines: Vec<&str> = if new.is_empty() {
             Vec::new()
         } else if new.ends_with('\n') {
@@ -84,12 +84,12 @@ impl DiffAlgorithm for MyersDiff {
         // To match the behavior of the Similar algorithm, we need to handle the input differently
         // Create a similar::TextDiff to use its inline_changes method
         let diff = similar::TextDiff::from_lines(old, new);
-        
+
         // Convert our DiffOp to a similar::DiffOp
         let similar_op = match op.tag() {
             ChangeTag::Equal => similar::DiffOp::Equal {
                 old_index: op.old_start(),
-                
+
                 new_index: op.new_start(),
                 len: op.old_len(), // The Equal variant has a single 'len' field
             },
@@ -104,10 +104,10 @@ impl DiffAlgorithm for MyersDiff {
                 new_len: op.new_len(),
             },
         };
-        
+
         // Use the similar crate's inline_changes method
         let mut changes = Vec::new();
-        
+
         // Process each group of changes
         for group in diff.iter_inline_changes(&similar_op) {
             let mut change = Change::new(match group.tag() {
@@ -115,18 +115,18 @@ impl DiffAlgorithm for MyersDiff {
                 similar::ChangeTag::Delete => ChangeTag::Delete,
                 similar::ChangeTag::Insert => ChangeTag::Insert,
             });
-            
+
             // Process each value in the group
             for (highlighted, value) in group.iter_strings_lossy() {
                 // Create an owned copy of the value
                 let owned_value = value.into_owned();
                 change.add_value(highlighted, owned_value.into());
             }
-            
+
             change.set_missing_newline(group.missing_newline());
             changes.push(change);
         }
-        
+
         changes
     }
 }
@@ -455,12 +455,12 @@ mod tests {
 
         // The output should show the newline difference
         assert!(output.contains("␊"));
-        
+
         // Test the reverse case
         let mut buffer = Cursor::new(Vec::new());
         diff_with_algorithm(&mut buffer, new, old, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        
+
         // The output should show the newline difference
         assert!(output.contains("␊"));
     }
