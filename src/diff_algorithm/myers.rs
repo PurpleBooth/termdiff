@@ -621,10 +621,10 @@ mod tests {
         // Verify line-by-line changes
         let lines: Vec<&str> = output.lines().collect();
         assert_eq!(lines[0], "< left / > right");
-        assert_eq!(lines[1], "  line1");
-        assert_eq!(lines[2], "< line2");
-        assert_eq!(lines[3], "> modified line2");
-        assert_eq!(lines[4], "  line3");
+        assert_eq!(lines[1], " line1");
+        assert_eq!(lines[2], "<line2");
+        assert_eq!(lines[3], ">modified line2");
+        assert_eq!(lines[4], " line3");
     }
 
     /// Test the Myers algorithm with trailing newline differences
