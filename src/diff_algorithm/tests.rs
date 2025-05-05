@@ -53,7 +53,6 @@ fn test_myers_vs_similar_multiline() {
     assert_eq!(similar_output, myers_output);
 }
 
-
 /// Test that the Myers algorithm produces the same output as the Similar algorithm
 /// for a case with added lines
 #[test]
