@@ -263,7 +263,7 @@ impl DiffAlgorithm for MyersDiff {
         }
     }
 
-        // Push the last operation if there is one
+    // Push the last operation if there is one
         if let Some((tag, old_start, old_len, new_start, new_len)) = current_op {
             merged_result.push(DiffOp::new(tag, old_start, old_len, new_start, new_len));
         }
