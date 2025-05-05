@@ -59,7 +59,5 @@ bench-git:
 
 # Run mutation tests
 mutate:
-
-    # AI! How do I ignore the two failing mutation tests in this? They are failing because they need 0 features to be enabled.
-    cargo mutants --all-features --diff --shuffle
+    cargo mutants --all-features --diff --shuffle --ignore "src/cmd.rs:110:8: delete !" --ignore "src/diff_algorithm/common.rs:165:9: replace Algorithm::has_available_algorithms -> bool with true"
 
