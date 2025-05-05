@@ -251,7 +251,6 @@ impl DiffAlgorithm for MyersDiff {
                     ));
                 }
             }
-            }
         } else {
             // Start a new operation
             current_op = Some((
@@ -262,6 +261,7 @@ impl DiffAlgorithm for MyersDiff {
                 op.new_len(),
             ));
         }
+    }
 
         // Push the last operation if there is one
         if let Some((tag, old_start, old_len, new_start, new_len)) = current_op {
