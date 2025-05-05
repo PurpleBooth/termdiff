@@ -293,7 +293,8 @@ mod tests {
         assert_eq!(error.to_string(), "Test error");
     }
 
-    /// Test that diff_with_algorithm correctly handles when no algorithms are available
+    /// Test that `diff_with_algorithm` correctly handles when no algorithms are available
+    /// AI!: this test is failing
     #[test]
     fn test_diff_with_algorithm_no_algorithms_available() {
         let old = "old";
