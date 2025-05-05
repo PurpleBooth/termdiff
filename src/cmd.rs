@@ -317,7 +317,7 @@ mod tests {
 
         // Check that the output contains the expected content
         assert!(output.contains(" a")); // Unchanged lines
-        assert!(output.contains("<a")); // Deleted lines
+        assert!(output.contains("< a")); // Deleted lines
         assert!(output.contains(">b")); // Inserted lines
     }
 
