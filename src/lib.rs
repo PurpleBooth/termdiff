@@ -242,13 +242,14 @@ mod integration_tests {
         let output = format!("{}", DrawDiff::new(old, new, &theme));
 
         // Verify formatted output with proper spacing
+        // AI! The arrows theme doesn't have a space between the prefix and the line
         assert!(
-            output.contains("< The quick brown fox"),
+            output.contains("<The quick brown fox"),
             "Expected deleted line marker with space, got:\n{}",
             output
         );
         assert!(
-            output.contains("> The quick red fox"),
+            output.contains(">The quick red fox"),
             "Expected inserted line marker with space, got:\n{}",
             output
         );
