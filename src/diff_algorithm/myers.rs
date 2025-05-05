@@ -1,5 +1,7 @@
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
 
+// Run mutation tests and fix them, most of them are in this file AI!
+
 /// Represents a diff operation
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum DiffOperation {
