@@ -1,5 +1,7 @@
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
 
+// AI! Totally reimplement this module
+
 /// Represents a diff operation
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum DiffOperation {
