@@ -348,8 +348,8 @@ mod tests {
         // The output should show the specific insertion point
         let expected = "\
 < left / > right
-< abc
-> abxc
+<abc
+>abxc
 ";
         assert_eq!(output, expected);
     }
@@ -370,8 +370,8 @@ mod tests {
         // The output should show the specific deletion
         let expected = "\
 < left / > right
-< abxc
-> abc
+<abxc
+>abc
 ";
         assert_eq!(output, expected);
     }
@@ -392,8 +392,8 @@ mod tests {
         // The output should show the specific changes
         let expected = "\
 < left / > right
-< abcd
-> acbd
+<abcd
+>acbd
 ";
         assert_eq!(output, expected);
     }
@@ -413,8 +413,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Verify the specific changes
-        assert!(output.contains("< abcdefg"));
-        assert!(output.contains("> abxdefz"));
+        assert!(output.contains("<abcdefg"));
+        assert!(output.contains(">abxdefz"));
         // Should show 2 changes: 'c'->'x' and 'g'->'z'
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
@@ -443,9 +443,11 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Verify the specific changes
+        // AI! This test needs better error messages
         assert!(output.contains("<abcdefghij"));
         assert!(output.contains(">axcyefghiz"));
         // Should show changes at positions 2 (b->x) and 8 (i->y)
+        // AI! This doesn't seem correct?
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
 

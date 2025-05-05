@@ -141,8 +141,8 @@ mod tests {
         diff(&mut buffer, old, new, &theme).unwrap();
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        assert!(output.contains("< The quick brown fox"));
-        assert!(output.contains("> The quick red fox"));
+        assert!(output.contains("<The quick brown fox"));
+        assert!(output.contains(">The quick red fox"));
         assert!(output.contains("< left / > right"));
     }
 
@@ -317,8 +317,8 @@ mod tests {
 
         // Check that the output contains the expected content
         assert!(output.contains(" a")); // Unchanged lines
-        assert!(output.contains("< a")); // Deleted lines
-        assert!(output.contains("> b")); // Inserted lines
+        assert!(output.contains("<a")); // Deleted lines
+        assert!(output.contains(">b")); // Inserted lines
     }
 
     /// Test that the application works with only the Myers algorithm
