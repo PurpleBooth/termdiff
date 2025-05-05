@@ -128,7 +128,11 @@ enum EditOp {
 }
 
 /// Computes the shortest edit script using the Myers algorithm
-#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss, clippy::cast_possible_wrap)]
+#[allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_possible_wrap
+)]
 fn compute_edit_script<T: PartialEq>(old_seq: &[T], new_seq: &[T]) -> Vec<EditOp> {
     let old_len = old_seq.len();
     let new_len = new_seq.len();
@@ -195,7 +199,11 @@ fn compute_edit_script<T: PartialEq>(old_seq: &[T], new_seq: &[T]) -> Vec<EditOp
 }
 
 /// Reconstructs the edit script by backtracking through the trace
-#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss, clippy::cast_possible_wrap)]
+#[allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_possible_wrap
+)]
 fn backtrack_path(trace: &[Vec<i32>], old_len: usize, new_len: usize) -> Vec<EditOp> {
     let offset = old_len + new_len;
     let mut edit_script = Vec::new();
