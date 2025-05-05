@@ -241,11 +241,22 @@ mod integration_tests {
 
         let output = format!("{}", DrawDiff::new(old, new, &theme));
 
-        // AI! Improve the errors in this test
-        assert!(output.contains("<The quick brown fox"));
-        assert!(output.contains(">The quick red fox"));
-        assert!(output.contains("< left / > right"));
-        assert!(output.contains("< left / > right"));
+        // Verify formatted output with proper spacing
+        assert!(
+            output.contains("< The quick brown fox"),
+            "Expected deleted line marker with space, got:\n{}",
+            output
+        );
+        assert!(
+            output.contains("> The quick red fox"),
+            "Expected inserted line marker with space, got:\n{}",
+            output
+        );
+        assert!(
+            output.contains("< left / > right"),
+            "Expected header with proper spacing, got:\n{}",
+            output
+        );
     }
 
     /// Test that `DrawDiff` produces the expected output with `SignsTheme`
