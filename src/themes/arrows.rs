@@ -33,11 +33,11 @@ impl Theme for ArrowsTheme {
     }
 
     fn delete_prefix<'this>(&self) -> Cow<'this, str> {
-        "<".into()
+        "< ".into()
     }
 
     fn insert_prefix<'this>(&self) -> Cow<'this, str> {
-        ">".into()
+        "> ".into()
     }
 
     fn header<'this>(&self) -> Cow<'this, str> {
