@@ -182,6 +182,7 @@ fn test_myers_vs_similar_completely_different() {
 #[test]
 #[cfg(feature = "myers")]
 fn test_diff_with_algorithm_myers() {
+    // Fix me, I am broken AI!
     let old = "The quick brown fox";
     let new = "The quick red fox";
     let mut buffer = Cursor::new(Vec::new());
@@ -198,6 +199,7 @@ fn test_diff_with_algorithm_myers() {
 #[test]
 #[cfg(feature = "similar")]
 fn test_diff_with_algorithm_similar() {
+    // Fix me, I am broken AI!
     let old = "The quick brown fox";
     let new = "The quick red fox";
     let mut buffer = Cursor::new(Vec::new());
