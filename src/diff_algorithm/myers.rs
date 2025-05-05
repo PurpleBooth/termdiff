@@ -486,6 +486,7 @@ mod tests {
     /// Test the Myers algorithm with a case that exercises the `iter_inline_changes` method
     #[test]
     fn test_myers_iter_inline_changes() {
+        // Fix me, I am broken AI!
         // This test case is designed to exercise the iter_inline_changes method
         // by having changes that require inline highlighting
         let old = "The quick brown fox jumps over the lazy dog";
