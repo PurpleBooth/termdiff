@@ -222,6 +222,38 @@ mod tests {
     }
 
     #[test]
+    fn test_has_available_algorithms_behavior_with_empty_vec() {
+        // Test with a mock implementation that returns an empty vector
+        let mock_empty_vec = || Vec::<Algorithm>::new();
+        
+        // This is the exact implementation from has_available_algorithms
+        let result = !mock_empty_vec().is_empty();
+        
+        // When the vector is empty, the result should be false
+        assert!(!result, "Should return false when algorithms vector is empty");
+        
+        // Now test with a non-empty vector
+        let mock_non_empty_vec = || vec![Algorithm::Myers];
+        let result = !mock_non_empty_vec().is_empty();
+        
+        // When the vector is not empty, the result should be true
+        assert!(result, "Should return true when algorithms vector is not empty");
+        
+        // Verify that the actual implementation matches our expectations
+        #[cfg(not(any(feature = "myers", feature = "similar")))]
+        {
+            assert!(!Algorithm::has_available_algorithms(), 
+                    "Should return false when no algorithms are available");
+        }
+        
+        #[cfg(any(feature = "myers", feature = "similar"))]
+        {
+            assert!(Algorithm::has_available_algorithms(), 
+                    "Should return true when algorithms are available");
+        }
+    }
+
+    #[test]
     fn test_first_available() {
         // This test ensures that first_available works correctly
         let first = Algorithm::first_available();
