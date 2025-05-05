@@ -162,18 +162,53 @@ impl Algorithm {
     /// Checks if any algorithms are available
     #[must_use]
     pub fn has_available_algorithms() -> bool {
-        !Self::available_algorithms().is_empty()
+        let algorithms = Self::available_algorithms();
+        !algorithms.is_empty()
     }
 
     /// Returns the first available algorithm, or None if no algorithms are available
     #[must_use]
     pub fn first_available() -> Option<Self> {
-        Self::available_algorithms().first().copied()
+        let algorithms = Self::available_algorithms();
+        if algorithms.is_empty() {
+            None
+        } else {
+            Some(algorithms[0])
+        }
     }
 }
 
 impl Default for Algorithm {
     fn default() -> Self {
         Self::first_available().unwrap_or(Self::Similar)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_has_available_algorithms() {
+        // This test ensures that has_available_algorithms works correctly
+        let has_algorithms = Algorithm::has_available_algorithms();
+        
+        #[cfg(any(feature = "similar", feature = "myers"))]
+        assert!(has_algorithms, "Should have available algorithms when features are enabled");
+        
+        #[cfg(not(any(feature = "similar", feature = "myers")))]
+        assert!(!has_algorithms, "Should not have available algorithms when no features are enabled");
+    }
+
+    #[test]
+    fn test_first_available() {
+        // This test ensures that first_available works correctly
+        let first = Algorithm::first_available();
+        
+        #[cfg(any(feature = "similar", feature = "myers"))]
+        assert!(first.is_some(), "Should have a first algorithm when features are enabled");
+        
+        #[cfg(not(any(feature = "similar", feature = "myers")))]
+        assert!(first.is_none(), "Should not have a first algorithm when no features are enabled");
     }
 }
