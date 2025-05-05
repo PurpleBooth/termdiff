@@ -1,3 +1,5 @@
+default: fmt lint test mutate
+
 # This help screen
 show-help:
 	just --list
@@ -57,4 +59,7 @@ bench-git:
 
 # Run mutation tests
 mutate:
-    cargo mutants
+
+    # AI! How do I ignore the two failing mutation tests in this? They are failing because they need 0 features to be enabled.
+    cargo mutants --all-features --diff --shuffle
+
