@@ -443,9 +443,10 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Verify the specific changes
-        assert!(output.contains("< abcdefghij"));
-        assert!(output.contains("> axcyefghiz"));
+        assert!(output.contains("<abcdefghij"));
+        assert!(output.contains(">axcyefghiz"));
         // Should show changes at positions 2 (b->x) and 8 (i->y)
+        // AI! This doesn't seem correct?
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
 
@@ -473,8 +474,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Verify the merged changes
-        assert!(output.contains("< aaaabbbbcccc"));
-        assert!(output.contains("> aaaaddddcccc"));
+        assert!(output.contains("<aaaabbbbcccc"));
+        assert!(output.contains(">aaaaddddcccc"));
         // Should show single delete and insert operation for the changed middle section
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
@@ -495,7 +496,7 @@ mod tests {
         // by having changes that require inline highlighting
         let old = "The quick brown fox jumps over the lazy dog";
         let new = "The quick red fox jumps over the sleepy dog";
-        
+
         // Create a theme that shows inline highlights with underlines
         #[derive(Debug)]
         struct TestTheme;
@@ -507,10 +508,18 @@ mod tests {
                 format!("_{input}_").into()
             }
             // Use simple arrow prefixes for clarity
-            fn delete_prefix<'this>(&self) -> std::borrow::Cow<'this, str> { "<".into() }
-            fn insert_prefix<'this>(&self) -> std::borrow::Cow<'this, str> { ">".into() }
-            fn equal_prefix<'this>(&self) -> std::borrow::Cow<'this, str> { " ".into() }
-            fn header<'this>(&self) -> std::borrow::Cow<'this, str> { "< left / > right\n".into() }
+            fn delete_prefix<'this>(&self) -> std::borrow::Cow<'this, str> {
+                "<".into()
+            }
+            fn insert_prefix<'this>(&self) -> std::borrow::Cow<'this, str> {
+                ">".into()
+            }
+            fn equal_prefix<'this>(&self) -> std::borrow::Cow<'this, str> {
+                " ".into()
+            }
+            fn header<'this>(&self) -> std::borrow::Cow<'this, str> {
+                "< left / > right\n".into()
+            }
         }
 
         // Get output from Myers algorithm using the test theme
@@ -585,7 +594,7 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Verify complete replacement
-        assert!(output.contains("< abc\n> xyz"));
+        assert!(output.contains("<abc\n>xyz"));
         assert_eq!(output.matches('<').count(), 1);
         assert_eq!(output.matches('>').count(), 1);
     }
@@ -640,8 +649,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
         // Verify formatted output
-        assert!(output.contains("< The quick brown fox"));
-        assert!(output.contains("> The quick red fox"));
+        assert!(output.contains("<The quick brown fox"));
+        assert!(output.contains(">The quick red fox"));
         assert_eq!(output.lines().count(), 3); // Header + 2 lines
     }
 }
