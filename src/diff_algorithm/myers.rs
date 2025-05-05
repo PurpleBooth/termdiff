@@ -267,12 +267,12 @@ impl DiffAlgorithm for MyersDiff {
     }
 
     // Push the last operation if there is one
-        if let Some((tag, old_start, old_len, new_start, new_len)) = current_op {
-            merged_result.push(DiffOp::new(tag, old_start, old_len, new_start, new_len));
-        }
-
-        merged_result
+    if let Some((tag, old_start, old_len, new_start, new_len)) = current_op {
+        merged_result.push(DiffOp::new(tag, old_start, old_len, new_start, new_len));
     }
+
+    merged_result
+}
 
     fn iter_inline_changes<'a>(&self, old: &'a str, new: &'a str, op: &DiffOp) -> Vec<Change<'a>> {
         // Get the lines without newlines for comparison
