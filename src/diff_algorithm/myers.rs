@@ -1,7 +1,5 @@
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
 
-// AI: this has loads of escaped mutants - fix it please. AI!
-
 /// Represents a diff operation
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum DiffOperation {
@@ -353,9 +351,14 @@ mod tests {
         diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
 
-        // The output should show the insertion
-        assert!(output.contains("<abc"));
-        assert!(output.contains(">abxc"));
+        // The output should show the specific insertion point
+        let expected = "\
+< left / > right
+ a
+ b< c
+> xc
+";
+        assert_eq!(output, expected);
     }
 
     /// Test the Myers algorithm with a deletion case
