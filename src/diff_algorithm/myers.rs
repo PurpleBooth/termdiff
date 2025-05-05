@@ -31,7 +31,7 @@ impl DiffAlgorithm for MyersDiff {
 
         // Compute the diff operations using the Myers algorithm
         let edit_script = compute_edit_script(&old_lines, &new_lines);
-        
+
         // Convert the edit script to DiffOps
         let mut diff_ops = Vec::new();
         let mut old_idx = 0;
@@ -74,11 +74,11 @@ impl DiffAlgorithm for MyersDiff {
 
                     let mut change = Change::new(ChangeTag::Equal);
                     change.add_value(false, old_lines[old_idx].into());
-                    
+
                     // Check if this is the last line and it's missing a newline
                     let missing_newline = old_idx == old_lines.len() - 1 && !old.ends_with('\n');
                     change.set_missing_newline(missing_newline);
-                    
+
                     changes.push(change);
                 }
             }
@@ -91,11 +91,11 @@ impl DiffAlgorithm for MyersDiff {
 
                     let mut change = Change::new(ChangeTag::Delete);
                     change.add_value(true, old_lines[old_idx].into());
-                    
+
                     // Check if this is the last line and it's missing a newline
                     let missing_newline = old_idx == old_lines.len() - 1 && !old.ends_with('\n');
                     change.set_missing_newline(missing_newline);
-                    
+
                     changes.push(change);
                 }
             }
@@ -108,11 +108,11 @@ impl DiffAlgorithm for MyersDiff {
 
                     let mut change = Change::new(ChangeTag::Insert);
                     change.add_value(true, new_lines[new_idx].into());
-                    
+
                     // Check if this is the last line and it's missing a newline
                     let missing_newline = new_idx == new_lines.len() - 1 && !new.ends_with('\n');
                     change.set_missing_newline(missing_newline);
-                    
+
                     changes.push(change);
                 }
             }
@@ -135,7 +135,7 @@ fn compute_edit_script<T: PartialEq>(a: &[T], b: &[T]) -> Vec<EditOp> {
     let n = a.len();
     let m = b.len();
     let max = n + m;
-    
+
     // Handle edge cases
     if n == 0 {
         return vec![EditOp::Insert; m];
@@ -148,15 +148,15 @@ fn compute_edit_script<T: PartialEq>(a: &[T], b: &[T]) -> Vec<EditOp> {
     // v[k + max] = x means that the furthest reaching D-path ending at diagonal k
     // has reached position (x, x - k)
     let mut v = vec![0; 2 * max + 1];
-    
+
     // Store the entire edit history to reconstruct the path
     let mut trace = Vec::with_capacity(max + 1);
-    
+
     // For each edit distance d
     for d in 0..=max {
         // Save the current state of v for backtracking
         trace.push(v.clone());
-        
+
         // For each diagonal k from -d to d in steps of 2
         for k in (-d..=d).step_by(2) {
             // Determine whether to go down or right
@@ -165,18 +165,18 @@ fn compute_edit_script<T: PartialEq>(a: &[T], b: &[T]) -> Vec<EditOp> {
             } else {
                 v[k - 1 + max] + 1 // Move right: (x-1, y) -> (x, y)
             };
-            
+
             let mut y = x - k;
-            
+
             // Follow diagonal moves (matches) as far as possible
             while x < n as i32 && y < m as i32 && a[x as usize] == b[y as usize] {
                 x += 1;
                 y += 1;
             }
-            
+
             // Store the furthest reaching path for this diagonal
             v[k + max] = x;
-            
+
             // If we've reached the bottom right corner, we're done
             if x >= n as i32 && y >= m as i32 {
                 // Reconstruct the edit script from the trace
@@ -184,7 +184,7 @@ fn compute_edit_script<T: PartialEq>(a: &[T], b: &[T]) -> Vec<EditOp> {
             }
         }
     }
-    
+
     // This should never happen if the algorithm is implemented correctly
     Vec::new()
 }
@@ -195,29 +195,29 @@ fn backtrack_path(trace: Vec<Vec<i32>>, n: usize, m: usize) -> Vec<EditOp> {
     let mut edit_script = Vec::new();
     let mut x = n as i32;
     let mut y = m as i32;
-    
+
     // Start from the last edit distance and work backwards
     for d in (0..trace.len()).rev() {
         let v = &trace[d];
         let k = x - y;
-        
+
         // Determine whether we came from a vertical, horizontal, or diagonal move
         let prev_k = if k == -d as i32 || (k != d as i32 && v[k - 1 + max] < v[k + 1 + max]) {
             k + 1
         } else {
             k - 1
         };
-        
+
         let prev_x = v[prev_k + max];
         let prev_y = prev_x - prev_k;
-        
+
         // Add diagonal moves (matches)
         while x > prev_x && y > prev_y {
             edit_script.push(EditOp::Equal);
             x -= 1;
             y -= 1;
         }
-        
+
         // Add the non-diagonal move
         if d > 0 {
             if x == prev_x {
@@ -229,7 +229,7 @@ fn backtrack_path(trace: Vec<Vec<i32>>, n: usize, m: usize) -> Vec<EditOp> {
             }
         }
     }
-    
+
     // Reverse the edit script to get the correct order
     edit_script.reverse();
     edit_script
@@ -240,10 +240,10 @@ fn merge_adjacent_ops(ops: Vec<DiffOp>) -> Vec<DiffOp> {
     if ops.is_empty() {
         return ops;
     }
-    
+
     let mut merged = Vec::new();
     let mut current = ops[0].clone();
-    
+
     for op in ops.into_iter().skip(1) {
         if current.tag() == op.tag()
             && current.old_start() + current.old_len() == op.old_start()
@@ -263,10 +263,10 @@ fn merge_adjacent_ops(ops: Vec<DiffOp>) -> Vec<DiffOp> {
             current = op;
         }
     }
-    
+
     // Don't forget to push the last operation
     merged.push(current);
-    
+
     merged
 }
 
