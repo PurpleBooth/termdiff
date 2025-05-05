@@ -1,48 +1,171 @@
 use crate::diff_algorithm::common::{Change, ChangeTag, DiffAlgorithm, DiffOp};
+use std::collections::HashMap;
 
-// AI! Totally reimplement this module
-
-/// Represents a diff operation
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum DiffOperation {
-    /// No change between old and new
-    Equal,
-    /// Content was in old but not in new
-    Delete,
-    /// Content was not in old but is in new
-    Insert,
+/// Myers algorithm implementation based on "An O(ND) Difference Algorithm" paper
+struct Myers {
+    a: Vec<String>,
+    b: Vec<String>,
 }
 
-/// Computes the diff operations using an optimized version of the Myers algorithm
-fn compute_diff_operations<T: PartialEq>(old: &[T], new: &[T]) -> Vec<DiffOperation> {
-    let m = old.len();
-    let n = new.len();
-
-    // Handle empty inputs
-    if m == 0 && n == 0 {
-        return Vec::new();
-    }
-    if m == 0 {
-        return vec![DiffOperation::Insert; n];
-    }
-    if n == 0 {
-        return vec![DiffOperation::Delete; m];
-    }
-    if n == 0 {
-        return vec![DiffOperation::Delete; m];
+impl Myers {
+    fn new(old: &str, new: &str) -> Self {
+        // Include newlines in the comparison to detect trailing newline changes
+        let a = Self::split_with_newlines(old);
+        let b = Self::split_with_newlines(new);
+        Self { a, b }
     }
 
-    // For small inputs, use a more efficient approach
-    if m < 100 && n < 100 {
-        return compute_diff_operations_small(old, new);
+    fn split_with_newlines(s: &str) -> Vec<String> {
+        let mut lines = Vec::new();
+        let mut line = String::new();
+        
+        for c in s.chars() {
+            line.push(c);
+            if c == '\n' {
+                lines.push(line);
+                line = String::new();
+            }
+        }
+        if !line.is_empty() {
+            lines.push(line);
+        }
+        lines
     }
 
-    // For larger inputs, use a space-efficient version of the algorithm
-    compute_diff_operations_large(old, new)
+    fn diff(&self) -> Vec<ChangeTag> {
+        let mut ops = Vec::new();
+        let max = self.a.len() + self.b.len();
+        let mut v = vec![0; 2 * max + 1];
+        let mut traces = Vec::new();
+
+        for d in 0..=max {
+            traces.push(v.clone());
+            for k in (-d..=d).step_by(2) {
+                let mut x = if k == -d || (k != d && v[k-1+max] < v[k+1+max]) {
+                    v[k+1+max]
+                } else {
+                    v[k-1+max] + 1
+                };
+
+                let mut y = x - k;
+                
+                // Follow snakes
+                while x < self.a.len() as i32 && y < self.b.len() as i32 && 
+                      self.a[x as usize] == self.b[y as usize] {
+                    x += 1;
+                    y += 1;
+                }
+
+                v[k+max] = x;
+                
+                if x >= self.a.len() as i32 && y >= self.b.len() as i32 {
+                    return Self::backtrack(&traces, self.a.len(), self.b.len());
+                }
+            }
+        }
+        vec![]
+    }
+
+    fn backtrack(traces: &[Vec<i32>], mut x: usize, mut y: usize) -> Vec<ChangeTag> {
+        let mut ops = Vec::new();
+        let mut d = traces.len() as i32 - 1;
+        
+        while d >= 0 {
+            let v = &traces[d as usize];
+            let k = x as i32 - y as i32;
+            let prev_k = if k == -d || (k != d && v[(k-1+traces[0].len() as i32/2) as usize] < v[(k+1+traces[0].len() as i32/2) as usize]) {
+                k + 1
+            } else {
+                k - 1
+            };
+            
+            let prev_x = v[(prev_k + traces[0].len() as i32/2) as usize];
+            let prev_y = prev_x - prev_k;
+            
+            while x > prev_x as usize && y > prev_y as usize {
+                ops.push(ChangeTag::Equal);
+                x -= 1;
+                y -= 1;
+            }
+            
+            if d > 0 {
+                if x == prev_x as usize {
+                    ops.push(ChangeTag::Insert);
+                } else {
+                    ops.push(ChangeTag::Delete);
+                }
+            }
+            
+            d -= 1;
+            x = prev_x as usize;
+            y = prev_y as usize;
+        }
+        
+        ops.reverse();
+        ops
+    }
 }
 
-/// Computes diff operations for small inputs using a full LCS matrix
-fn compute_diff_operations_small<T: PartialEq>(old: &[T], new: &[T]) -> Vec<DiffOperation> {
+/// Compute diff operations using Myers algorithm
+fn compute_diff_operations(old: &str, new: &str) -> Vec<ChangeTag> {
+    let myers = Myers::new(old, new);
+    myers.diff()
+}
+
+#[derive(Debug, Default)]
+pub struct MyersDiff;
+
+impl DiffAlgorithm for MyersDiff {
+    fn ops<'a>(&self, old: &'a str, new: &'a str) -> Vec<DiffOp> {
+        let ops = compute_diff_operations(old, new);
+        let mut diff_ops = Vec::new();
+        let mut old_idx = 0;
+        let mut new_idx = 0;
+
+        for tag in ops {
+            match tag {
+                ChangeTag::Equal => {
+                    diff_ops.push(DiffOp::new(ChangeTag::Equal, old_idx, 1, new_idx, 1));
+                    old_idx += 1;
+                    new_idx += 1;
+                }
+                ChangeTag::Delete => {
+                    diff_ops.push(DiffOp::new(ChangeTag::Delete, old_idx, 1, new_idx, 0));
+                    old_idx += 1;
+                }
+                ChangeTag::Insert => {
+                    diff_ops.push(DiffOp::new(ChangeTag::Insert, old_idx, 0, new_idx, 1));
+                    new_idx += 1;
+                }
+            }
+        }
+
+        // Merge adjacent operations
+        let mut merged = Vec::new();
+        let mut current = diff_ops.first().cloned().unwrap_or_else(|| 
+            DiffOp::new(ChangeTag::Equal, 0, 0, 0, 0));
+
+        for op in diff_ops.iter().skip(1) {
+            if current.tag() == op.tag() 
+                && current.old_start() + current.old_len() == op.old_start()
+                && current.new_start() + current.new_len() == op.new_start() 
+            {
+                current = DiffOp::new(
+                    current.tag(),
+                    current.old_start(),
+                    current.old_len() + op.old_len(),
+                    current.new_start(),
+                    current.new_len() + op.new_len(),
+                );
+            } else {
+                merged.push(current);
+                current = op.clone();
+            }
+        }
+        merged.push(current);
+
+        merged
+    }
     let m = old.len();
     let n = new.len();
 
