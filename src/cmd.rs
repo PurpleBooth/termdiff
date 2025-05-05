@@ -208,8 +208,8 @@ mod tests {
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
         // Should show unchanged lines and changed lines
         assert!(output.contains(" line 1"));
-        assert!(output.contains("<line 2"));
-        assert!(output.contains(">modified line 2"));
+        assert!(output.contains("< line 2"));
+        assert!(output.contains("> modified line 2"));
         assert!(output.contains(" line 3"));
     }
 
