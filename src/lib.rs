@@ -153,7 +153,6 @@
     clippy::cargo,
     clippy::complexity,
     clippy::correctness,
-    clippy::pedantic,
     clippy::perf,
     clippy::style,
     clippy::suspicious,
