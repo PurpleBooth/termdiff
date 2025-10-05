@@ -386,6 +386,6 @@ resources:
     icon: docker
     check_every: 24h
     source:
-      repository: rust
-      tag: latest
+      repository: ghcr.io/catthehacker/ubuntu
+      tag: rust-latest
     type: registry-image
