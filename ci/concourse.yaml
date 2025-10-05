@@ -3,6 +3,7 @@
 # - Triggers on any change to main
 # - Validates and auto-fixes Rust code (fmt, clippy, check)
 # - Runs tests and security scans
+# - Validates PRs without auto-fixing
 jobs:
   - name: set-pipeline
     serial: true
@@ -394,6 +395,102 @@ jobs:
       - params:
           repository: repo-main
         put: repo-main
+  - name: validate-pr
+    public: true
+    plan:
+      - get: task
+      - get: ci-runtime-env
+        passed: [verify-runtime-env]
+      - get: docker-rust
+      - get: pr
+        trigger: true
+        version: every
+      - no_get: true
+        params:
+          path: pr
+          status: pending
+        put: pr
+      - task: yamlfix-check
+        file: task/concourse/tasks/yamlfix-check/task.yaml
+        image: ci-runtime-env
+        input_mapping:
+          src: pr
+      - task: renovate-config-lint
+        file: task/concourse/tasks/renovate-config-lint/task.yaml
+        input_mapping:
+          src: pr
+      - task: trufflehog-git
+        image: ci-runtime-env
+        file: task/concourse/tasks/trufflehog-git/task.yaml
+        input_mapping:
+          src: pr
+      - task: grype
+        file: task/concourse/tasks/grype-filesystem/task.yaml
+        image: ci-runtime-env
+        input_mapping:
+          src: pr
+        vars:
+          fail-on: critical
+      - task: rust-fmt-check
+        image: docker-rust
+        input_mapping:
+          src: pr
+        config:
+          platform: linux
+          inputs:
+            - name: src
+          run:
+            path: cargo
+            dir: src
+            args: [fmt, --, --check]
+      - task: rust-clippy
+        image: docker-rust
+        input_mapping:
+          src: pr
+        config:
+          platform: linux
+          inputs:
+            - name: src
+          run:
+            path: cargo
+            dir: src
+            args: [clippy, --all-features]
+      - task: rust-check
+        image: docker-rust
+        input_mapping:
+          src: pr
+        config:
+          platform: linux
+          inputs:
+            - name: src
+          run:
+            path: cargo
+            dir: src
+            args: [check]
+      - task: rust-test
+        image: docker-rust
+        input_mapping:
+          src: pr
+        config:
+          platform: linux
+          inputs:
+            - name: src
+          run:
+            path: cargo
+            dir: src
+            args: [test]
+    on_failure:
+      no_get: true
+      params:
+        path: pr
+        status: failure
+      put: pr
+    on_success:
+      no_get: true
+      params:
+        path: pr
+        status: success
+      put: pr
 # -----------------------------------------------------------------------------
 # Resources
 # -----------------------------------------------------------------------------
@@ -432,3 +529,31 @@ resources:
       repository: ghcr.io/catthehacker/ubuntu
       tag: rust-latest
     type: registry-image
+  - name: pr
+    type: gitea-pr
+    icon: source-merge
+    check_every: 1m
+    webhook_token: ((vault:webhook.token))
+    source:
+      access_token: ((vault:forgejo.token))
+      endpoint: https://codeberg.org
+      repository: PurpleBooth/termdiff
+      state: open
+# -----------------------------------------------------------------------------
+# Resource Types
+# -----------------------------------------------------------------------------
+resource_types:
+  - name: gitea-pr
+    source:
+      repository: europe-west10-docker.pkg.dev/purplebooth-gke/giving-raddeker/atteniemi/gitea-pr-resource
+      tag: latest
+      username: ((vault:gar.username))
+      password: ((vault:gar.password))
+    type: registry-image
+  - name: registry-image
+    type: registry-image
+    source:
+      repository: europe-west10-docker.pkg.dev/purplebooth-gke/giving-raddeker/concourse/registry-image-resource
+      tag: latest
+      username: ((vault:gar.username))
+      password: ((vault:gar.password))
