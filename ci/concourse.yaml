@@ -360,7 +360,7 @@ resources:
     icon: git
     check_every: 24h
     source:
-      uri: git@github.com:PurpleBooth/termdiff.git
+      uri: ssh://git@codeberg.org/PurpleBooth/termdiff.git
       branch: main
       private_key: ((vault:git.private_key))
     webhook_token: ((vault:webhook.token))
