@@ -61,3 +61,7 @@ bench-git:
 mutate:
     cargo mutants --all-features --diff --shuffle
 
+# Set the Concourse pipeline
+set-pipeline:
+	fly -t ci-mgmt set-pipeline -p termdiff -c ci/concourse.yaml
+
