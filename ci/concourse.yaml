@@ -356,6 +356,8 @@ jobs:
         passed: [validate-main]
         trigger: true
         version: latest
+        params:
+          depth: 0
       - get: task
       - get: ci-runtime-env
         passed: [verify-runtime-env]
