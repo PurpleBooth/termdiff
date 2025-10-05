@@ -350,7 +350,6 @@ jobs:
         CONTEXT: validate-main
         DESCRIPTION: Main branch validation failed
         STATUS: failure
-
   - name: release
     plan:
       - get: repo-main
@@ -389,8 +388,6 @@ jobs:
       - params:
           repository: repo-main
         put: repo-main
-
-
 # -----------------------------------------------------------------------------
 # Resources
 # -----------------------------------------------------------------------------
