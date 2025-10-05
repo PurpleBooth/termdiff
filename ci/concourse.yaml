@@ -37,7 +37,7 @@ jobs:
     public: true
     plan:
       - get: ci-runtime-env
-        passed: [verify-runtime-env]
+        passed: [ verify-runtime-env ]
       - get: docker-rust
       - get: task
       - get: repo-main
@@ -131,7 +131,7 @@ jobs:
           run:
             path: cargo
             dir: src
-            args: [fmt, --, --check]
+            args: [ fmt, --, --check ]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -158,7 +158,7 @@ jobs:
                 run:
                   path: cargo
                   dir: src
-                  args: [fmt]
+                  args: [ fmt ]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
               image: ci-runtime-env
@@ -192,7 +192,7 @@ jobs:
           run:
             path: cargo
             dir: src
-            args: [clippy, --all-features]
+            args: [ clippy, --all-features ]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -258,7 +258,7 @@ jobs:
           run:
             path: cargo
             dir: src
-            args: [check]
+            args: [ check ]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -285,7 +285,7 @@ jobs:
                 run:
                   path: cargo
                   dir: src
-                  args: [fix, --allow-dirty, --allow-staged]
+                  args: [ fix, --allow-dirty, --allow-staged ]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
               image: ci-runtime-env
@@ -319,7 +319,7 @@ jobs:
           run:
             path: cargo
             dir: src
-            args: [test]
+            args: [ test ]
     on_success:
       task: set-status-validate-main-success
       file: task/concourse/tasks/forgejo-set-commit-status/task.yaml
@@ -353,14 +353,14 @@ jobs:
   - name: release
     plan:
       - get: repo-main
-        passed: [validate-main]
+        passed: [ validate-main ]
         trigger: true
         version: latest
         params:
           depth: 0
       - get: task
       - get: ci-runtime-env
-        passed: [verify-runtime-env]
+        passed: [ verify-runtime-env ]
       - get: docker-rust
       - file: task/concourse/tasks/release-with-cog/task.yaml
         image: ci-runtime-env
@@ -377,18 +377,20 @@ jobs:
           GPG_SIGNING_PRIVATE_KEY: ((gpg.signing_private_key))
           GPG_SIGNING_PRIVATE_PASSWORD: ((gpg.signing_private_password))
         task: release-with-cog
-      - task: cargo-publish
-        image: docker-rust
-        input_mapping:
-          src: repo-main
-        config:
-          platform: linux
-          inputs:
-            - name: src
-          run:
-            path: cargo
-            dir: src
-            args: [publish, --token, ((vault:cargo.token))]
+      - try:
+          do:
+            - task: cargo-publish
+              image: docker-rust
+              input_mapping:
+                src: repo-main
+              config:
+                platform: linux
+                inputs:
+                  - name: src
+                run:
+                  path: cargo
+                  dir: src
+                  args: [ publish, --token, ((vault:cargo.token)) ]
       - params:
           repository: repo-main
         put: repo-main
