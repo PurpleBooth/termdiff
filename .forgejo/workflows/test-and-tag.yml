@@ -223,6 +223,7 @@ jobs:
           fi
         env:
           CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
+
   codeberg-release:
     if: needs.release.outputs.current_version != needs.release.outputs.previous_version
     name: Create release
