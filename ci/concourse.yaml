@@ -119,7 +119,7 @@ jobs:
         input_mapping:
           src: repo-main
         vars:
-          fail-on: ((grype.fail_on))
+          fail-on: critical
       - task: rust-fmt-check
         image: docker-rust
         input_mapping:
