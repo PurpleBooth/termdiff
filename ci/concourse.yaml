@@ -130,7 +130,7 @@ jobs:
             - name: src
           run:
             path: cargo
-            working_dir: src
+            dir: src
             args: [fmt, --, --check]
         on_failure:
           do:
@@ -157,7 +157,7 @@ jobs:
                   - name: src
                 run:
                   path: cargo
-                  working_dir: src
+                  dir: src
                   args: [fmt]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
@@ -191,7 +191,7 @@ jobs:
             - name: src
           run:
             path: cargo
-            working_dir: src
+            dir: src
             args: [clippy, --all-features]
         on_failure:
           do:
@@ -218,7 +218,7 @@ jobs:
                   - name: src
                 run:
                   path: cargo
-                  working_dir: src
+                  dir: src
                   args:
                     - clippy
                     - --fix
@@ -257,7 +257,7 @@ jobs:
             - name: src
           run:
             path: cargo
-            working_dir: src
+            dir: src
             args: [check]
         on_failure:
           do:
@@ -284,7 +284,7 @@ jobs:
                   - name: src
                 run:
                   path: cargo
-                  working_dir: src
+                  dir: src
                   args: [fix, --allow-dirty, --allow-staged]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
@@ -318,7 +318,7 @@ jobs:
             - name: src
           run:
             path: cargo
-            working_dir: src
+            dir: src
             args: [test]
     on_success:
       task: set-status-validate-main-success
