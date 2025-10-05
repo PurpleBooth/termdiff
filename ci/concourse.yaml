@@ -75,7 +75,7 @@ jobs:
                 src: repo-main
               params:
                 EXPECTED_AUTHOR_NAME: Solace System Renovate Fox [bot]
-                EXPECTED_COMMIT_SUBJECT: "style(yamlfix): apply auto-fixes"
+                EXPECTED_COMMIT_SUBJECT: 'style(yamlfix): apply auto-fixes'
             - task: yamlfix-fix
               file: task/concourse/tasks/yamlfix-fix/task.yaml
               image: ci-runtime-env
@@ -92,7 +92,7 @@ jobs:
                 src: repo-main
               params:
                 ADD: .
-                MESSAGE: "style(yamlfix): apply auto-fixes"
+                MESSAGE: 'style(yamlfix): apply auto-fixes'
                 GIT_COMMITTER_NAME: Solace System Renovate Fox [bot]
                 GIT_COMMITTER_EMAIL: solace-system-renovate-fox@example.com
                 GIT_AUTHOR_NAME: Solace System Renovate Fox [bot]
@@ -143,7 +143,7 @@ jobs:
                 src: repo-main
               params:
                 EXPECTED_AUTHOR_NAME: Solace System Renovate Fox [bot]
-                EXPECTED_COMMIT_SUBJECT: "style(rust-fmt): apply auto-fixes"
+                EXPECTED_COMMIT_SUBJECT: 'style(rust-fmt): apply auto-fixes'
             - task: rust-fmt-fix
               image: docker-rust
               input_mapping:
@@ -169,7 +169,7 @@ jobs:
                 src: repo-main
               params:
                 ADD: .
-                MESSAGE: "style(rust-fmt): apply auto-fixes"
+                MESSAGE: 'style(rust-fmt): apply auto-fixes'
                 GIT_COMMITTER_NAME: Solace System Renovate Fox [bot]
                 GIT_COMMITTER_EMAIL: solace-system-renovate-fox@example.com
                 GIT_AUTHOR_NAME: Solace System Renovate Fox [bot]
@@ -204,7 +204,7 @@ jobs:
                 src: repo-main
               params:
                 EXPECTED_AUTHOR_NAME: Solace System Renovate Fox [bot]
-                EXPECTED_COMMIT_SUBJECT: "style(clippy): apply auto-fixes"
+                EXPECTED_COMMIT_SUBJECT: 'style(clippy): apply auto-fixes'
             - task: rust-clippy-fix
               image: docker-rust
               input_mapping:
@@ -235,7 +235,7 @@ jobs:
                 src: repo-main
               params:
                 ADD: .
-                MESSAGE: "style(clippy): apply auto-fixes"
+                MESSAGE: 'style(clippy): apply auto-fixes'
                 GIT_COMMITTER_NAME: Solace System Renovate Fox [bot]
                 GIT_COMMITTER_EMAIL: solace-system-renovate-fox@example.com
                 GIT_AUTHOR_NAME: Solace System Renovate Fox [bot]
@@ -270,7 +270,7 @@ jobs:
                 src: repo-main
               params:
                 EXPECTED_AUTHOR_NAME: Solace System Renovate Fox [bot]
-                EXPECTED_COMMIT_SUBJECT: "style(cargo-check): apply auto-fixes"
+                EXPECTED_COMMIT_SUBJECT: 'style(cargo-check): apply auto-fixes'
             - task: rust-check-fix
               image: docker-rust
               input_mapping:
@@ -296,7 +296,7 @@ jobs:
                 src: repo-main
               params:
                 ADD: .
-                MESSAGE: "style(cargo-check): apply auto-fixes"
+                MESSAGE: 'style(cargo-check): apply auto-fixes'
                 GIT_COMMITTER_NAME: Solace System Renovate Fox [bot]
                 GIT_COMMITTER_EMAIL: solace-system-renovate-fox@example.com
                 GIT_AUTHOR_NAME: Solace System Renovate Fox [bot]
