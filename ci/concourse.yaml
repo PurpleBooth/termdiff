@@ -350,6 +350,47 @@ jobs:
         CONTEXT: validate-main
         DESCRIPTION: Main branch validation failed
         STATUS: failure
+
+  - name: release
+    plan:
+      - get: repo-main
+        passed: [validate-main]
+        trigger: true
+        version: latest
+      - get: task
+      - get: ci-runtime-env
+        passed: [verify-runtime-env]
+      - get: docker-rust
+      - file: task/concourse/tasks/release-with-cog/task.yaml
+        image: ci-runtime-env
+        input_mapping:
+          src: repo-main
+        params:
+          FJ_BASE_URL: https://codeberg.org
+          FJ_OWNER: PurpleBooth
+          FJ_REPO: termdiff
+          FJ_TOKEN: ((vault:forgejo.token))
+          DEFAULT_BRANCH: main
+          GPG_SIGNING_PRIVATE_KEY: ((gpg.signing_private_key))
+          GPG_SIGNING_PRIVATE_PASSWORD: ((gpg.signing_private_password))
+        task: release-with-cog
+      - task: cargo-publish
+        image: docker-rust
+        input_mapping:
+          src: repo-main
+        config:
+          platform: linux
+          inputs:
+            - name: src
+          run:
+            path: cargo
+            dir: src
+            args: [publish, --token, ((vault:cargo.token))]
+      - params:
+          repository: repo-main
+        put: repo-main
+
+
 # -----------------------------------------------------------------------------
 # Resources
 # -----------------------------------------------------------------------------
