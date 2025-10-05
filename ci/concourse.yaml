@@ -362,7 +362,7 @@ jobs:
       - get: ci-runtime-env
         passed: [verify-runtime-env]
       - get: docker-rust
-      - file: task/concourse/tasks/release-with-cog/task.yaml
+      - file: task/concourse/tasks/cog-bump/task.yaml
         image: ci-runtime-env
         output_mapping:
           src: repo-main
