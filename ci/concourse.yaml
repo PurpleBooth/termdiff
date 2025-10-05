@@ -53,9 +53,9 @@ jobs:
           repo: repo-main
         params:
           SHA: ((.:sha))
-          FJ_API_URL: ((forgejo.api_url))
-          FJ_OWNER: ((forgejo.owner))
-          FJ_REPO: ((forgejo.repo))
+          FJ_API_URL: https://codeberg.org/api/v1
+          FJ_OWNER: PurpleBooth
+          FJ_REPO: termdiff
           FJ_TOKEN: ((vault:forgejo.token))
           CONTEXT: validate-main
           DESCRIPTION: Validating main branch
@@ -346,9 +346,9 @@ jobs:
         repo: repo-main
       params:
         SHA: ((.:sha))
-        FJ_API_URL: ((forgejo.api_url))
-        FJ_OWNER: ((forgejo.owner))
-        FJ_REPO: ((forgejo.repo))
+        FJ_API_URL: https://codeberg.org/api/v1
+        FJ_OWNER: PurpleBooth
+        FJ_REPO: termdiff
         FJ_TOKEN: ((vault:forgejo.token))
         CONTEXT: validate-main
         DESCRIPTION: Main branch validation complete
@@ -361,9 +361,9 @@ jobs:
         repo: repo-main
       params:
         SHA: ((.:sha))
-        FJ_API_URL: ((forgejo.api_url))
-        FJ_OWNER: ((forgejo.owner))
-        FJ_REPO: ((forgejo.repo))
+        FJ_API_URL: https://codeberg.org/api/v1
+        FJ_OWNER: PurpleBooth
+        FJ_REPO: termdiff
         FJ_TOKEN: ((vault:forgejo.token))
         CONTEXT: validate-main
         DESCRIPTION: Main branch validation failed
