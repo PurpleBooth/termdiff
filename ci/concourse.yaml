@@ -33,7 +33,6 @@ jobs:
           COSIGN_PASSWORD: ((vault:cosign.password))
           COSIGN_PRIVATE_KEY: ((vault:cosign.private_key))
           COSIGN_PUBLIC_KEY: ((vault:cosign.public_key))
-
   - name: validate-main
     public: true
     plan:
@@ -132,11 +131,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args:
-              - fmt
-              - --
-              - --check
-              - --color=always
+            args: [fmt, --, --check, --color=always]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -163,9 +158,7 @@ jobs:
                 run:
                   path: cargo
                   working_dir: src
-                  args:
-                    - fmt
-                    - --color=always
+                  args: [fmt, --color=always]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
               image: ci-runtime-env
@@ -199,10 +192,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args:
-              - clippy
-              - --color=always
-              - --all-features
+            args: [clippy, --color=always, --all-features]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -269,8 +259,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args:
-              - check
+            args: [check]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -297,11 +286,7 @@ jobs:
                 run:
                   path: cargo
                   working_dir: src
-                  args:
-                    - fix
-                    - --allow-dirty
-                    - --allow-staged
-                    - --color=always
+                  args: [fix, --allow-dirty, --allow-staged, --color=always]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
               image: ci-runtime-env
@@ -335,9 +320,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args:
-              - test
-              - --color=always
+            args: [test, --color=always]
     on_success:
       task: set-status-validate-main-success
       file: task/concourse/tasks/forgejo-set-commit-status/task.yaml
@@ -368,7 +351,6 @@ jobs:
         CONTEXT: validate-main
         DESCRIPTION: Main branch validation failed
         STATUS: failure
-
 # -----------------------------------------------------------------------------
 # Resources
 # -----------------------------------------------------------------------------

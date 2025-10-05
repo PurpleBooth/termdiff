@@ -1,16 +1,17 @@
+---
 use_angular: true
 types: [ci]
 scopes:
-- logo
-- versio
-- deps
-- deploy
-- dependabot
-- Mergify
-- Actions
-- Homebrew
-- FastConventional
-- Justfile
-- src
-- Changelog
-- themes
+  - logo
+  - versio
+  - deps
+  - deploy
+  - dependabot
+  - Mergify
+  - Actions
+  - Homebrew
+  - FastConventional
+  - Justfile
+  - src
+  - Changelog
+  - themes
