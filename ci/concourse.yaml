@@ -131,7 +131,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args: [fmt, --, --check, --color=always]
+            args: [fmt, --, --check]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -158,7 +158,7 @@ jobs:
                 run:
                   path: cargo
                   working_dir: src
-                  args: [fmt, --color=always]
+                  args: [fmt]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
               image: ci-runtime-env
@@ -192,7 +192,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args: [clippy, --color=always, --all-features]
+            args: [clippy, --all-features]
         on_failure:
           do:
             - task: prevent-loop-gate
@@ -224,7 +224,6 @@ jobs:
                     - --fix
                     - --allow-dirty
                     - --allow-staged
-                    - --color=always
                     - --all-features
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
@@ -286,7 +285,7 @@ jobs:
                 run:
                   path: cargo
                   working_dir: src
-                  args: [fix, --allow-dirty, --allow-staged, --color=always]
+                  args: [fix, --allow-dirty, --allow-staged]
             - task: git-commit
               file: task/concourse/tasks/git-commit/task.yaml
               image: ci-runtime-env
@@ -320,7 +319,7 @@ jobs:
           run:
             path: cargo
             working_dir: src
-            args: [test, --color=always]
+            args: [test]
     on_success:
       task: set-status-validate-main-success
       file: task/concourse/tasks/forgejo-set-commit-status/task.yaml
