@@ -501,7 +501,7 @@ resources:
   - name: 24h
     type: time
     icon: hours-24
-    source: { interval: 24h, location: 'Europe/Berlin' }
+    source: {interval: 24h, location: Europe/Berlin}
   - name: repo-main
     type: git
     icon: git
