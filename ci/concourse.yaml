@@ -37,6 +37,8 @@ jobs:
   - name: validate-main
     public: true
     plan:
+      - get: 24h
+        trigger: true
       - get: ci-runtime-env
         passed: [verify-runtime-env]
       - get: docker-rust
@@ -496,6 +498,9 @@ jobs:
 # Resources
 # -----------------------------------------------------------------------------
 resources:
+  - name: 24h
+    type: time
+    source: { interval: 24h }
   - name: repo-main
     type: git
     icon: git
