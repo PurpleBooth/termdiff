@@ -366,12 +366,11 @@ jobs:
         passed: [verify-runtime-env]
       - get: docker-rust
         passed: [validate-main]
-      - get: changelog  # Add this input
       - file: task/concourse/tasks/cog-bump/task.yml
         image: ci-runtime-env
         output_mapping:
           src: repo-main
-          bump: bump  # Make sure bump output is available
+          bump: bump
         input_mapping:
           src: repo-main
         params:
