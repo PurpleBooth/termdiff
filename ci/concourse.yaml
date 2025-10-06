@@ -366,10 +366,12 @@ jobs:
         passed: [verify-runtime-env]
       - get: docker-rust
         passed: [validate-main]
+      - get: changelog  # Add this input
       - file: task/concourse/tasks/cog-bump/task.yml
         image: ci-runtime-env
         output_mapping:
           src: repo-main
+          bump: bump  # Make sure bump output is available
         input_mapping:
           src: repo-main
         params:
@@ -395,6 +397,43 @@ jobs:
                   path: cargo
                   dir: src
                   args: [publish, --token, ((vault:cargo.token))]
+            - task: create-codeberg-release
+              image: ci-runtime-env
+              config:
+                platform: linux
+                params:
+                  CODEBERG_TOKEN: ((vault:forgejo.token))
+                  REPO_OWNER: PurpleBooth
+                  REPO_NAME: termdiff
+                inputs:
+                  - name: src
+                  - name: bump
+                run:
+                  path: ash
+                  args:
+                    - -c
+                    - |
+                      TAG_NAME=$(cat bump/current-version)
+                      RELEASE_NAME="Release $TAG_NAME"
+                      CHANGELOG_BODY=$(cat src/CHANGELOG.md)
+                      
+                      jq -n \
+                        --arg tag "$TAG_NAME" \
+                        --arg name "$RELEASE_NAME" \
+                        --arg body "$CHANGELOG_BODY" \
+                        '{
+                          tag_name: $tag,
+                          target_commitish: "main",
+                          name: $name,
+                          body: $body,
+                          draft: false,
+                          prerelease: false
+                        }' | \
+                      curl -X POST \
+                        -H "Authorization: token $CODEBERG_TOKEN" \
+                        -H "Content-Type: application/json" \
+                        -d @- \
+                        "https://codeberg.org/api/v1/repos/$REPO_OWNER/$REPO_NAME/releases"
       - params:
           repository: repo-main
         put: repo-main
