@@ -524,6 +524,7 @@ resources:
     check_every: 24h
     source:
       uri: ssh://git@codeberg.org/PurpleBooth/termdiff.git
+      fetch_tags: true
       branch: main
       private_key: ((vault:git.private_key))
     webhook_token: ((vault:webhook.token))
