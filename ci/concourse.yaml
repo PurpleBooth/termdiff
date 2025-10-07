@@ -34,6 +34,28 @@ jobs:
           COSIGN_PASSWORD: ((vault:cosign.password))
           COSIGN_PRIVATE_KEY: ((vault:cosign.private_key))
           COSIGN_PUBLIC_KEY: ((vault:cosign.public_key))
+  - name: verify-rust-env
+    plan:
+      - get: task
+      - get: ci-rust-env
+        trigger: true
+      - load_var: tag
+        file: ci-rust-env/tag
+      - load_var: digest
+        file: ci-rust-env/digest
+      - task: cosign-verify-registry-image
+        file: task/concourse/tasks/cosign-verify-registry-image/task.yaml
+        input_mapping:
+          task: task
+          image: ci-rust-env
+        params:
+          DOCKER_REGISTRY: europe-west10-docker.pkg.dev
+          DOCKER_USERNAME: ((vault:gar.username))
+          DOCKER_PASSWORD: ((vault:gar.password))
+          IMAGE: europe-west10-docker.pkg.dev/purplebooth-gke/optimistic-robbie/ci-runtime-env:((.:tag))@((.:digest))
+          COSIGN_PASSWORD: ((vault:cosign.password))
+          COSIGN_PRIVATE_KEY: ((vault:cosign.private_key))
+          COSIGN_PUBLIC_KEY: ((vault:cosign.public_key))
   - name: validate-main
     public: true
     plan:
@@ -362,12 +384,14 @@ jobs:
         params:
           depth: 0
       - get: task
+      - get: ci-rust-env
+        passed: [verify-rust-env]
       - get: ci-runtime-env
         passed: [verify-runtime-env]
       - get: docker-rust
         passed: [validate-main]
       - file: task/concourse/tasks/cog-bump/task.yml
-        image: ci-runtime-env
+        image: ci-rust-env
         output_mapping:
           src: repo-main
           bump: bump
