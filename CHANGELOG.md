@@ -2,6 +2,70 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v4.1.1 - 2025-10-08
+#### Bug Fixes
+- correct task file extension from yaml to yml in concourse pipeline - (583f7e3) - Billie Thompson
+#### Continuous Integration
+- remove redundant ci-rust-env resource from concourse pipeline - (d085e47) - Billie Thompson
+- add verify-rust-env job and update cog-bump task image - (dfedefd) - Billie Thompson
+- enable tag fetching in Concourse pipeline configuration - (60cdcf3) - Billie Thompson
+- add git committer details for renovate bot - (86306b7) - Billie Thompson
+- add git author details for Renovate bot in release pipeline - (f39ad01) - Billie Thompson
+- update GAR resource credentials for docker images - (9e05987) - Billie Thompson
+- update CI runtime image to custom repository - (7d40d0d) - Billie Thompson
+- add Codeberg release creation task to CI pipeline - (51c8a1d) - Billie Thompson
+- add icon for 24h time resource in concourse pipeline - (e79825b) - Billie Thompson
+- add 24-hour interval trigger to validate-main job - (b5afdff) - Billie Thompson
+- add PR validation pipeline to Concourse configuration - (74bc39b) - Billie Thompson
+- update concourse task file for cog bump - (439a5ad) - Billie Thompson
+- update Concourse and Forgejo workflow configurations - (0df3ee0) - Billie Thompson
+- configure git clone depth for concourse pipeline - (196b86a) - Billie Thompson
+- add release pipeline with cog and cargo publish - (affae3c) - Billie Thompson
+- update Concourse YAML to use `dir` instead of `working_dir` - (ea30793) - Billie Thompson
+- remove --color=always from cargo commands - (406db7f) - Billie Thompson
+- update grype fail condition to critical in concourse pipeline - (a85bad8) - Billie Thompson
+- refactor workflow and configuration files for improved readability - (9c7c8fe) - Billie Thompson
+- update Forgejo/Codeberg repository details in Concourse pipeline - (a61ca7e) - Billie Thompson
+- add Concourse pipeline configuration command - (e5b3d67) - Billie Thompson
+- add Concourse pipeline configuration for termdiff validation - (2fb9429) - Billie Thompson
+- run less often - (df4416d) - PurpleBooth
+- set a lower retension - (888a019) - PurpleBooth
+#### Miscellaneous Chores
+- **(deps)** update https://code.forgejo.org/actions/checkout action to v5 - (ddbad4f) - Solace System Renovate Fox
+- **(deps)** update actions/checkout action to v5 - (1f60c62) - Solace System Renovate Fox
+- **(deps)** update https://code.forgejo.org/actions/checkout digest to 08eba0b - (e4da6d3) - Solace System Renovate Fox
+- **(deps)** update https://code.forgejo.org/actions/cache digest to 0057852 - (2b44eab) - Solace System Renovate Fox
+- **(deps)** update https://code.forgejo.org/actions/cache digest to 0400d5f - (3edf601) - Solace System Renovate Fox
+- **(deps)** update rust crate criterion to v0.7.0 - (eac152f) - Solace System Renovate Fox
+- **(deps)** update rust crate criterion to v0.6.0 - (66442d8) - Solace System Renovate Fox
+- remove post-bump git push hooks from cog.toml - (6e95aeb) - Billie Thompson
+- remove Forgejo workflow configuration file - (e74658e) - Billie Thompson
+- update concourse pipeline configuration for cog-bump task - (783afce) - Billie Thompson
+- update Concourse time resource icon to hours-24 - (79cc373) - Billie Thompson
+- update Concourse time resource icon to clock-outline - (bc2bd8f) - Billie Thompson
+- add location to time resource in Concourse pipeline - (c1b2deb) - Billie Thompson
+- update branch whitelist to include HEAD in cog configuration - (dd8fad1) - Billie Thompson
+- update Docker image to ubuntu with Rust for CI pipeline - (8999c54) - Billie Thompson
+- update git repository source from GitHub to Codeberg - (c697c16) - Billie Thompson
+- remove unnecessary line from fastconventional config - (6fe8c8c) - Billie Thompson
+- Aktualisiere similar-Bibliothek und entferne pedantic Clippy-Lint - (71371b4) - Billie Thompson
+#### Refactoring
+- replace docker-rust with ci-rust-env in concourse pipeline - (0634337) - Billie Thompson
+- simplify Codeberg release task configuration in concourse.yaml - (0eb5749) - Billie Thompson
+- update Renovate configuration to use library preset - (3427f07) - Billie Thompson
+#### Style
+- **(yamlfix)** apply auto-fixes - (1810f62) - Solace System Renovate Fox [bot]
+- **(yamlfix)** apply auto-fixes - (5dea6ee) - Solace System Renovate Fox [bot]
+- **(yamlfix)** apply auto-fixes - (6092b3c) - Solace System Renovate Fox [bot]
+- **(yamlfix)** apply auto-fixes - (4a2e69f) - Solace System Renovate Fox [bot]
+- **(yamlfix)** apply auto-fixes - (d6f9754) - Solace System Renovate Fox [bot]
+- **(yamlfix)** apply auto-fixes - (7873b0b) - Solace System Renovate Fox [bot]
+- **(yamlfix)** apply auto-fixes - (4df7649) - Solace System Renovate Fox [bot]
+- update quote style in concourse.yaml configuration - (7ad1108) - Billie Thompson
+- format concourse.yaml with consistent spacing - (1b148c0) - Billie Thompson
+
+- - -
+
 ## v4.1.0 - 2025-05-05
 #### Bug Fixes
 - update test comment and mark failing test for `diff_with_algorithm` - (48c3b28) - Billie Thompson
