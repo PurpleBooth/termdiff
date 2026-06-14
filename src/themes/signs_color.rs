@@ -10,7 +10,7 @@ use crossterm::style::Stylize;
 /// let old = "The quick brown fox and\njumps over the sleepy dog";
 /// let new = "The quick red fox and\njumps over the lazy dog";
 /// let mut buffer: Vec<u8> = Vec::new();
-/// let  theme = SignsColorTheme::default();
+/// let theme = SignsColorTheme::default();
 /// diff(&mut buffer, old, new, &theme).unwrap();
 /// let actual: String = String::from_utf8(buffer).expect("Not valid UTF-8");
 ///
