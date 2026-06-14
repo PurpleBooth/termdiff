@@ -2,6 +2,39 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v4.2.0 - 2026-06-14
+#### Features
+- implement real Myers O(ND) diff algorithm - (2c704ad) - Billie Thompson
+#### Bug Fixes
+- remove double space in SignsColorTheme doc example - (a973010) - Billie Thompson
+- replace dead eprintln-only edge case tests with real assertions - (f2e1381) - Billie Thompson
+#### Performance Improvements
+- eliminate Vec allocation in algorithm availability checks - (7f262f6) - Billie Thompson
+#### Documentation
+- fix misleading Patience/Myers algorithm documentation - (cc9b527) - Billie Thompson
+#### Continuous Integration
+- replace concourse with woodpecker - (2690842) - Billie Thompson
+#### Refactoring
+- move end-to-end tests into tests/ directory - (dbf5865) - Billie Thompson
+#### Miscellaneous Chores
+- (**deps**) update rust docker digest to 087fe68 - (c395db6) - Solace System Renovate Fox
+- (**deps**) update rust docker digest to a2d7edb - (b6064d3) - Solace System Renovate Fox
+- (**deps**) pin rust docker tag to c0601cf - (6617763) - Solace System Renovate Fox
+
+- - -
+
+## v4.1.1 - 2025-10-10
+#### Continuous Integration
+- update fail-on flag to uppercase CRITICAL in concourse pipeline - (0785858) - Billie Thompson
+- reduce resource check interval from 24h to 1h - (598fa3c) - Billie Thompson
+- update concourse pipeline job dependencies - (3a10e8b) - Billie Thompson
+#### Refactoring
+- update security scanning tasks in Concourse pipeline - (e927e3c) - Billie Thompson
+#### Miscellaneous Chores
+- remove hardcoded git author and committer details in concourse config - (2a78eb8) - Billie Thompson
+
+- - -
+
 ## v4.1.1 - 2025-10-08
 #### Bug Fixes
 - correct task file extension from yaml to yml in concourse pipeline - (583f7e3) - Billie Thompson
