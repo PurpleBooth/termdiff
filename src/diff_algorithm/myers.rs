@@ -1,7 +1,10 @@
 use crate::diff_algorithm::common::{Change, DiffAlgorithm, DiffOp};
 
-/// Implementation of the Patience diff algorithm
-/// This is actually using the similar crate's implementation for compatibility
+/// Myers diff algorithm implementation
+///
+/// This delegates to the similar crate's implementation, which uses Myers'
+/// algorithm internally. The two algorithm enum variants (`Myers` and
+/// `Similar`) therefore produce identical output.
 #[derive(Debug, Default)]
 pub struct MyersDiff;
 

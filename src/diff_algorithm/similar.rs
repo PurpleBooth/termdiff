@@ -116,9 +116,10 @@ impl DiffAlgorithm for SimilarDiff {
 
             let mut change = Change::new(tag);
 
-            // Add each value with its highlighting information
+            // Add each value with its highlighting information.
+            // We must clone because the string slices borrow from the local
+            // `TextDiff`, which does not outlive this function.
             for (highlighted, value) in group.iter_strings_lossy() {
-                // Clone the value to avoid borrowing issues
                 change.add_value(highlighted, value.to_string().into());
             }
 

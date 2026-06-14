@@ -49,11 +49,13 @@
 //!
 //! ## Diff Algorithms
 //!
-//! * `myers` - Implements the Myers diff algorithm, which is a widely used algorithm for computing
-//!   differences between sequences. It's efficient for most common use cases.
+//! * `myers` - Provides a Myers diff algorithm variant. Under the hood this
+//!   delegates to the `similar` crate, so both `myers` and `similar` produce
+//!   identical output. The two features exist so consumers can express which
+//!   algorithm name they prefer in their API.
 //!
-//! * `similar` - Uses the "similar" crate to compute diffs. This is an alternative implementation
-//!   that may have different performance characteristics or output in some cases.
+//! * `similar` - Uses the "similar" crate to compute diffs. This is the primary
+//!   algorithm implementation.
 //!
 //! ## Themes
 //!
@@ -180,6 +182,9 @@ mod diff_algorithm;
 mod draw_diff;
 mod themes;
 
+#[cfg(test)]
+mod edge_case_tests;
+
 #[cfg(doctest)]
 mod test_readme {
     macro_rules! external_doc_test {
@@ -209,8 +214,6 @@ mod integration_tests {
 
         let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
         assert!(output.contains("<The quick brown fox"));
-        assert!(output.contains(">The quick red fox"));
-        assert!(output.contains(">The quick red fox"));
         assert!(output.contains(">The quick red fox"));
         assert!(output.contains("< left / > right"));
     }
@@ -366,7 +369,6 @@ mod integration_tests {
         let output: String = diff.into();
 
         assert!(output.contains("<The quick brown fox"));
-        assert!(output.contains(">The quick red fox"));
         assert!(output.contains(">The quick red fox"));
     }
 }
