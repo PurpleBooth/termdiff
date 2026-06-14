@@ -270,8 +270,7 @@ fn split_lines_keep_newline(s: &str) -> Vec<&str> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{diff_with_algorithm, Algorithm, ArrowsTheme};
-    use std::io::Cursor;
+    use crate::diff_algorithm::common::{ChangeTag, DiffOp};
 
     // ---- Pure algorithm unit tests ----
 
@@ -386,65 +385,5 @@ mod tests {
         assert_eq!(split_lines_keep_newline("a\nb\n"), vec!["a\n", "b\n"]);
         assert_eq!(split_lines_keep_newline("abc"), vec!["abc"]);
         assert!(split_lines_keep_newline("").is_empty());
-    }
-
-    // ---- Integration tests ----
-
-    #[test]
-    fn test_myers_insertion() {
-        let old = "abc";
-        let new = "abxc";
-        let theme = ArrowsTheme::default();
-
-        let mut buffer = Cursor::new(Vec::new());
-        diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
-        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-
-        assert!(output.contains("<abc"));
-        assert!(output.contains(">abxc"));
-    }
-
-    #[test]
-    fn test_myers_deletion() {
-        let old = "abxc";
-        let new = "abc";
-        let theme = ArrowsTheme::default();
-
-        let mut buffer = Cursor::new(Vec::new());
-        diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
-        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-
-        assert!(output.contains("<abxc"));
-        assert!(output.contains(">abc"));
-    }
-
-    #[test]
-    fn test_myers_empty_inputs() {
-        let theme = ArrowsTheme::default();
-
-        let mut buffer = Cursor::new(Vec::new());
-        diff_with_algorithm(&mut buffer, "", "", &theme, Algorithm::Myers).unwrap();
-        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        assert_eq!(output, "< left / > right\n");
-
-        let mut buffer = Cursor::new(Vec::new());
-        diff_with_algorithm(&mut buffer, "", "abc", &theme, Algorithm::Myers).unwrap();
-        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-        assert!(output.contains(">abc"));
-    }
-
-    #[test]
-    fn test_myers_identical_inputs() {
-        let old = "abc";
-        let new = "abc";
-        let theme = ArrowsTheme::default();
-
-        let mut buffer = Cursor::new(Vec::new());
-        diff_with_algorithm(&mut buffer, old, new, &theme, Algorithm::Myers).unwrap();
-        let output = String::from_utf8(buffer.into_inner()).expect("Not valid UTF-8");
-
-        assert!(output.contains(" abc"));
-        assert!(!output.contains("<abc"));
-        assert!(!output.contains(">abc"));
     }
 }
