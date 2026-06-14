@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v4.2.1 - 2026-06-14
+#### Bug Fixes
+- gate integration test imports by feature combination - (9d9ff37) - Billie Thompson
+
+- - -
+
 ## v4.2.0 - 2026-06-14
 #### Features
 - implement real Myers O(ND) diff algorithm - (2c704ad) - Billie Thompson
