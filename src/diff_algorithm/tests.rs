@@ -1,5 +1,7 @@
 use super::*;
-use crate::{diff_with_algorithm, ArrowsTheme, DrawDiff, SignsTheme};
+use crate::{diff_with_algorithm, ArrowsTheme};
+#[cfg(all(feature = "myers", feature = "similar"))]
+use crate::{DrawDiff, SignsTheme};
 #[cfg(test)]
 use std::io::Cursor;
 

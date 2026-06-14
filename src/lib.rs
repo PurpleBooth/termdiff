@@ -49,10 +49,11 @@
 //!
 //! ## Diff Algorithms
 //!
-//! * `myers` - Provides a Myers diff algorithm variant. Under the hood this
-//!   delegates to the `similar` crate, so both `myers` and `similar` produce
-//!   identical output. The two features exist so consumers can express which
-//!   algorithm name they prefer in their API.
+//! * `myers` - Provides a Myers diff algorithm variant. This is a from-scratch
+//!   implementation of Eugene Myers' O(ND) difference algorithm (1986) that
+//!   does not depend on the `similar` crate. It can be used on its own
+//!   (without the `similar` feature) and produces output compatible with the
+//!   `similar` feature.
 //!
 //! * `similar` - Uses the "similar" crate to compute diffs. This is the primary
 //!   algorithm implementation.

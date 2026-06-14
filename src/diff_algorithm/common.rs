@@ -63,7 +63,7 @@ impl<'a> Change<'a> {
 }
 
 /// Represents a diff operation
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct DiffOp {
     /// The type of change
     tag: ChangeTag,

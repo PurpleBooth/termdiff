@@ -1,6 +1,6 @@
 /// Edge case tests
 #[cfg(test)]
-mod edge_case_tests {
+mod tests {
     use crate::{ArrowsTheme, DrawDiff, SignsTheme, Theme};
 
     /// The trailing newline marker (␊) should appear when old ends with \n
@@ -129,7 +129,7 @@ mod edge_case_tests {
         );
     }
 
-    /// SignsTheme should return the expected header.
+    /// `SignsTheme` should return the expected header.
     #[test]
     fn test_signs_header() {
         let theme = SignsTheme::default();
