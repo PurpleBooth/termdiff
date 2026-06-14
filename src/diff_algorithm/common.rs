@@ -161,19 +161,19 @@ impl Algorithm {
 
     /// Checks if any algorithms are available
     #[must_use]
-    pub fn has_available_algorithms() -> bool {
-        let algorithms = Self::available_algorithms();
-        !algorithms.is_empty()
+    pub const fn has_available_algorithms() -> bool {
+        cfg!(any(feature = "similar", feature = "myers"))
     }
 
     /// Returns the first available algorithm, or None if no algorithms are available
     #[must_use]
-    pub fn first_available() -> Option<Self> {
-        let algorithms = Self::available_algorithms();
-        if algorithms.is_empty() {
-            None
+    pub const fn first_available() -> Option<Self> {
+        if cfg!(feature = "similar") {
+            Some(Self::Similar)
+        } else if cfg!(feature = "myers") {
+            Some(Self::Myers)
         } else {
-            Some(algorithms[0])
+            None
         }
     }
 }
