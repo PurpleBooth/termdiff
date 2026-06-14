@@ -27,7 +27,7 @@ use super::{diff_algorithm::Algorithm, draw_diff::DrawDiff, themes::Theme};
 /// "
 /// );
 /// ```
-///  
+///
 /// Colorful theme
 ///
 /// ```
