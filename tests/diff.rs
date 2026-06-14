@@ -8,7 +8,7 @@
 use std::borrow::Cow;
 use std::io::Write;
 
-use termdiff::{diff, diff_with_algorithm, Algorithm, DrawDiff, Theme};
+use termdiff::{diff, DrawDiff, Theme};
 
 /// Render a diff through `DrawDiff` and return the output string.
 fn render(old: &str, new: &str, theme: &dyn Theme) -> String {
@@ -129,8 +129,10 @@ fn diff_writer_error() {
 // ---------------------------------------------------------------------------
 
 #[test]
-#[cfg(feature = "arrows")]
+#[cfg(all(feature = "arrows", feature = "myers"))]
 fn diff_with_algorithm_myers() {
+    use termdiff::{diff_with_algorithm, Algorithm};
+
     let old = "The quick brown fox";
     let new = "The quick red fox";
     let theme = termdiff::ArrowsTheme::default();
@@ -144,8 +146,10 @@ fn diff_with_algorithm_myers() {
 }
 
 #[test]
-#[cfg(feature = "arrows")]
+#[cfg(all(feature = "arrows", feature = "similar"))]
 fn diff_with_algorithm_similar() {
+    use termdiff::{diff_with_algorithm, Algorithm};
+
     let old = "The quick brown fox";
     let new = "The quick red fox";
     let theme = termdiff::ArrowsTheme::default();
