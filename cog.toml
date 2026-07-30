@@ -8,7 +8,7 @@ pre_bump_hooks = [
 ]
 post_bump_hooks = [
     "git push origin HEAD:main",
-    "git push origin {{version}}",
+    "git push origin {{version_tag}}",
     "cargo publish"
 ]
 pre_package_bump_hooks = []
