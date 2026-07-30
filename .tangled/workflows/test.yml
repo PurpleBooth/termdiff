@@ -21,6 +21,7 @@ dependencies:
 steps:
   - name: "cog check"
     command: |
+      git fetch --unshallow origin || true
       git fetch --tags --prune --prune-tags
       cog check --from-latest-tag
   - name: "cargo fmt"
