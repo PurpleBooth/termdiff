@@ -26,13 +26,13 @@ steps:
       git fetch --tags --prune --prune-tags
       cog check --from-latest-tag
   - name: "cargo fmt"
-    command: cargo +nightly fmt --all -- --check
+    command: cargo fmt --all -- --check
   - name: "cargo clippy"
-    command: cargo +nightly clippy --all-features
+    command: cargo clippy --all-features
   - name: "cargo check"
-    command: cargo +nightly check
+    command: cargo check
   - name: "cargo audit"
-    command: cargo +nightly audit
+    command: cargo audit
   - name: "cargo test"
     command: RUST_BACKTRACE=1 cargo test
   - name: 'ssh-key > ~/.ssh/id_ed25519'
