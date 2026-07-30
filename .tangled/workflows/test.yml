@@ -16,12 +16,12 @@ dependencies:
 
 steps:
   - name: "Format check"
-    command: cargo fmt --all -- --check
+    command: cargo +nightly fmt --all -- --check
   - name: "Clippy"
-    command: cargo clippy --all-features
+    command: cargo +nightly clippy --all-features
   - name: "Check"
-    command: cargo check
+    command: cargo +nightly check
   - name: "Audit"
-    command: cargo audit
+    command: cargo +nightly audit
   - name: "Test"
     command: RUST_BACKTRACE=1 cargo test
