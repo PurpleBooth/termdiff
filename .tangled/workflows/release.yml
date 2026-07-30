@@ -1,0 +1,17 @@
+when:
+  - event: ["push"]
+    tag: ["v*"]
+
+engine: microvm
+image: nixos
+
+dependencies:
+  - gcc
+  - cargo
+  - rustc
+  - pkg-config
+  - openssl
+
+steps:
+  - name: "publish"
+    command: cargo publish

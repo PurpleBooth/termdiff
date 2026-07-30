@@ -1,0 +1,38 @@
+when:
+  - event: ["push", "manual"]
+    branch: ["main"]
+
+engine: microvm
+image: nixos
+
+dependencies:
+  - gcc
+  - cocogitto
+  - cargo
+  - rustc
+  - clippy
+  - rustfmt
+  - cargo-audit
+  - pkg-config
+  - openssl
+
+steps:
+  - name: "cog check"
+    command: cog check --from-latest-tag
+  - name: "cargo fmt"
+    command: cargo +nightly fmt --all -- --check
+  - name: "cargo clippy"
+    command: cargo +nightly clippy --all-features
+  - name: "cargo check"
+    command: cargo +nightly check
+  - name: "cargo audit"
+    command: cargo +nightly audit
+  - name: "cargo test"
+    command: RUST_BACKTRACE=1 cargo test
+  - name: 'ssh-key > ~/.ssh/id_ed25519'
+    command: |
+      git config core.sshCommand 'ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519'
+      mkdir ~/.ssh/
+      echo "$PUSH_SSH_KEY" > ~/.ssh/id_ed25519
+  - name: "cog bump"
+    command: cog bump --auto

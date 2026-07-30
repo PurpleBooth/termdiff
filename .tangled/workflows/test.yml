@@ -1,11 +1,12 @@
 when:
-  - event: ["push", "pull_request", "manual"]
+  - event: ["pull_request", "manual"]
 
 engine: microvm
 image: nixos
 
 dependencies:
   - gcc
+  - cocogitto
   - cargo
   - rustc
   - clippy
@@ -15,13 +16,15 @@ dependencies:
   - openssl
 
 steps:
-  - name: "Format check"
+  - name: "cog check"
+    command: cog check --from-latest-tag
+  - name: "cargo fmt"
     command: cargo +nightly fmt --all -- --check
-  - name: "Clippy"
+  - name: "cargo clippy"
     command: cargo +nightly clippy --all-features
-  - name: "Check"
+  - name: "cargo check"
     command: cargo +nightly check
-  - name: "Audit"
+  - name: "cargo audit"
     command: cargo +nightly audit
-  - name: "Test"
+  - name: "cargo test"
     command: RUST_BACKTRACE=1 cargo test
