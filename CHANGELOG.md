@@ -31,6 +31,40 @@ All notable changes to this project will be documented in this file. See [conven
 - migrate from Woodpecker to Forgejo Actions - (a77fd25) - Billie Thompson
 #### Miscellaneous Chores
 - (**deps**) bump deps - (b48a72b) - Billie Thompson
+- (**version**) v4.2.1 - (aeb26b3) - termdiff Pipeline
+- release - (2370dbb) - Billie Thompson
+
+- - -
+
+## v4.2.1 - 2026-07-30
+#### Bug Fixes
+- (**ci**) push to repo DID, not owner DID - (f16a340) - Billie Thompson
+- (**ci**) disable strict host key checking for knot push - (ef7670e) - Billie Thompson
+- (**ci**) add knot host key to known_hosts before cog bump - (c8de188) - Billie Thompson
+- (**ci**) unshallow clone before cog check - (3074b06) - Billie Thompson
+- gate integration test imports by feature combination - (9d9ff37) - Billie Thompson
+#### Build system
+- push detached head - (39c4dcb) - Billie Thompson
+- move publish into post bump hooks - (f9efbf3) - Billie Thompson
+#### Continuous Integration
+- add branch switch so we aren't on the head - (3ecad27) - Billie Thompson
+- add tangled repo url before pushing - (76eadb1) - Billie Thompson
+- add git username and email - (4c8f6ca) - Billie Thompson
+- add cargo edit - (a19c73d) - Billie Thompson
+- remove nightly - (5a28c1a) - Billie Thompson
+- unshallow the repository before getting tags - (8e63a6d) - Billie Thompson
+- pull tags in same step as cog check - (100c79d) - Billie Thompson
+- pull tags for commit check - (9558b3e) - Billie Thompson
+- add nixery cache - (abfb9a5) - Billie Thompson
+- add cd pipeline - (72108ee) - Billie Thompson
+- add manual trigger to pipeline - (8036a3f) - Billie Thompson
+- use nightly toolchain to match Justfile - (33bd061) - Billie Thompson
+- run fmt+lint+test on all branches - (9297595) - Billie Thompson
+- trigger pipeline - (1d0c55e) - Billie Thompson
+- add test ci pipeline - (6f33059) - Billie Thompson
+- migrate from Woodpecker to Forgejo Actions - (a77fd25) - Billie Thompson
+#### Miscellaneous Chores
+- (**deps**) bump deps - (b48a72b) - Billie Thompson
 - release - (2370dbb) - Billie Thompson
 
 - - -
