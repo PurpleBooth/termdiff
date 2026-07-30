@@ -41,9 +41,11 @@ steps:
   - name: 'ssh-key > ~/.ssh/id_ed25519'
     command: |
       git switch "$TANGLED_REPO_DEFAULT_BRANCH"
-      git config core.sshCommand 'ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519'
-      mkdir ~/.ssh/
+      mkdir -p ~/.ssh/
       echo "$PUSH_SSH_KEY" > ~/.ssh/id_ed25519
+      chmod 600 ~/.ssh/id_ed25519
+      ssh-keyscan -H "$TANGLED_REPO_KNOT" >> ~/.ssh/known_hosts
+      git config core.sshCommand 'ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519'
       git config user.name "$TANGLED_REPO_NAME Pipeline"
       git config user.email "$TANGLED_REPO_DID"
       git remote set-url origin "git@${TANGLED_REPO_KNOT}:${TANGLED_REPO_DID}"
