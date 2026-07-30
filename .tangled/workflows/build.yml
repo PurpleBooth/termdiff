@@ -43,5 +43,7 @@ steps:
       git config core.sshCommand 'ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519'
       mkdir ~/.ssh/
       echo "$PUSH_SSH_KEY" > ~/.ssh/id_ed25519
+      git config user.name "$TANGLED_REPO_NAME Pipeline"
+      git config user.email "$TANGLED_REPO_DID"
   - name: "cog bump"
     command: cog bump --auto
