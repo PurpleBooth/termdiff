@@ -45,5 +45,6 @@ steps:
       echo "$PUSH_SSH_KEY" > ~/.ssh/id_ed25519
       git config user.name "$TANGLED_REPO_NAME Pipeline"
       git config user.email "$TANGLED_REPO_DID"
+      git remote set-url origin "git@${TANGLED_REPO_KNOT}:${TANGLED_REPO_DID}"
   - name: "cog bump"
     command: cog bump --auto
