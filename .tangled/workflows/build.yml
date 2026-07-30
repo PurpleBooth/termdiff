@@ -9,15 +9,16 @@ caches:
   https://nix-community.cachix.org: "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 
 dependencies:
-  - gcc
-  - cocogitto
   - cargo
-  - rustc
-  - clippy
-  - rustfmt
   - cargo-audit
-  - pkg-config
+  - cargo-edit
+  - clippy
+  - cocogitto
+  - gcc
   - openssl
+  - pkg-config
+  - rustc
+  - rustfmt
 
 steps:
   - name: "cog check"
@@ -34,7 +35,9 @@ steps:
   - name: "cargo audit"
     command: cargo audit
   - name: "cargo test"
-    command: RUST_BACKTRACE=1 cargo test
+    command: cargo test
+    environment:
+      RUST_BACKTRACE: "1"
   - name: 'ssh-key > ~/.ssh/id_ed25519'
     command: |
       git config core.sshCommand 'ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519'

@@ -8,22 +8,17 @@ caches:
   https://nix-community.cachix.org: "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 
 dependencies:
-  - gcc
-  - cocogitto
   - cargo
-  - rustc
-  - clippy
-  - rustfmt
   - cargo-audit
-  - pkg-config
+  - clippy
+  - cocogitto
+  - gcc
   - openssl
+  - pkg-config
+  - rustc
+  - rustfmt
 
 steps:
-  - name: "cog check"
-    command: |
-      git fetch --unshallow origin
-      git fetch --tags --prune --prune-tags
-      cog check --from-latest-tag
   - name: "cargo fmt"
     command: cargo fmt --all -- --check
   - name: "cargo clippy"
@@ -33,4 +28,11 @@ steps:
   - name: "cargo audit"
     command: cargo audit
   - name: "cargo test"
-    command: RUST_BACKTRACE=1 cargo test
+    command: cargo test
+    environment:
+      RUST_BACKTRACE: "1"
+  - name: "cog check"
+    command: |
+      git fetch --unshallow origin
+      git fetch --tags --prune --prune-tags
+      cog check --from-latest-tag

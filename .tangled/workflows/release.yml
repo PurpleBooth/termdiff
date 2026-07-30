@@ -9,11 +9,11 @@ caches:
   https://nix-community.cachix.org: "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 
 dependencies:
-  - gcc
   - cargo
-  - rustc
-  - pkg-config
+  - gcc
   - openssl
+  - pkg-config
+  - rustc
 
 steps:
   - name: "publish"
