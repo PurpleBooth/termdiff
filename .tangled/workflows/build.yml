@@ -20,10 +20,10 @@ dependencies:
   - openssl
 
 steps:
-  - name: git fetch --tags
-    command: git fetch --tags
   - name: "cog check"
-    command: cog check --from-latest-tag
+    command: |
+      git fetch --tags --prune --prune-tags
+      cog check --from-latest-tag
   - name: "cargo fmt"
     command: cargo +nightly fmt --all -- --check
   - name: "cargo clippy"
