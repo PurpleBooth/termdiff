@@ -51,6 +51,9 @@ steps:
       git config push.default current
       git config user.name "$TANGLED_REPO_NAME Pipeline"
       git config user.email "$TANGLED_REPO_DID"
+      git config gpg.format ssh
+      git config user.signingkey ~/.ssh/id_ed25519
+      git config tag.gpgsign true
       git remote set-url origin "git@${TANGLED_REPO_KNOT}:${TANGLED_REPO_REPO_DID}"
   - name: "cog bump"
     command: cog bump --auto

@@ -7,6 +7,8 @@ pre_bump_hooks = [
     "cargo build --release",
 ]
 post_bump_hooks = [
+    "cog changelog > /tmp/changelog.txt",
+    "git tag {{version_tag}} {{version_tag}}^{} --force --sign --annotate --message='Release {{version}}' --message=\"$(cat /tmp/changelog.txt)\"",
     "git push origin HEAD:main",
     "git push origin {{version_tag}}",
     "cargo publish"
