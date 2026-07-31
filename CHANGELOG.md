@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v4.2.2 - 2026-07-31
+#### Bug Fixes
+- (**ci**) make git setup step self-contained in build workflow - (e3bf8a1) - Billie Thompson
+#### Continuous Integration
+- sign release tags with ssh key and embed changelog - (997800a) - Billie Thompson
+#### Miscellaneous Chores
+- tidy up old pipelines - (d268c00) - Billie Thompson
+
+- - -
+
 ## v4.2.1 - 2026-07-30
 #### Bug Fixes
 - (**ci**) use version_tag with prefix in tag push hook - (fd77cba) - Billie Thompson
