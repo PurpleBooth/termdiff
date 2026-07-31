@@ -38,13 +38,17 @@ steps:
     command: cargo test
     environment:
       RUST_BACKTRACE: "1"
-  - name: 'ssh-key > ~/.ssh/id_ed25519'
+  - name: "Set up git for push"
     command: |
-      git switch "$TANGLED_REPO_DEFAULT_BRANCH"
+      git switch -c "$TANGLED_REPO_DEFAULT_BRANCH"
+      git fetch --unshallow origin 2>/dev/null || git fetch origin
+      git fetch --tags origin
+
       mkdir -p ~/.ssh/
       echo "$PUSH_SSH_KEY" > ~/.ssh/id_ed25519
       chmod 600 ~/.ssh/id_ed25519
       git config core.sshCommand 'ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_ed25519'
+      git config push.default current
       git config user.name "$TANGLED_REPO_NAME Pipeline"
       git config user.email "$TANGLED_REPO_DID"
       git remote set-url origin "git@${TANGLED_REPO_KNOT}:${TANGLED_REPO_REPO_DID}"
