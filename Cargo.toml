@@ -4,7 +4,7 @@ description = "Write a diff with color codes to a string"
 version = "4.2.2"
 edition = "2018"
 license = "CC0-1.0"
-repository = "https://github.com/PurpleBooth/termdiff"
+repository = "https://tangled.org/billie.codes/termdiff"
 keywords = ["diff", "terminal", "text", "comparison"]
 categories = ["development-tools", "text-processing"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
